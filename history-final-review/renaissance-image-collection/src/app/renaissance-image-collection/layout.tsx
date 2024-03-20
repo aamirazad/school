@@ -19,13 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div
-        className={cn(
-          "min-h-screen font-sans antialiased",
-          fontSans.variable
-        )}
-      >
-        {children}
+    <div className={cn("font-sans antialiased", fontSans.variable)}>
+      {children}
     </div>
   );
 }
