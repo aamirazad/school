@@ -4,7 +4,7 @@ export const imageData = [
   {
     src: wedding,
     alt: "Wedding image",
-    caption: `<h1>hello</h1>`,
+    caption: `A wedding`,
   },
   {
     src: wedding,
