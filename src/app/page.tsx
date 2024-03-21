@@ -3,12 +3,12 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="text-center p-24">
-      <h1 className="">Welcome</h1>
-      <ul>
+    <div className="flex flex-col p-14 justify-center items-center">
+      <h1 className="text-2xl p-6 font-bold">Welcome</h1>
+      <ul className="list-disc items-center">
         <li>
           <Link
-            className="decoration-solid"
+            className="text-slate-300 list-disc"
             href="/renaissance-image-collection"
           >
             Renaissance Image Collection
