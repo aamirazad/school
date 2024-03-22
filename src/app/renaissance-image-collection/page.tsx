@@ -18,14 +18,13 @@ export default function Home() {
     setCurrentIndex(index);
   };
   return (
-    <main className="flex h-full flex-col items-center justify-between px-24 pb-8">
-      <div className="max-w-5xl w-full text-sm">
-        <h1 className="pt-6 px-24 text-2xl">{imageData[currentIndex].title}</h1>
+    <main className="flex flex-col items-center justify-between px-24 pb-8 max-w-5xl w-full text-sm">
+        <h1 className="pt-6 px-24 text-2xl h-12">{imageData[currentIndex].title}</h1>
         <Carousel onSlideChange={handleSlideChange}>
           <CarouselContent>
             {imageData.map((item, index) => (
               <CarouselItem key={index}>
-                <figure className="flex flex-col items-center text-center w-5/6">
+                <figure className="flex flex-col items-center text-center w-5/6 h-84 bg-red-300">
                   <div className="p-8">
                     <Image
                       src={item.src}
@@ -43,7 +42,6 @@ export default function Home() {
         <figcaption className="text-lg px-16 py-1">
           {imageData[currentIndex].caption}
         </figcaption>
-      </div>
     </main>
   );
 }
