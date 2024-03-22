@@ -39,7 +39,7 @@ export default function Home() {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-        <figcaption className="text-lg px-16 py-1">
+        <figcaption className="text-lg px-16">
           {imageData[currentIndex].caption}
         </figcaption>
     </main>
