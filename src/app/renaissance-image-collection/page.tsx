@@ -28,8 +28,10 @@ export default function Home() {
                 <figure className="flex flex-col items-center text-center w-5/6">
                   <div className="p-8">
                     <Image
-                      src={item.src}
+                      src={`${process.env.NEXT_PUBLIC_CDN}${item.src}`}
                       alt={item.alt}
+                      width="515"
+                      height="768"
                       className="rounded-md"
                     />
                   </div>
