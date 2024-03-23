@@ -16,5 +16,11 @@ export const imageData = [
     caption: "This painting is so well known for good reason. It shows many new Renaissance influences such as it's focus on humanism, realism, and perspective. It is humanistic because it is a painting of a person, showing all the qualities of the human. It shows religious aspects which is what pre-humanistic art mostly looked like. It is very realistic showing all the detail's in her face as well as in the background. Perspective is a new technique that sets Leonardo da Vinci apart. It can be seen in the background which creates depth and makes her face pop out.",
     cite: "https://newportbrushstrokes.com/why-was-the-mona-lisa-important-to-the-renaissance/"
   },
-  
+  {
+    caption: "Is a fresco painting by Michelangelo which goes in to part of the Sistine Chapel's ceiling. The painting represents the a scene in the Book of Genesis where god Gives life to Adam. Renaissance characteristics is very much present with it's use of realism and perspective. Humanism is also shown with it's questioning of the creation of man"
+  },
+  {
+    title: "Miracle of St. Mark by Tintoretto",
+    caption: "This is one of the most obvious use of color. During this time, there was no artificial dyes so all colors had to be made from natural sources. This means some colors were expensive and sometimes almost"
+  }
 ];
