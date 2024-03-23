@@ -19,20 +19,20 @@ export default function Home() {
   };
   return (
     <div className="flex justify-center w-full">
-      <div className="flex flex-col items-center justify-between px-24 pb-8  w-full">
+      <div className="flex flex-col items-center justify-between px-24 pb-8 w-full">
         <h1 className="pt-6 text-2xl h-12">{imageData[currentIndex].title}</h1>
         <Carousel onSlideChange={handleSlideChange}>
           <CarouselContent>
             {imageData.map((item, index) => (
               <CarouselItem key={index}>
-                <figure className="flex flex-col items-center text-center w-5/6">
-                  <div className="p-8">
+                <figure className="flex flex-col items-center text-center py-8 w-32">
+                  <div className="relative w-96 h-96">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_CDN}${item.src}`}
                       alt={item.alt}
-                      width="515"
-                      height="768"
-                      className="rounded-md"
+                      fill={true}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-contain"
                     />
                   </div>
                 </figure>

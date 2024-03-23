@@ -19,10 +19,18 @@ export const imageData = [
     cite: "https://newportbrushstrokes.com/why-was-the-mona-lisa-important-to-the-renaissance/",
   },
   {
-    caption: "Is a fresco painting by Michelangelo which goes in to part of the Sistine Chapel's ceiling. The painting represents the a scene in the Book of Genesis where god Gives life to Adam. Renaissance characteristics is very much present with it's use of realism and perspective. Humanism is also shown with it's questioning of the creation of man"
+    src: "the-creation-of-adam.webp",
+    alt: "The creation of adam",
+    title: "The Creation of Adam by Michelangelo",
+    caption:
+      "Is a fresco painting by Michelangelo which goes in to part of the Sistine Chapel's ceiling. The painting represents the a scene in the Book of Genesis where god Gives life to Adam. Renaissance characteristics is very much present with it's use of realism and perspective. Humanism is also shown with it's questioning of the creation of man",
   },
   {
+    src: "miracle-of-st-mark.webp",
+    alt: "Miracle of St. Mark",
     title: "Miracle of St. Mark by Tintoretto",
-    caption: "This is one of the most obvious use of color. During this time, there was no artificial dyes so all colors had to be made from natural sources. This means some colors were expensive and sometimes almost"
-  }
+    caption:
+      "This is one of the most obvious use of color. During this time, there was no artificial dyes so all colors had to be made from natural sources. This means some colors were expensive and sometimes almost impossible to get",
+    cite: "https://www.gallerieaccademia.it/en/miracle-slave-also-known-miracle-saint-mark",
+  },
 ];
