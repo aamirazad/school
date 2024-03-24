@@ -17,8 +17,9 @@ export default function Home() {
   const handleSlideChange = (index: number) => {
     setCurrentIndex(index);
   };
+
   return (
-    <div className="flex justify-center w-full">
+    <div className="flex justify-center w-full animate-fadeIn">
       <div className="flex flex-col items-center justify-between px-24 pb-8 w-full">
         <h1 className="pt-6 text-2xl h-12">{imageData[currentIndex].title}</h1>
         <Carousel onSlideChange={handleSlideChange}>
@@ -31,8 +32,8 @@ export default function Home() {
                       src={`${process.env.NEXT_PUBLIC_CDN}${item.src}`}
                       alt={item.alt}
                       fill={true}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-contain"
+                      loading="eager"
                     />
                   </div>
                 </figure>
