@@ -21,7 +21,7 @@ export default function Home() {
 
   return (
     <div className="flex justify-center w-full animate-fadeIn">
-      <div className="flex flex-col items-center justify-between px-24 pb-8 w-full">
+      <div className="flex flex-col items-center justify-between px-24 pb-8 xl:w-1/2">
         <h1 className="pt-6 text-2xl h-12">{imageData[currentIndex].title}</h1>
         <Carousel onSlideChange={handleSlideChange}>
           <CarouselContent>
@@ -48,13 +48,14 @@ export default function Home() {
           <div>{imageData[currentIndex].caption}</div>
           <div>
             <p>References:</p>
-            {imageData[currentIndex].cite && imageData[currentIndex].cite.map((url, index) => (
-              <li key={index}>
-                <a target="_blank" className="underline" href={url}>
-                  {url}
-                </a>
-              </li>
-            ))}
+            {imageData[currentIndex].cite &&
+              imageData[currentIndex].cite.map((url, index) => (
+                <li key={index}>
+                  <a target="_blank" className="underline" href={url}>
+                    {url}
+                  </a>
+                </li>
+              ))}
           </div>
         </figcaption>
       </div>
