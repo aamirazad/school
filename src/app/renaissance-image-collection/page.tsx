@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { imageData } from "./imageData";
 import { useState } from "react";
+import DOMPurify from "isomorphic-dompurify";
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -43,8 +44,16 @@ export default function Home() {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-        <figcaption className="text-lg px-16 text-slate-200">
-          {imageData[currentIndex].caption}
+        <figcaption className="text-lg px-16 text-slate-200 flex flex-col space-y-8">
+          <div>{imageData[currentIndex].caption}</div>
+          <div>
+            <p>References:</p>
+            <div className="underline"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(imageData[currentIndex].cite || ""),
+              }}
+            ></div>
+          </div>
         </figcaption>
       </div>
     </div>

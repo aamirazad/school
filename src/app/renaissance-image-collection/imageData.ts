@@ -1,7 +1,3 @@
-import dome from "./images/florence-brunelleschi-dome.webp";
-import mona_lisa from "./images/mona_lisa.webp";
-import adam from "./images/the-creation-of-adam.webp";
-
 export const imageData = [
   {
     src: "florence-brunelleschi-dome.webp",
@@ -31,6 +27,6 @@ export const imageData = [
     title: "Miracle of St. Mark by Tintoretto",
     caption:
       "This is one of the most obvious use of color. During this time, there was no artificial dyes so all colors had to be made from natural sources. This means some colors were expensive and sometimes almost impossible to get",
-    cite: "https://www.gallerieaccademia.it/en/miracle-slave-also-known-miracle-saint-mark",
+    cite: `<a href="https://www.gallerieaccademia.it/en/miracle-slave-also-known-miracle-saint-mark"></a>`,
   },
 ];
