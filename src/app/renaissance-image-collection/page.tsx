@@ -48,11 +48,13 @@ export default function Home() {
           <div>{imageData[currentIndex].caption}</div>
           <div>
             <p>References:</p>
-            <div className="underline"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(imageData[currentIndex].cite || ""),
-              }}
-            ></div>
+            {imageData[currentIndex].cite && imageData[currentIndex].cite.map((url, index) => (
+              <li key={index}>
+                <a target="_blank" className="underline" href={url}>
+                  {url}
+                </a>
+              </li>
+            ))}
           </div>
         </figcaption>
       </div>
