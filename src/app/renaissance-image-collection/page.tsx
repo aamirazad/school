@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/carousel";
 import { imageData } from "./imageData";
 import { useState } from "react";
-import DOMPurify from "isomorphic-dompurify";
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
