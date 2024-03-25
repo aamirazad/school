@@ -21,7 +21,7 @@ export default function Home() {
 
   return (
     <div className="flex justify-center w-full animate-fadeIn">
-      <div className="flex flex-col items-center justify-between px-24 pb-8 xl:w-1/2">
+      <div className="flex flex-col items-center justify-between px-24 pb-8 xl:w-3/4">
         <h1 className="pt-6 text-2xl h-12">{imageData[currentIndex].title}</h1>
         <Carousel onSlideChange={handleSlideChange}>
           <CarouselContent>
