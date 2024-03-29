@@ -20,11 +20,11 @@ export default function Home() {
 
   return (
     <div className="flex justify-center w-full animate-fadeIn">
-      <div className="flex flex-col items-center justify-between px-24 pb-8 xl:w-3/4">
+      <div className="flex flex-col items-center justify-between pb-8 w-3/4 xl:w-1/2">
         <h1 className="pt-6 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
           {imageData[currentIndex].title}
         </h1>
-        <Carousel onSlideChange={handleSlideChange}>
+        <Carousel className="w-3/4" onSlideChange={handleSlideChange}>
           <CarouselContent>
             {imageData.map((item, index) => (
               <CarouselItem key={index}>
