@@ -8,7 +8,6 @@ export const imageData = [
     cite: [
       "https://www.britannica.com/biography/Filippo-Brunelleschi",
       "https://www.theartstory.org/artist/brunelleschi-filippo/",
-      "https://sketchfab.com/3d-models%20florence-cathedralsanta-maria-del-fioreduomo-787c53a765c348038f08a8a034c7ed1a" 
     ],
   },
   {
@@ -48,34 +47,36 @@ export const imageData = [
     cite: [
       "https://www.britannica.com/topic/Gates-of-Paradise-by-Ghiberti",
       "https://www.smithsonianmag.com/arts-culture/the-gates-of-paradise-174431341/",
-    ]
+    ],
   },
   {
-    src: "the-last-supper",
+    src: "the-last-supper.webp",
     alt: "The Last Supper",
     title: "The Last Supper Leonardo da Vinci",
-    caption: 
+    caption:
       "In The Last Supper, Leonardo, because of his studies of light, sound and movement, these techniques were used lots in the painting. Also, the posture, gesture, and expression showed his belief in the motions of the soul. The painting was commissioned by Ludovico Sforza with their family's initials on the painting. He tried to use a new technique using oil point on two layers on a dry paper base. But this caused the painting to deteriorate and flake within a few years",
     cite: [
       "https://cenacolovinciano.org/en/museum/the-works/the-last-supper-leonardo-da-vinci-1452-1519/",
       "https://www.britannica.com/topic/Last-Supper-fresco-by-Leonardo-da-Vinci",
-    ]
+    ],
   },
   {
-    src: "the-crucifixion",
+    src: "the-crucifixion.webp",
     alt: "The Crucifixion",
     title: "The Crucifixion by Jan Van Eyck",
-    caption: 
+    caption:
       "This painting is widely appreciated for it's extreme detail and complex scene. Van Eyck was made during the start of the Northern Renaissance and was painted using oil on the panel. With extreme detail in the face, this painting was very humanistic, showing the figures with extreme attention to detail. In addition, perspective was used to make the large scene look more realistic. ",
-    cite: [
-      "https://www.metmuseum.org/toah/hd/eyck/hd_eyck.htm",
-    ]
+    cite: ["https://www.metmuseum.org/toah/hd/eyck/hd_eyck.htm"],
   },
   {
-    src: "the-arnolfini-wedding",
+    src: "the-arnolfini-wedding.webp",
     alt: "The Arnolfini Wedding",
     title: "The Arnolfini Wedding by Jan Van Eyck",
     caption:
-      "Another painting by Renaissance painter Jan Van Eyck, The Arnolfini Wedding or Arnolfini Portrait is a painting that shows the wedding of two cousins. Both were wealthy merchants who, due to Florence's social structure, like many other merchants, had lots of money to spend on art. The clothing shows wealth due to it's color and type. Like his other painting, all of the objects in the painting are painted with extreme detail, a characteristic of the Renaissance. Also, perspective is used by creating shadows from the light coming from the window."
+      "Another painting by Renaissance painter Jan Van Eyck, The Arnolfini Wedding or Arnolfini Portrait is a painting that shows the wedding of two cousins. Both were wealthy merchants who, due to Florence's social structure, like many other merchants, had lots of money to spend on art. The clothing shows wealth due to it's color and type. Like his other painting, all of the objects in the painting are painted with extreme detail, a characteristic of the Renaissance. Also, perspective is used by creating shadows from the light coming from the window.",
+    cite: [
+      "https://mymodernmet.com/arnolfini-portrait/",
+      "https://www.britannica.com/topic/Portrait-of-Giovanni-Arnolfini-and-His-Wife",
+    ],
   },
 ];
