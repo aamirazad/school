@@ -36,6 +36,7 @@ export const imageData = [
     ],
   },
   {
+    src: "gates-of-paradise.webp",
     alt: "The Gates of Paradise",
     title: "The Gates of Paradise by Lorenzo Ghiberti",
     caption:
