@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/carousel";
 import { imageData } from "./imageData";
 import { useState } from "react";
-import DOMPurify from "isomorphic-dompurify";
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,9 +20,11 @@ export default function Home() {
 
   return (
     <div className="flex justify-center w-full animate-fadeIn">
-      <div className="flex flex-col items-center justify-between px-24 pb-8 xl:w-1/2">
-        <h1 className="pt-6 text-2xl h-12">{imageData[currentIndex].title}</h1>
-        <Carousel onSlideChange={handleSlideChange}>
+      <div className="flex flex-col items-center justify-between pb-8 w-3/4 xl:w-1/2">
+        <h1 className="pt-6 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+          {imageData[currentIndex].title}
+        </h1>
+        <Carousel className="w-3/4" onSlideChange={handleSlideChange}>
           <CarouselContent>
             {imageData.map((item, index) => (
               <CarouselItem key={index}>
@@ -44,18 +45,22 @@ export default function Home() {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-        <figcaption className="text-lg px-16 text-slate-200 flex flex-col space-y-8">
+        <figcaption className="leading-7 [&:not(:first-child)]:mt-6">
           <div>{imageData[currentIndex].caption}</div>
           <div>
-            <p>References:</p>
-            {imageData[currentIndex].cite &&
-              imageData[currentIndex].cite.map((url, index) => (
-                <li key={index}>
-                  <a target="_blank" className="underline" href={url}>
-                    {url}
-                  </a>
-                </li>
-              ))}
+            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pt-6">
+              References:
+            </h2>
+            <ul className="my-6 ml-6 list-disc [&>li]:mt-2">
+              {imageData[currentIndex].cite &&
+                imageData[currentIndex].cite.map((url, index) => (
+                  <li key={index}>
+                    <a target="_blank" href={url} className="underline">
+                      {url}
+                    </a>
+                  </li>
+                ))}
+            </ul>
           </div>
         </figcaption>
       </div>
