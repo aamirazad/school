@@ -73,10 +73,28 @@ export const imageData = [
     alt: "The Arnolfini Wedding",
     title: "The Arnolfini Wedding by Jan Van Eyck",
     caption:
-      "Another painting by Renaissance painter Jan Van Eyck, The Arnolfini Wedding or Arnolfini Portrait is a painting that shows the wedding of two cousins. Both were wealthy merchants who, due to Florence's social structure, like many other merchants, had lots of money to spend on art. The clothing shows wealth due to it's color and type. Like his other painting, all of the objects in the painting are painted with extreme detail, a characteristic of the Renaissance. Also, perspective is used by creating shadows from the light coming from the window.",
+      "Another painting by Renaissance painter Jan Van Eyck, The Arnolfini Wedding or Arnolfini Portrait is a painting that shows the wedding of two cousins. Both were wealthy merchants who, due to Florence's social structure, like many other merchants, had lots of money to spend on art. The clothing shows wealth due to it's color and type. Like his other painting, all of the objects in the painting are painted with extreme detail, a characteristic of the Renaissance. Developed during the Renaissance, oil painting as seen in this painting allowed for more colors and better blending. Also, perspective is used by creating shadows from the light coming from the window.",
     cite: [
       "https://mymodernmet.com/arnolfini-portrait/",
       "https://www.britannica.com/topic/Portrait-of-Giovanni-Arnolfini-and-His-Wife",
     ],
+  },
+  {
+    src: "the-virgin-and-child-with-saint-anne.webp",
+    alt: "The Virgin and Child with Saint Anne",
+    title: "The Virgin and Child with Saint Anne by Leonardo da Vinci",
+    caption:
+      "The innovative new technique called Sfumato used in this painting is the technique of transitioning between colors by smoothly. The blur of the lines between the people make the picture more mysterious and gives it depth.",
+    cite: [
+      "https://www.thehistoryofart.org/leonardo-da-vinci/the-virgin-and-child-with-saint-anne/",
+    ],
+  },
+  {
+    src: "holy-trinity.webp",
+    alt: "Holy Trinity",
+    title: "Holy Trinity by Masaccio",
+    caption:
+      "Lastly, this painting by inspired by Brunelleschi's use of perspective uses geometry to make it look more realistic.. The ceiling has edges that all point towards the main subject. Also, the architecture had Greek and Roman characteristics, which made sense considering during this time, classical architecture was becoming popular.",
+    cite: ["https://smarthistory.org/masaccio-holy-trinity/"],
   },
 ];
