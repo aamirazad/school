@@ -10,7 +10,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { imageData } from "./imageData";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 export default function Home() {
@@ -19,13 +19,19 @@ export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  let params = Number(searchParams.get("index"));
+  const [move, setMove] = useState(0);
+
 
   useEffect(() => {
-    if (api && !isNaN(params)) {
-      api.scrollTo(params);
+    if (!move) {
+      let loadedIndex = Number(searchParams.get("index"));
+      console.log("moveing");
+      if (api && !isNaN(loadedIndex)) {
+        api.scrollTo(loadedIndex);
+        setMove(1);
+      }
     }
-  });
+    }, [move, api, searchParams]);
 
   const handleSlideChange = (index: number) => {
     router.push(`?index=${currentIndex}`);
@@ -33,7 +39,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex justify-center w-full animate-fadeIn">
+    <div className="flex flex-grow justify-center w-full animate-fadeIn">
       <div className="flex flex-col items-center justify-between pb-8 w-3/4 xl:w-2/5">
         <h1 className="pt-6 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
           {imageData[currentIndex].title}
