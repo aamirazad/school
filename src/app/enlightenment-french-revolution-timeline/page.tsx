@@ -8,9 +8,6 @@ export default function Timeline() {
         width="100%"
         height="650"
         allowFullScreen
-        mozallowfullscreen
-        allowfullscreen
-        frameborder="0"
       ></iframe>
     </div>
   );
