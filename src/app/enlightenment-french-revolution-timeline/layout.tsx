@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Renaissance Image Colletion",
+  title: "Enlightenentment/French Revolution Timeline",
+  description: "How it happened and it's impacts",
 };
 
 export default function Layout({
@@ -9,5 +10,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main className="text-slate-100 bg-black">{children}</main>;
+  return <main>{children}</main>;
 }
