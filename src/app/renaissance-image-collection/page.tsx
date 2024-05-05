@@ -25,7 +25,6 @@ export default function Home() {
   useEffect(() => {
     if (!move) {
       let loadedIndex = Number(searchParams.get("index"));
-      console.log("moveing");
       if (api && !isNaN(loadedIndex)) {
         api.scrollTo(loadedIndex);
         setMove(1);
