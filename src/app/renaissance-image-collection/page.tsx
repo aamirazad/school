@@ -12,29 +12,31 @@ import {
 import { imageData } from "./imageData";
 import { useState, useEffect } from "react";
 import { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [move, setMove] = useState(0);
 
   useEffect(() => {
     if (!move) {
-      let loadedIndex = Number(searchParams.get("index"));
-      if (api && !isNaN(loadedIndex)) {
+      const storedIndex = localStorage.getItem("index");
+      console.log("Stored index in localStorage:", storedIndex); // Check the raw value from localStorage
+      let loadedIndex = Number(storedIndex) || 0;
+      if (api) {
+        console.log("moving", loadedIndex);
         api.scrollTo(loadedIndex);
         setMove(1);
       }
     }
-  }, [move, api, searchParams]);
+  }, [move, api]);
 
   const handleSlideChange = (index: number) => {
-    router.push(`?index=${currentIndex}`);
-    setCurrentIndex(index);
+    if (move) {
+      localStorage.setItem("index", String(index));
+      setCurrentIndex(index);
+    }
   };
 
   return (
