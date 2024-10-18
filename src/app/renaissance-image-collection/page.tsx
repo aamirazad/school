@@ -22,7 +22,6 @@ export default function Home() {
 
   const [move, setMove] = useState(0);
 
-
   useEffect(() => {
     if (!move) {
       let loadedIndex = Number(searchParams.get("index"));
@@ -31,7 +30,7 @@ export default function Home() {
         setMove(1);
       }
     }
-    }, [move, api, searchParams]);
+  }, [move, api, searchParams]);
 
   const handleSlideChange = (index: number) => {
     router.push(`?index=${currentIndex}`);
@@ -39,8 +38,8 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-grow justify-center w-full animate-fadeIn">
-      <Suspense>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex flex-grow justify-center w-full animate-fadeIn">
         <div className="flex flex-col items-center justify-between pb-8 w-3/4 xl:w-2/5">
           <h1 className="pt-6 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
             {imageData[currentIndex].title}
@@ -59,6 +58,7 @@ export default function Home() {
                         src={`${process.env.NEXT_PUBLIC_CDN}${item.src}`}
                         alt={item.alt}
                         fill={true}
+                        priority={index === 0 ? true : false}
                         sizes="384, 384"
                         className="object-contain"
                         loading="eager"
@@ -90,7 +90,7 @@ export default function Home() {
             </div>
           </figcaption>
         </div>
-      </Suspense>
-    </div>
+      </div>
+    </Suspense>
   );
 }
