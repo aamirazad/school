@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Renaissance Image Colletion",
+  title: "Renaissance Image Collection",
 };
 
 export default function Layout({
