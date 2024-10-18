@@ -17,9 +17,13 @@ export default function RootLayout({
     <html lang="en">
       <body className="{`${inter.className} antialiased`} text-slate-100 bg-black">
         <div>
-          <Link className="px-3" href="/">Back</Link>
+          <Link className="px-3" href="/">
+            Back
+          </Link>
         </div>
-        {children}
+        <div className="flex flex-col p-14 justify-center items-center">
+          {children}
+        </div>
       </body>
     </html>
   );
