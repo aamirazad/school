@@ -97,11 +97,11 @@ function Question({ question, nextQuestion }: QuestionProps) {
           className={`mb-6 ${index != currentStep ? "opacity-50" : ""}`}
         >
           <div
-            className={`bg-gray-900 p-4 rounded-md mb-4 shadow-md transition-shadow duration-500 ${
+            className={`bg-gray-900 p-4 rounded-md mb-4 shadow-[0_0px_20px_rgba(0,0,0,0.3)] transition-shadow duration-500 ${
               shadowColor === "green" && index === currentStep
-                ? "shadow-green-400"
+                ? "shadow-green-500"
                 : shadowColor === "red" && index === currentStep
-                ? "shadow-red-400"
+                ? "shadow-red-500"
                 : ""
             }`}
           >
