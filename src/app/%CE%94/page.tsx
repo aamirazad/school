@@ -1,23 +1,29 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { gas } from "./questions/gas";
-import { string, z } from "zod";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { questions } from "./questions/gas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 
-export default function DeltaChem() {
+interface QuestionProps {
+  question: (typeof questions)[0];
+  nextQuestion: () => void;
+}
+
+function Question({ question, nextQuestion }: QuestionProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>(
-    Array(gas.length).fill(null)
+    Array(question.length).fill(null)
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [showHint, setShowHint] = useState<boolean[]>(
-    Array(gas.length).fill(false)
+    Array(question.length).fill(false)
   );
-  const [errors, setErrors] = useState<string[]>(Array(gas.length).fill(""));
+  const [errors, setErrors] = useState<string[]>(
+    Array(question.length).fill("")
+  );
 
   useEffect(() => {
     if (inputRefs.current[currentStep]) {
@@ -46,7 +52,7 @@ export default function DeltaChem() {
       return;
     }
 
-    if (Math.abs(numericAnswer - gas[index].solution) < 0.1) {
+    if (Math.abs(numericAnswer - question[index].solution) < 0.1) {
       setUserAnswers((prev) => {
         const newAnswers = [...prev];
         newAnswers[index] = numericAnswer;
@@ -57,8 +63,12 @@ export default function DeltaChem() {
         newErrors[index] = "";
         return newErrors;
       });
-      if (index === currentStep && currentStep < gas.length - 1) {
-        setCurrentStep(currentStep + 1);
+      if (index === currentStep) {
+        if (currentStep < question.length - 1) {
+          setCurrentStep(currentStep + 1);
+        } else {
+          nextQuestion();
+        }
       }
     } else {
       setErrors((prev) => {
@@ -70,9 +80,8 @@ export default function DeltaChem() {
   };
 
   return (
-    <main className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-6">Δ Chem</h1>
-      {gas.map((step, index) => (
+    <div>
+      {question.map((step, index) => (
         <div
           key={index}
           className={`mb-6 ${index != currentStep ? "opacity-50" : ""}`}
@@ -97,7 +106,9 @@ export default function DeltaChem() {
                     }}
                     defaultValue={userAnswers[index]?.toString() || ""}
                     placeholder={`Enter your answer in ${step.unit}`}
-                    className={`flex-grow ${index < currentStep ? 'ring-2 ring-green-950' : ''}`}
+                    className={`flex-grow ${
+                      index < currentStep ? "ring-2 ring-green-950" : ""
+                    }`}
                     disabled={index != currentStep}
                   />
                   <span className="text-gray-500">{step.unit}</span>
@@ -131,35 +142,52 @@ export default function DeltaChem() {
               </div>
             </form>
           </div>
-
-          {currentStep > gas.length && (
-            <div className="text-center mt-6">
-              <h2 className="text-xl font-semibold mb-4">
-                Congratulations! You&apos;ve solved the problem.
-              </h2>
-              <p className="mb-4">Here are your answers:</p>
-              <ul className="list-disc list-inside">
-                {gas.map((step, index) => (
-                  <li key={index}>
-                    Step {index + 1}: {userAnswers[index]?.toFixed(2)}{" "}
-                    {step.unit}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={() => {
-                  setCurrentStep(0);
-                  setUserAnswers(Array(gas.length).fill(null));
-                  setErrors(Array(gas.length).fill(""));
-                }}
-                className="mt-4"
-              >
-                Start Over
-              </Button>
-            </div>
-          )}
         </div>
       ))}
-    </main>
+    </div>
+  );
+}
+
+export default function DeltaChem() {
+  const [currentQuestion, setCurrentQuestion] = useState<number>(() => {
+    // Read the initial state from localStorage or default to 0
+    const savedQuestion = localStorage.getItem("currentQuestion");
+    return savedQuestion ? parseInt(savedQuestion, 10) : 0;
+  });
+
+  useEffect(() => {
+    // Save the currentQuestion to localStorage whenever it changes
+    localStorage.setItem("currentQuestion", currentQuestion.toString());
+  }, [currentQuestion]);
+
+  const nextQuestion = () => {
+    setCurrentQuestion((prev) => prev + 1);
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold mb-4">Δ Chem</h1>
+      <h1 className="text-xl font-bold mb-6">Question {currentQuestion + 1}</h1>
+      <Question
+        question={questions[currentQuestion]}
+        nextQuestion={nextQuestion}
+        key={currentQuestion}
+      />
+      <div className="flex justify-center my-4">
+        <div className="w-1/2">
+          <Progress value={(currentQuestion / (questions.length - 1)) * 100} />
+        </div>
+      </div>
+      <div className="flex justify-center">
+        <Button
+          onClick={() => {
+            setCurrentQuestion(0);
+          }}
+          variant={"destructive"}
+        >
+          Reset
+        </Button>
+      </div>
+    </div>
   );
 }
