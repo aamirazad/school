@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import LoadingSpinner from "@/components/loading-spinner";
 
 interface QuestionProps {
   question: (typeof questions)[0];
@@ -24,6 +25,7 @@ function Question({ question, nextQuestion }: QuestionProps) {
   const [errors, setErrors] = useState<string[]>(
     Array(question.length).fill("")
   );
+  const [shadowColor, setShadowColor] = useState<string>("");
 
   useEffect(() => {
     if (inputRefs.current[currentStep]) {
@@ -49,6 +51,8 @@ function Question({ question, nextQuestion }: QuestionProps) {
         newErrors[index] = "Please enter a valid number";
         return newErrors;
       });
+      setShadowColor("red");
+      setTimeout(() => setShadowColor(""), 1000);
       return;
     }
 
@@ -63,19 +67,25 @@ function Question({ question, nextQuestion }: QuestionProps) {
         newErrors[index] = "";
         return newErrors;
       });
-      if (index === currentStep) {
-        if (currentStep < question.length - 1) {
-          setCurrentStep(currentStep + 1);
-        } else {
-          nextQuestion();
+      setShadowColor("green");
+      setTimeout(() => {
+        setShadowColor("");
+        if (index === currentStep) {
+          if (currentStep < question.length - 1) {
+            setCurrentStep(currentStep + 1);
+          } else {
+            nextQuestion();
+          }
         }
-      }
+      }, 1000);
     } else {
       setErrors((prev) => {
         const newErrors = [...prev];
         newErrors[index] = "That's not quite right. Try again!";
         return newErrors;
       });
+      setShadowColor("red");
+      setTimeout(() => setShadowColor(""), 1000);
     }
   };
 
@@ -86,7 +96,15 @@ function Question({ question, nextQuestion }: QuestionProps) {
           key={index}
           className={`mb-6 ${index != currentStep ? "opacity-50" : ""}`}
         >
-          <div className="bg-gray-900 p-4 rounded-md mb-4">
+          <div
+            className={`bg-gray-900 p-4 rounded-md mb-4 shadow-md transition-shadow duration-500 ${
+              shadowColor === "green" && index === currentStep
+                ? "shadow-green-400"
+                : shadowColor === "red" && index === currentStep
+                ? "shadow-red-400"
+                : ""
+            }`}
+          >
             <p className="font-semibold mb-2">Step {index + 1}:</p>
             <p className="mb-4">{step.instruction}</p>
             <form
@@ -106,9 +124,7 @@ function Question({ question, nextQuestion }: QuestionProps) {
                     }}
                     defaultValue={userAnswers[index]?.toString() || ""}
                     placeholder={`Enter your answer in ${step.unit}`}
-                    className={`flex-grow ${
-                      index < currentStep ? "ring-2 ring-green-950" : ""
-                    }`}
+                    className="flex-grow"
                     disabled={index != currentStep}
                   />
                   <span className="text-gray-500">{step.unit}</span>
@@ -149,23 +165,35 @@ function Question({ question, nextQuestion }: QuestionProps) {
 }
 
 export default function DeltaChem() {
-  const [currentQuestion, setCurrentQuestion] = useState<number>(() => {
-    // Read the initial state from localStorage or default to 0
-    const savedQuestion = localStorage.getItem("currentQuestion");
-    return savedQuestion ? parseInt(savedQuestion, 10) : 0;
-  });
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Save the currentQuestion to localStorage whenever it changes
-    localStorage.setItem("currentQuestion", currentQuestion.toString());
-  }, [currentQuestion]);
+    if (typeof window !== "undefined") {
+      const savedQuestion = localStorage.getItem("currentQuestion");
+      if (savedQuestion) {
+        setCurrentQuestion(parseInt(savedQuestion, 10));
+      }
+      setIsMounted(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      localStorage.setItem("currentQuestion", currentQuestion.toString());
+    }
+  }, [currentQuestion, isMounted]);
 
   const nextQuestion = () => {
     setCurrentQuestion((prev) => prev + 1);
   };
 
+  if (!isMounted) {
+    return <LoadingSpinner />; // or a loading spinner
+  }
+
   return (
-    <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg">
+    <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg ease-in duration-300">
       <h1 className="text-3xl font-bold mb-4">Δ Chem</h1>
       <h1 className="text-xl font-bold mb-6">Question {currentQuestion + 1}</h1>
       <Question
@@ -174,11 +202,22 @@ export default function DeltaChem() {
         key={currentQuestion}
       />
       <div className="flex justify-center my-4">
-        <div className="w-1/2">
+        <div className="w-2/3">
           <Progress value={(currentQuestion / (questions.length - 1)) * 100} />
         </div>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center gap-4">
+        {currentQuestion > 0 ? (
+          <Button
+            onClick={() => {
+              setCurrentQuestion(currentQuestion - 1);
+            }}
+          >
+            Back
+          </Button>
+        ) : (
+          <></>
+        )}
         <Button
           onClick={() => {
             setCurrentQuestion(0);
