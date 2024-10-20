@@ -22,10 +22,8 @@ export default function Home() {
   useEffect(() => {
     if (!move) {
       const storedIndex = localStorage.getItem("index");
-      console.log("Stored index in localStorage:", storedIndex); // Check the raw value from localStorage
       let loadedIndex = Number(storedIndex) || 0;
       if (api) {
-        console.log("moving", loadedIndex);
         api.scrollTo(loadedIndex);
         setMove(1);
       }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { inter } from "@/app/fonts";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "School projects home",
@@ -22,7 +23,14 @@ export default function RootLayout({
           </Link>
         </div>
         <div className="flex flex-col p-14 justify-center items-center">
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
         </div>
       </body>
     </html>
