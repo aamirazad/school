@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import LoadingSpinner from "@/components/loading-spinner";
-import { Check } from "lucide-react";
 
 interface QuestionProps {
   steps: (typeof questions)[0]["steps"];
@@ -124,7 +123,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
                     defaultValue={userAnswers[index]?.toString() || ""}
                     placeholder={`Enter your answer in ${step.unit}`}
                     className="flex-grow"
-                    disabled={index != currentStep}
+                    disabled={index != currentStep || shadowColor == "green"}
                   />
                   <span className="text-gray-500">{step.unit}</span>
                 </div>
@@ -195,10 +194,11 @@ export default function DeltaChem() {
     <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg ease-in duration-300">
       <h1 className="text-3xl font-bold mb-4">Δ Chem</h1>
       {currentQuestion >= questions.length ? (
-        <>
-          <Check />
-          <div className="">done</div>
-        </>
+        <div className="flex items-center justify-center">
+          <div className="inline-block text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 w-96 my-8 text-center">
+            Done!
+          </div>
+        </div>
       ) : (
         <>
           <h1 className="text-xl font-bold mb-6">
