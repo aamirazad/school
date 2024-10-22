@@ -52,7 +52,7 @@ function Question({ question, nextQuestion }: QuestionProps) {
         return newErrors;
       });
       setShadowColor("red");
-      setTimeout(() => setShadowColor(""), 1000);
+      setTimeout(() => setShadowColor(""), 2000);
       return;
     }
 
@@ -77,7 +77,7 @@ function Question({ question, nextQuestion }: QuestionProps) {
             nextQuestion();
           }
         }
-      }, 1000);
+      }, 2000);
     } else {
       setErrors((prev) => {
         const newErrors = [...prev];
@@ -85,7 +85,7 @@ function Question({ question, nextQuestion }: QuestionProps) {
         return newErrors;
       });
       setShadowColor("red");
-      setTimeout(() => setShadowColor(""), 1000);
+      setTimeout(() => setShadowColor(""), 2000);
     }
   };
 
