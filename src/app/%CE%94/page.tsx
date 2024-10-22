@@ -77,7 +77,7 @@ function Question({ question, nextQuestion }: QuestionProps) {
             nextQuestion();
           }
         }
-      }, 2000);
+      }, 1200);
     } else {
       setErrors((prev) => {
         const newErrors = [...prev];
