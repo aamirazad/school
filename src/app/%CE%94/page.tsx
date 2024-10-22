@@ -1,30 +1,29 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { questions } from "./questions/gas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import LoadingSpinner from "@/components/loading-spinner";
+import { Check } from "lucide-react";
 
 interface QuestionProps {
-  question: (typeof questions)[0];
+  steps: (typeof questions)[0]["steps"];
   nextQuestion: () => void;
 }
 
-function Question({ question, nextQuestion }: QuestionProps) {
+function Steps({ steps, nextQuestion }: QuestionProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>(
-    Array(question.length).fill(null)
+    Array(steps.length).fill(null)
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [showHint, setShowHint] = useState<boolean[]>(
-    Array(question.length).fill(false)
+    Array(steps.length).fill(false)
   );
-  const [errors, setErrors] = useState<string[]>(
-    Array(question.length).fill("")
-  );
+  const [errors, setErrors] = useState<string[]>(Array(steps.length).fill(""));
   const [shadowColor, setShadowColor] = useState<string>("");
 
   useEffect(() => {
@@ -56,7 +55,7 @@ function Question({ question, nextQuestion }: QuestionProps) {
       return;
     }
 
-    if (Math.abs(numericAnswer - question[index].solution) < 0.1) {
+    if (Math.abs(numericAnswer - steps[index].solution) < 0.1) {
       setUserAnswers((prev) => {
         const newAnswers = [...prev];
         newAnswers[index] = numericAnswer;
@@ -71,7 +70,7 @@ function Question({ question, nextQuestion }: QuestionProps) {
       setTimeout(() => {
         setShadowColor("");
         if (index === currentStep) {
-          if (currentStep < question.length - 1) {
+          if (currentStep < steps.length - 1) {
             setCurrentStep(currentStep + 1);
           } else {
             nextQuestion();
@@ -91,7 +90,7 @@ function Question({ question, nextQuestion }: QuestionProps) {
 
   return (
     <div>
-      {question.map((step, index) => (
+      {steps.map((step, index) => (
         <div
           key={index}
           className={`mb-6 ${index != currentStep ? "opacity-50" : ""}`}
@@ -195,12 +194,28 @@ export default function DeltaChem() {
   return (
     <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg ease-in duration-300">
       <h1 className="text-3xl font-bold mb-4">Δ Chem</h1>
-      <h1 className="text-xl font-bold mb-6">Question {currentQuestion + 1}</h1>
-      <Question
-        question={questions[currentQuestion]}
-        nextQuestion={nextQuestion}
-        key={currentQuestion}
-      />
+      {currentQuestion >= questions.length ? (
+        <>
+          <Check />
+          <div className="">done</div>
+        </>
+      ) : (
+        <>
+          <h1 className="text-xl font-bold mb-6">
+            Question {currentQuestion + 1}
+          </h1>
+          <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 mb-6">
+            <h2 className="text-xl font-bold text-white">
+              {questions[currentQuestion]["question"]}
+            </h2>
+          </div>
+          <Steps
+            steps={questions[currentQuestion]["steps"]}
+            nextQuestion={nextQuestion}
+            key={currentQuestion}
+          />
+        </>
+      )}
       <div className="flex justify-center my-4">
         <div className="w-2/3">
           <Progress value={(currentQuestion / (questions.length - 1)) * 100} />
