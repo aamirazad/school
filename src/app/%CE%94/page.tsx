@@ -172,6 +172,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
 export default function DeltaChem() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -196,6 +197,8 @@ export default function DeltaChem() {
   if (!isMounted) {
     return <LoadingSpinner />; // or a loading spinner
   }
+
+  const teacher = searchParams.get("teacher");
 
   return (
     <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg ease-in duration-300">
@@ -228,6 +231,7 @@ export default function DeltaChem() {
           <Progress value={(currentQuestion / questions.length) * 100} />
         </div>
       </div>
+      <Suspense>
       <div className="flex justify-center gap-4">
         {currentQuestion > 0 ? (
           <Button
@@ -239,6 +243,7 @@ export default function DeltaChem() {
             Back
           </Button>
         ) : null}
+        {teacher && currentQuestion < questions.length ? (
           <Button
             onClick={() => {
               setCurrentQuestion((prev) => prev + 1);
@@ -246,7 +251,9 @@ export default function DeltaChem() {
           >
             Forward
           </Button>
+        ) : null}
       </div>
+      </Suspense>
     </div>
   );
 }
