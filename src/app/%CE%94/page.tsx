@@ -237,8 +237,8 @@ export default function DeltaChem() {
 }
 
 function Buttons() {
-  const teacher = searchParams.get("teacher");
   const searchParams = useSearchParams();
+  const teacher = searchParams.get("teacher");
 
   return (
     <div className="flex justify-center gap-4">
