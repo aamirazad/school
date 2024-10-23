@@ -202,6 +202,7 @@ export default function DeltaChem() {
   const teacher = searchParams.get("teacher");
 
   return (
+    <Suspense>
     <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg ease-in duration-300">
       <h1 className="text-3xl font-bold mb-4">Δ Chem</h1>
       {currentQuestion >= questions.length ? (
@@ -232,7 +233,6 @@ export default function DeltaChem() {
           <Progress value={(currentQuestion / questions.length) * 100} />
         </div>
       </div>
-      <Suspense>
       <div className="flex justify-center gap-4">
         {currentQuestion > 0 ? (
           <Button
@@ -254,7 +254,8 @@ export default function DeltaChem() {
           </Button>
         ) : null}
       </div>
-      </Suspense>
     </div>
+  </Suspense>
+
   );
 }
