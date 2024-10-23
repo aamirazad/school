@@ -57,7 +57,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
       return;
     }
 
-    if (Math.abs(numericAnswer - steps[index].solution) < 1) {
+    if (Math.abs(numericAnswer - steps[index].solution) < 0.5) {
       setUserAnswers((prev) => {
         const newAnswers = [...prev];
         newAnswers[index] = numericAnswer;
@@ -191,7 +191,7 @@ export default function DeltaChem() {
   }, [currentQuestion, isMounted]);
 
   const teacher = searchParams.get("teacher");
-  console.log(teacher)
+  console.log(teacher);
 
   const nextQuestion = () => {
     setCurrentQuestion((prev) => prev + 1);
@@ -233,7 +233,17 @@ export default function DeltaChem() {
         </div>
       </div>
       <div className="flex justify-center gap-4">
-        {teacher && currentQuestion < questions.length - 1 ? (
+        {currentQuestion > 0 ? (
+          <Button
+            onClick={() => {
+              setCurrentQuestion(currentQuestion - 1);
+            }}
+            variant={"destructive"}
+          >
+            Back
+          </Button>
+        ) : null}
+        {teacher && currentQuestion < questions.length ? (
           <Button
             onClick={() => {
               setCurrentQuestion((prev) => prev + 1);
@@ -242,25 +252,6 @@ export default function DeltaChem() {
             Forward
           </Button>
         ) : null}
-        {currentQuestion > 0 ? (
-          <Button
-            onClick={() => {
-              setCurrentQuestion(currentQuestion - 1);
-            }}
-          >
-            Back
-          </Button>
-        ) : (
-          <></>
-        )}
-        <Button
-          onClick={() => {
-            setCurrentQuestion(0);
-          }}
-          variant={"destructive"}
-        >
-          Reset
-        </Button>
       </div>
     </div>
   );
