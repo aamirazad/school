@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import LoadingSpinner from "@/components/loading-spinner";
 import Latex from "react-latex-next";
 import "katex/dist/katex.min.css";
+import { useSearchParams } from "next/navigation";
 
 interface QuestionProps {
   steps: (typeof questions)[0]["steps"];
@@ -89,7 +90,6 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
     }
   };
 
-
   return (
     <div>
       {steps.map((step, index) => (
@@ -130,7 +130,9 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
                     className="flex-grow"
                     disabled={index != currentStep || shadowColor == "green"}
                   />
-                  <span className="text-gray-500"><Latex>${step.unit}$</Latex></span>
+                  <span className="text-gray-500">
+                    <Latex>${step.unit}$</Latex>
+                  </span>
                 </div>
               </div>
 
@@ -170,6 +172,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
 export default function DeltaChem() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -186,6 +189,9 @@ export default function DeltaChem() {
       localStorage.setItem("currentQuestion", currentQuestion.toString());
     }
   }, [currentQuestion, isMounted]);
+
+  const teacher = searchParams.get("teacher");
+  console.log(teacher)
 
   const nextQuestion = () => {
     setCurrentQuestion((prev) => prev + 1);
@@ -223,10 +229,19 @@ export default function DeltaChem() {
       )}
       <div className="flex justify-center my-4">
         <div className="w-2/3">
-          <Progress value={(currentQuestion / (questions.length)) * 100} />
+          <Progress value={(currentQuestion / questions.length) * 100} />
         </div>
       </div>
       <div className="flex justify-center gap-4">
+        {teacher && currentQuestion < questions.length - 1 ? (
+          <Button
+            onClick={() => {
+              setCurrentQuestion((prev) => prev + 1);
+            }}
+          >
+            Forward
+          </Button>
+        ) : null}
         {currentQuestion > 0 ? (
           <Button
             onClick={() => {
