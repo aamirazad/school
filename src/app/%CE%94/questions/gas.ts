@@ -1,7 +1,8 @@
 //  , and steam is .  and the $\\Delta H_{\\text{fus}} = 6.02\\ \\text{kJ/mol}$
 export const questions = [
   {
-    question: "What quantity of energy does it take to covert $200\\ \\text{g}$ ice at $-10.0\\degree \\text{C}$ to steam at $300\\degree \\text{C}$?",
+    question:
+      "What quantity of energy does it take to covert $200\\ \\text{g}$ ice at $-10.0\\degree \\text{C}$ to steam at $300\\degree \\text{C}$?",
     steps: [
       {
         instruction:
@@ -46,12 +47,28 @@ export const questions = [
         hint: "$q= mC \\Delta T$",
       },
       {
-        instruction:
-          "Add up all the energy used!",
+        instruction: "Add up all the energy used!",
         solution: 687,
         unit: "kJ",
         hint: "Addition",
       },
+    ],
+  },
+  {
+    question: "A container holds 0.5 mol of an ideal gas at a pressure of 1.0 atm and a temperature of 300 K. You then heat the gas to 600 K, causing the volume to expand. If the pressure remains constant, what will the final volume of the gas be?",
+    steps: [
+      {
+        instruction: "Find the initial volume $V_1$",
+        solution: 12.309,
+        unit: "L",
+        hint: "$PV=nRT$",
+      },
+      {
+        instruction: "Find the final volume",
+        solution: 24.618,
+        unit: "L",
+        hint: "$\\frac{V_1}{T_1} = \\frac{V_2}{T_2}$", 
+      }
     ],
   },
 ];
