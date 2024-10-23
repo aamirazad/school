@@ -10,7 +10,7 @@ import LoadingSpinner from "@/components/loading-spinner";
 import Latex from "react-latex-next";
 import "katex/dist/katex.min.css";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from 'react'
+import { Suspense } from "react";
 
 interface QuestionProps {
   steps: (typeof questions)[0]["steps"];
@@ -173,7 +173,6 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
 export default function DeltaChem() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -199,10 +198,7 @@ export default function DeltaChem() {
     return <LoadingSpinner />; // or a loading spinner
   }
 
-  const teacher = searchParams.get("teacher");
-
   return (
-    <Suspense>
     <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg ease-in duration-300">
       <h1 className="text-3xl font-bold mb-4">Δ Chem</h1>
       {currentQuestion >= questions.length ? (
@@ -233,29 +229,38 @@ export default function DeltaChem() {
           <Progress value={(currentQuestion / questions.length) * 100} />
         </div>
       </div>
-      <div className="flex justify-center gap-4">
-        {currentQuestion > 0 ? (
-          <Button
-            onClick={() => {
-              setCurrentQuestion(currentQuestion - 1);
-            }}
-            variant={"destructive"}
-          >
-            Back
-          </Button>
-        ) : null}
-        {teacher && currentQuestion < questions.length ? (
-          <Button
-            onClick={() => {
-              setCurrentQuestion((prev) => prev + 1);
-            }}
-          >
-            Forward
-          </Button>
-        ) : null}
-      </div>
+      <Suspense>
+        <Buttons />
+      </Suspense>
     </div>
-  </Suspense>
+  );
+}
 
+function Buttons() {
+  const teacher = searchParams.get("teacher");
+  const searchParams = useSearchParams();
+
+  return (
+    <div className="flex justify-center gap-4">
+      {currentQuestion > 0 ? (
+        <Button
+          onClick={() => {
+            setCurrentQuestion(currentQuestion - 1);
+          }}
+          variant={"destructive"}
+        >
+          Back
+        </Button>
+      ) : null}
+      {teacher && currentQuestion < questions.length ? (
+        <Button
+          onClick={() => {
+            setCurrentQuestion((prev) => prev + 1);
+          }}
+        >
+          Forward
+        </Button>
+      ) : null}
+    </div>
   );
 }
