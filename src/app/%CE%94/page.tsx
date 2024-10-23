@@ -10,6 +10,7 @@ import LoadingSpinner from "@/components/loading-spinner";
 import Latex from "react-latex-next";
 import "katex/dist/katex.min.css";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from 'react'
 
 interface QuestionProps {
   steps: (typeof questions)[0]["steps"];
