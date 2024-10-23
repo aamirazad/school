@@ -56,7 +56,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
       return;
     }
 
-    if (Math.abs(numericAnswer - steps[index].solution) < 0.1) {
+    if (Math.abs(numericAnswer - steps[index].solution) < 1) {
       setUserAnswers((prev) => {
         const newAnswers = [...prev];
         newAnswers[index] = numericAnswer;

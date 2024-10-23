@@ -34,21 +34,21 @@ export const questions = [
       {
         instruction:
           "Now that we are a $100\\degree \\text{C}$ liquid, determine the energy required to become a gas. $\\Delta H_{\\text{vap}} = 40.7\\ \\text{kJ/mol}$",
-        solution: 451.77,
+        solution: 451.8,
         unit: "kJ",
         hint: "$q=\\Delta H_{fus} \\cdot n$",
       },
       {
         instruction:
           "Finally, heat the gas to $300\\degree \\text{C}$. The specific heat capacity of steam is $2.02 \\ \\text{J/g} \\cdot \\degree \\text{C}$",
-        solution: 1212,
+        solution: 80.8,
         unit: "kJ",
         hint: "$q= mC \\Delta T$",
       },
       {
         instruction:
           "Add up all the energy used!",
-        solution: 1829.33,
+        solution: 687,
         unit: "kJ",
         hint: "Addition",
       },
