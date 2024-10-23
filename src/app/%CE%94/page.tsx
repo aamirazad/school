@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import LoadingSpinner from "@/components/loading-spinner";
+import Latex from "react-latex-next";
+import "katex/dist/katex.min.css";
 
 interface QuestionProps {
   steps: (typeof questions)[0]["steps"];
@@ -87,6 +89,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
     }
   };
 
+
   return (
     <div>
       {steps.map((step, index) => (
@@ -104,7 +107,9 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
             }`}
           >
             <p className="font-semibold mb-2">Step {index + 1}:</p>
-            <p className="mb-4">{step.instruction}</p>
+            <p className="mb-4 prose">
+              <Latex>{step.instruction}</Latex>
+            </p>
             <form
               onSubmit={(e) => handleSubmit(e, index)}
               className="space-y-4"
@@ -125,7 +130,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
                     className="flex-grow"
                     disabled={index != currentStep || shadowColor == "green"}
                   />
-                  <span className="text-gray-500">{step.unit}</span>
+                  <span className="text-gray-500"><Latex>${step.unit}$</Latex></span>
                 </div>
               </div>
 
@@ -150,7 +155,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
 
                 {showHint[index] && (
                   <p className="mt-4 text-sm text-gray-300 bg-gray-900 p-2 rounded">
-                    Hint: {step.hint}
+                    <Latex>Hint: {step.hint}</Latex>
                   </p>
                 )}
               </div>
@@ -206,7 +211,7 @@ export default function DeltaChem() {
           </h1>
           <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 mb-6">
             <h2 className="text-xl font-bold text-white">
-              {questions[currentQuestion]["question"]}
+              <Latex>{questions[currentQuestion]["question"]}</Latex>
             </h2>
           </div>
           <Steps
@@ -218,7 +223,7 @@ export default function DeltaChem() {
       )}
       <div className="flex justify-center my-4">
         <div className="w-2/3">
-          <Progress value={(currentQuestion / (questions.length - 1)) * 100} />
+          <Progress value={(currentQuestion / (questions.length)) * 100} />
         </div>
       </div>
       <div className="flex justify-center gap-4">

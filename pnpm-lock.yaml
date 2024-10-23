@@ -32,6 +32,9 @@ importers:
       embla-carousel-react:
         specifier: ^8.0.0-rc22
         version: 8.3.0(react@18.3.1)
+      latex:
+        specifier: ^0.0.1
+        version: 0.0.1
       lucide-react:
         specifier: ^0.453.0
         version: 0.453.0(react@18.3.1)
@@ -50,6 +53,9 @@ importers:
       react-hook-form:
         specifier: ^7.53.1
         version: 7.53.1(react@18.3.1)
+      react-latex-next:
+        specifier: ^3.0.0
+        version: 3.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sharp:
         specifier: ^0.33.2
         version: 0.33.5
@@ -709,6 +715,10 @@ packages:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
     engines: {node: '>= 6'}
 
+  commander@8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
+
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
@@ -1017,6 +1027,9 @@ packages:
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
 
+  fs-extra@0.3.2:
+    resolution: {integrity: sha512-2zH6Lm/k3SEnVAGq2m0fdRXXQ8+5W68N8WUEAwuBlHvWzvr882LhtvDy59bJYLwGnd+HjoA9DKrQMc+3TgpbDQ==}
+
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
@@ -1081,6 +1094,16 @@ packages:
 
   gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
+
+  graceful-fs@1.1.14:
+    resolution: {integrity: sha512-JUrvoFoQbLZpOZilKTXZX2e1EV0DTnuG5vsRFNFv4mPf/mnYbwNAFw/5x0rxeyaJslIdObGSgTTsMnM/acRaVw==}
+    engines: {node: '>=0.4.0'}
+    deprecated: please upgrade to graceful-fs 4 for compatibility with current and future versions of Node.js
+
+  graceful-fs@1.2.3:
+    resolution: {integrity: sha512-iiTUZ5vZ+2ZV+h71XAgwCSu6+NAizhFU3Yw8aC/hH5SQ3SnISqEqAek40imAFGtDcwJKNhXvSY+hzIolnLwcdQ==}
+    engines: {node: '>=0.4.0'}
+    deprecated: please upgrade to graceful-fs 4 for compatibility with current and future versions of Node.js
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
@@ -1297,9 +1320,16 @@ packages:
     resolution: {integrity: sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==}
     hasBin: true
 
+  jsonfile@0.0.1:
+    resolution: {integrity: sha512-exg1z4OyWfLfB05WCTNg+PB8MBSEBnRoRU6MjnE+GXRba1P2wfAvB0ISUWJM2Ve3M6JJlNHBJ4nFXEzjji/4HQ==}
+
   jsx-ast-utils@3.3.5:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
+
+  katex@0.16.11:
+    resolution: {integrity: sha512-RQrI8rlHY92OLf3rho/Ts8i/XvjgguEjOkO1BEXcU3N8BqPpSzBNwV/G0Ukr+P/l3ivvJUE/Fa/CwbS6HesGNQ==}
+    hasBin: true
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -1310,6 +1340,9 @@ packages:
   language-tags@1.0.9:
     resolution: {integrity: sha512-MbjN408fEndfiQXbFQ1vnd+1NoLDsnQW41410oQBXiyXDMYH5z505juWa4KUE1LqxRC7DgOgZDbKLxHIwm27hA==}
     engines: {node: '>=0.10'}
+
+  latex@0.0.1:
+    resolution: {integrity: sha512-gjoKyqqGcwtTqxLa1duivzt5gFPcW/8uXVMZeR75OvoF61XkC1rDR9RvywQ0nLd70fs4LsA5m5siuMfuzEDUtA==}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -1377,6 +1410,10 @@ packages:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
+  mkdirp@0.3.5:
+    resolution: {integrity: sha512-8OCq0De/h9ZxseqzCH8Kw/Filf5pF/vMI6+BH7Lu0jXz2pqYCjTAQRolSxRIi+Ax+oCCjlxoJMP0YQ4XlrQNHg==}
+    deprecated: Legacy versions of mkdirp are no longer supported. Please update to mkdirp 1.x. (Note that the API surface has changed to use Promises in 1.x.)
+
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
@@ -1390,6 +1427,10 @@ packages:
 
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
+
+  ncp@0.2.7:
+    resolution: {integrity: sha512-wPUepcV37u3Mw+ktjrUbl3azxwAkcD9RrVLQGlpSapWcEQM5jL0g8zwKo6ukOjVQAAEjqpRdLeojOalqqySpCg==}
+    hasBin: true
 
   next-themes@0.3.0:
     resolution: {integrity: sha512-/QHIrsYpd6Kfk7xakK4svpDI5mmXP0gfvCoJdGpZQ2TOrQZmsW0QxjaiLn8wbIKjtm4BTSqLoix4lxYYOnLJ/w==}
@@ -1607,6 +1648,13 @@ packages:
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
+  react-latex-next@3.0.0:
+    resolution: {integrity: sha512-x70f1b1G7TronVigsRgKHKYYVUNfZk/3bciFyYX1lYLQH2y3/TXku3+5Vap8MDbJhtopePSYBsYWS6jhzIdz+g==}
+    engines: {node: '>=12', npm: '>=5'}
+    peerDependencies:
+      react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
@@ -1644,6 +1692,14 @@ packages:
   reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
+
+  rimraf@2.0.3:
+    resolution: {integrity: sha512-uR09PSoW2+1hW0hquRqxb+Ae2h6R5ls3OAy2oNekQFtqbSJkltkhKRa+OhZKoxWsN9195Gp1vg7sELDRoJ8a3w==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
+
+  rimraf@2.1.4:
+    resolution: {integrity: sha512-tzwmX16YQhcFu0T/m0gHBcFKx6yQAg77Z6WWaQSJsUekXYa6yaAmHhrDdmFicgauX/er7GsdN+vRao3mBhA4kQ==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
@@ -1809,6 +1865,10 @@ packages:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
 
+  temp@0.5.1:
+    resolution: {integrity: sha512-Gwc1QWGkf3f3d0y8wNyC9uvVqAsmVdUMPzdiLJDNVAHhlxZmSWlvVZAk1LmZcBuYcmhvJ0oHDVHksghU3VI/0w==}
+    engines: {'0': node >=0.8.0}
+
   text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
 
@@ -1818,6 +1878,9 @@ packages:
 
   thenify@3.3.1:
     resolution: {integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==}
+
+  through@2.1.0:
+    resolution: {integrity: sha512-uvPczOKXZtx4V1j1upuVsJAaUs2sOwCT6CVDT/xsse/AvenhMxgmK1LxILJUm2WoSZYi8RhOb10P9zvwjZOipQ==}
 
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
@@ -2536,6 +2599,8 @@ snapshots:
 
   commander@4.1.1: {}
 
+  commander@8.3.0: {}
+
   concat-map@0.0.1: {}
 
   cross-spawn@7.0.3:
@@ -3013,6 +3078,13 @@ snapshots:
 
   fraction.js@4.3.7: {}
 
+  fs-extra@0.3.2:
+    dependencies:
+      jsonfile: 0.0.1
+      mkdirp: 0.3.5
+      ncp: 0.2.7
+      rimraf: 2.0.3
+
   fs.realpath@1.0.0: {}
 
   fsevents@2.3.3:
@@ -3102,6 +3174,12 @@ snapshots:
   gopd@1.0.1:
     dependencies:
       get-intrinsic: 1.2.4
+
+  graceful-fs@1.1.14:
+    optional: true
+
+  graceful-fs@1.2.3:
+    optional: true
 
   graceful-fs@4.2.11: {}
 
@@ -3300,12 +3378,18 @@ snapshots:
     dependencies:
       minimist: 1.2.8
 
+  jsonfile@0.0.1: {}
+
   jsx-ast-utils@3.3.5:
     dependencies:
       array-includes: 3.1.8
       array.prototype.flat: 1.3.2
       object.assign: 4.1.5
       object.values: 1.2.0
+
+  katex@0.16.11:
+    dependencies:
+      commander: 8.3.0
 
   keyv@4.5.4:
     dependencies:
@@ -3316,6 +3400,12 @@ snapshots:
   language-tags@1.0.9:
     dependencies:
       language-subtag-registry: 0.3.23
+
+  latex@0.0.1:
+    dependencies:
+      fs-extra: 0.3.2
+      temp: 0.5.1
+      through: 2.1.0
 
   levn@0.4.1:
     dependencies:
@@ -3371,6 +3461,8 @@ snapshots:
 
   minipass@7.1.2: {}
 
+  mkdirp@0.3.5: {}
+
   ms@2.1.3: {}
 
   mz@2.7.0:
@@ -3382,6 +3474,8 @@ snapshots:
   nanoid@3.3.7: {}
 
   natural-compare@1.4.0: {}
+
+  ncp@0.2.7: {}
 
   next-themes@0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -3588,6 +3682,12 @@ snapshots:
 
   react-is@16.13.1: {}
 
+  react-latex-next@3.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      katex: 0.16.11
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   react@18.3.1:
     dependencies:
       loose-envify: 1.4.0
@@ -3634,6 +3734,14 @@ snapshots:
       supports-preserve-symlinks-flag: 1.0.0
 
   reusify@1.0.4: {}
+
+  rimraf@2.0.3:
+    optionalDependencies:
+      graceful-fs: 1.1.14
+
+  rimraf@2.1.4:
+    optionalDependencies:
+      graceful-fs: 1.2.3
 
   rimraf@3.0.2:
     dependencies:
@@ -3860,6 +3968,10 @@ snapshots:
 
   tapable@2.2.1: {}
 
+  temp@0.5.1:
+    dependencies:
+      rimraf: 2.1.4
+
   text-table@0.2.0: {}
 
   thenify-all@1.6.0:
@@ -3869,6 +3981,8 @@ snapshots:
   thenify@3.3.1:
     dependencies:
       any-promise: 1.3.0
+
+  through@2.1.0: {}
 
   to-regex-range@5.0.1:
     dependencies:
