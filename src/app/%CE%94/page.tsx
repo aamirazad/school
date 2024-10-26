@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { questions } from "./questions/gas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,6 @@ import LoadingSpinner from "@/components/loading-spinner";
 import Latex from "react-latex-next";
 import "katex/dist/katex.min.css";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 
 interface QuestionProps {
   steps: (typeof questions)[0]["steps"];
@@ -170,9 +169,10 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
   );
 }
 
-export default function DeltaChem() {
+function DeltaChem() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -189,6 +189,9 @@ export default function DeltaChem() {
       localStorage.setItem("currentQuestion", currentQuestion.toString());
     }
   }, [currentQuestion, isMounted]);
+
+  const teacher = searchParams.get("teacher");
+  console.log(teacher);
 
   const nextQuestion = () => {
     setCurrentQuestion((prev) => prev + 1);
@@ -229,38 +232,35 @@ export default function DeltaChem() {
           <Progress value={(currentQuestion / questions.length) * 100} />
         </div>
       </div>
-      <Suspense>
-        <Buttons />
-      </Suspense>
+      <div className="flex justify-center gap-4">
+        {currentQuestion > 0 ? (
+          <Button
+            onClick={() => {
+              setCurrentQuestion(currentQuestion - 1);
+            }}
+            variant={"destructive"}
+          >
+            Back
+          </Button>
+        ) : null}
+        {teacher && currentQuestion < questions.length ? (
+          <Button
+            onClick={() => {
+              setCurrentQuestion((prev) => prev + 1);
+            }}
+          >
+            Forward
+          </Button>
+        ) : null}
+      </div>
     </div>
   );
 }
 
-function Buttons() {
-  const searchParams = useSearchParams();
-  const teacher = searchParams.get("teacher");
-
+export default function DeltaChemWrapper() {
   return (
-    <div className="flex justify-center gap-4">
-      {currentQuestion > 0 ? (
-        <Button
-          onClick={() => {
-            setCurrentQuestion(currentQuestion - 1);
-          }}
-          variant={"destructive"}
-        >
-          Back
-        </Button>
-      ) : null}
-      {teacher && currentQuestion < questions.length ? (
-        <Button
-          onClick={() => {
-            setCurrentQuestion((prev) => prev + 1);
-          }}
-        >
-          Forward
-        </Button>
-      ) : null}
-    </div>
+    <Suspense fallback={<LoadingSpinner />}>
+      <DeltaChem />
+    </Suspense>
   );
 }
