@@ -15,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="{`${inter.className} antialiased`} text-slate-100 bg-black">
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} antialiased text-slate-100 bg-black`}>
         <div>
           <Link className="px-3" href="/">
             Back
@@ -25,7 +25,6 @@ export default function RootLayout({
         <div className="flex flex-col p-14 justify-center items-center">
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
