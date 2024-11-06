@@ -12,7 +12,7 @@ export default function Layout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-yellow-50 flex items-center justify-center p-4">
+      <body className="h-screen bg-yellow-50 flex items-center justify-center p-4">
         {children}
       </body>
     </html>

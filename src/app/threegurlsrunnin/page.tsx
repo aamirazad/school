@@ -17,7 +17,7 @@ export default function Component() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-yellow-50 flex items-center justify-center p-4">
+    <div className="h-screen bg-yellow-50 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-8 relative overflow-hidden">
         <h1 className="text-3xl font-bold text-yellow-600 mb-6 text-center">
           YMCA Yellow Shoelace Fundraiser
