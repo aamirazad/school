@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "YMCA Yellow Shoelace Fundraiser",
+  layout: false
 };
 
 export default function Layout({
