@@ -17,12 +17,11 @@ export default function Component() {
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-yellow-50 pl-20">
-      <div className="w-[450px] h-[150px] bg-white rounded-lg shadow-md p-3 relative overflow-hidden flex flex-col justify-between">
+      <div className="w-full h-1/2 bg-white rounded-lg shadow-md p-3 relative overflow-hidden flex flex-col justify-between">
         <h1 className="text-lg font-bold text-yellow-600 text-center">YMCA Yellow Shoelace Fundraiser</h1>
         
-        <div className="flex items-center justify-center flex-grow">
+        <div className="flex items-center justify-center flex-grow text-4xl font-bold text-yellow-500 mr-2">
           <motion.div 
-            className="text-4xl font-bold text-yellow-500 mr-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -36,11 +35,10 @@ export default function Component() {
           {[...Array(15)].map((_, index) => (
             <motion.div
               key={index}
-              className="w-1 h-8 bg-yellow-300 rounded-full transform -skew-x-12"
               initial={{ y: 10 }}
               animate={{ y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
-            />
+            ><div className='w-1 h-8 bg-yellow-300 rounded-full transform -skew-x-12' /></motion.div>
           ))}
         </div>
 
