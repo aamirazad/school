@@ -15,6 +15,10 @@ export default function Home() {
       href: "/%CE%94",
       name: "Δ Chem",
     },
+    {
+      href: "/threegurlsrunnin",
+      name: "Donation Tracker",
+    },
   ];
   return (
     <main className="text-slate-100 bg-black">
