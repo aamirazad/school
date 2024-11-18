@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 export default function Component() {
-  const AMOUNT_RAISED = 263;
+  const AMOUNT_RAISED = 273;
 
   const [displayAmount, setDisplayAmount] = useState(0);
 
