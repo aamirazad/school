@@ -1,52 +1,46 @@
 /* Default stuff */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.open-h {
   font-weight: bold;
   margin: 0.67em 0;
 }
 
-ul,
-ol {
+.open-ul,
+.open-ol {
   padding-left: 40px;
   list-style-type: disc;
 }
 
-li {
+.open-li {
   margin-bottom: 5px;
 }
 
-p {
+.open-p {
   margin: 1em 0;
 }
 
-img {
+.open-img {
   max-width: 100%;
   height: auto;
 }
 
-/* Keep your existing styles */
-body {
+.open-body {
   background: #141e24;
 }
-p {
+.open-p {
   color: #4f99aa;
 }
-h1 {
+.open-h1 {
   font-weight: bold;
   color: #15dd76;
   text-align: center;
 }
-h2 {
+.open-h2 {
   color: #e96c4c;
 }
-li {
+.open-li {
   color: #4f99aa;
 }
-h3 {
+.open-h3 {
   color: #4e9baf;
   font-weight: bold;
 }

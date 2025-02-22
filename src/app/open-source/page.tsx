@@ -4,11 +4,13 @@ import { PageWrapper } from "@/components/page-wrapper";
 
 export default function OpenSourcePage() {
   return (
-    <PageWrapper className="mx-64">
-      <h1>How Open Source Software Powers The World</h1>
+    <div className="mx-96 open-body">
+      <h1 className="open-h open-h1">
+        How Open Source Software Powers The World
+      </h1>
 
-      <h2>What is open source software?</h2>
-      <p id="intro">
+      <h2 className="open-h open-h2">What is open source software?</h2>
+      <p id="intro" className="open-p">
         The term 'open source' is used to describe software whose source code is
         available to the public. Although this may seem uninportant, there are
         lots of advangatges to having code be open source both for the user and
@@ -51,7 +53,7 @@ export default function OpenSourcePage() {
           </a>
         </p>
       </div>
-      <p>
+      <p className="open-p">
         Github, is a very popluar code hosting platform. When you put your code
         on github, it is then open source, anyone can access the code. Others
         can "fork" your code, which is essentally chaning your code so it fits
@@ -61,28 +63,30 @@ export default function OpenSourcePage() {
         they like it, can "merge" it to their software.
       </p>
 
-      <h2>Advantages of Open Source</h2>
-      <h3>When an app is open source a developer can ...</h3>
-      <ul>
+      <h2 className="open-h open-h2">Advantages of Open Source</h2>
+      <h3 className="open-h open-h3">
+        When an app is open source a developer can ...
+      </h3>
+      <ul className="open-ul">
         <img
           id="img"
           src="https://live.staticflickr.com/1262/1186846236_55c8eb1c46_w_d.jpg"
           alt="hacking"
         />
-        <li>Learn how an app works</li>
-        <p>
+        <li className="open-li">Learn how an app works</li>
+        <p className="open-p">
           Lets say a developer finds a feature in another persons app that they
           don't understand and want to learn how to have in their own app. They
           can just look at the code. Most of the time, open source developers
           publish docs that explain each feature.
         </p>
-        <li>Reveal security concerns</li>
-        <p>
+        <li className="open-li">Reveal security concerns</li>
+        <p className="open-p">
           An open source is much more safe than proprietery software beacuse it
           is impossible to secretlly put ransomware or any other bad stuff
           integrated in the app.
         </p>
-        <p id="cite" className="attrannounceibution">
+        <p id="cite" className="open-p attrannounceibution">
           "
           <a
             id="gray"
@@ -111,8 +115,8 @@ export default function OpenSourcePage() {
             CC BY-NC-SA 2.0
           </a>
         </p>
-        <li>Announce shady practices</li>
-        <p>
+        <li className="open-li">Announce shady practices</li>
+        <p className="open-p">
           If an app trys to secretly sell their users data and the code is open
           source, people will immediately notice an announce it to the public.
           For instance, Apple was just found tracking their users as soon as the
@@ -120,24 +124,24 @@ export default function OpenSourcePage() {
           tell the user, nobody knew beacuse the code for their phone is not
           open source.
         </p>
-        <li>Use the code in their own app</li>
-        <p>
-          This is pretty simple, if somebody wants a feauture, they can use it.
-          This makes the whole technology echosystem a better place. Even small
+        <li className="open-li">Use the code in their own app</li>
+        <p className="open-p">
+          This is pretty simple, if somebody wants a feature, they can use it.
+          This makes the whole technology ecosystem a better place. Even small
           developers have the capability to make an app as good as a company
           like Google.
         </p>
-        <li>Suggest changes to the code</li>
-        <p>
+        <li className="open-li">Suggest changes to the code</li>
+        <p className="open-p">
           This is really helpfull especially if you are a solo dev and don't
           have a team to help fix unknown bugs. If somebody is esspecially good
           in one field, they can help another developer who is not doing it in
           the most efficient way
         </p>
-        <li>Make a "fork" of the app</li>
-        <p>
-          This means the there can be more competition which will drive the app
-          to become better. For instance, if an app is missing some essential
+        <li className="open-li">Make a "fork" of the app</li>
+        <p className="open-p">
+          This means there can be more competition which will drive the app to
+          become better. For instance, if an app is missing some essential
           features that the public wants, somebody can copy the existing app,
           adding the needed features, then redestrubuite. Then if somebody
           really wants that feature, they can just use the fork instead of
@@ -145,8 +149,8 @@ export default function OpenSourcePage() {
         </p>
       </ul>
 
-      <h2>Technology that is powered by open source</h2>
-      <p>
+      <h2 className="open-h2">Technology that is powered by open source</h2>
+      <p className="open-p">
         Everything is build on top of open source software. Just think, if there
         was no open source software, anytime you wanted to code an application,
         you would have to build it from scratch; every developer reinventing the
@@ -157,19 +161,19 @@ export default function OpenSourcePage() {
         src="https://live.staticflickr.com/4562/26763407419_6555dace70_w_d.jpg"
         alt="iphone"
       />
-      <h3>
+      <h3 className="open-h3">
         There are millions of devices that run software that is open source.
       </h3>
-      <ul>
-        <li>Chrome</li>
-        <li>Android</li>
-        <li>Apache HTTP Server (The web)</li>
-        <li>Code.org</li>
-        <li>Linux</li>
-        <li>VLC</li>
+      <ul className="open-ul">
+        <li className="open-li">Chrome</li>
+        <li className="open-li">Android</li>
+        <li className="open-li">Apache HTTP Server (The web)</li>
+        <li className="open-li">Code.org</li>
+        <li className="open-li">Linux</li>
+        <li className="open-li">VLC</li>
       </ul>
-      <h3>And even more devices powered by open source</h3>
-      <p id="cite" className="attribution">
+      <h3 className="open-h3">And even more devices powered by open source</h3>
+      <p className="open-p attribution" id="cite">
         "
         <a
           id="gray"
@@ -198,14 +202,16 @@ export default function OpenSourcePage() {
           CC BY-ND 2.0
         </a>{" "}
       </p>
-      <ul>
-        <li>Google</li>
-        <li>iPhone</li>
-        <li>Programming languages (Java, python, Javascript etc.)</li>
-        <li>James webb telescope</li>
+      <ul className="open-ul">
+        <li className="open-li">Google</li>
+        <li className="open-li">iPhone</li>
+        <li className="open-li">
+          Programming languages (Java, python, Javascript etc.)
+        </li>
+        <li className="open-li">James webb telescope</li>
 
-        <li>Windows</li>
+        <li className="open-li">Windows</li>
       </ul>
-    </PageWrapper>
+    </div>
   );
 }

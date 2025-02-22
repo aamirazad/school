@@ -1,5 +1,4 @@
 "use client";
-import { PageWrapper } from "@/components/page-wrapper";
 import Link from "next/link";
 
 export default function Home() {
@@ -30,8 +29,8 @@ export default function Home() {
     },
   ];
   return (
-    <PageWrapper className="text-slate-100 bg-black">
-      <main>
+    <div className="text-slate-100 bg-black min-h-screen">
+      <div className="flex flex-col p-14 justify-center items-center">
         <h1 className="text-2xl p-6 font-bold items-center">Welcome</h1>
         <ul className="list-disc items-center text-slate-300">
           {links.map((data, index) => (
@@ -40,7 +39,7 @@ export default function Home() {
             </li>
           ))}
         </ul>
-      </main>
-    </PageWrapper>
+      </div>
+    </div>
   );
 }
