@@ -14,6 +14,8 @@ import { useState, useEffect } from "react";
 import { Suspense } from "react";
 
 export default function Home() {
+  const cdn =
+    "https://xrgkyc5aexvkc7oh.public.blob.vercel-storage.com/renaissance-image-collection/";
   const [currentIndex, setCurrentIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
 
@@ -55,7 +57,7 @@ export default function Home() {
                   <figure className="flex flex-col items-center text-center py-8 w-32">
                     <div className="relative w-96 h-96">
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_CDN}${item.src}`}
+                        src={`${cdn}${item.src}`}
                         alt={item.alt}
                         fill={true}
                         priority={index === 0 ? true : false}

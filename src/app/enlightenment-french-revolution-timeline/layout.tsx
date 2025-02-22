@@ -1,3 +1,4 @@
+import { PageWrapper } from "@/components/page-wrapper";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,5 +11,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main>{children}</main>;
+  return <PageWrapper>{children}</PageWrapper>;
 }

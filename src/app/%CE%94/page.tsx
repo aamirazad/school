@@ -10,6 +10,7 @@ import LoadingSpinner from "@/components/loading-spinner";
 import Latex from "react-latex-next";
 import "katex/dist/katex.min.css";
 import { useSearchParams } from "next/navigation";
+import { PageWrapper } from "@/components/page-wrapper";
 
 interface QuestionProps {
   steps: (typeof questions)[0]["steps"];
@@ -19,11 +20,11 @@ interface QuestionProps {
 function Steps({ steps, nextQuestion }: QuestionProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>(
-    Array(steps.length).fill(null)
+    Array(steps.length).fill(null),
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [showHint, setShowHint] = useState<boolean[]>(
-    Array(steps.length).fill(false)
+    Array(steps.length).fill(false),
   );
   const [errors, setErrors] = useState<string[]>(Array(steps.length).fill(""));
   const [shadowColor, setShadowColor] = useState<string>("");
@@ -102,8 +103,8 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
               shadowColor === "green" && index === currentStep
                 ? "shadow-[0_0px_60px_-5px_rgba(104,211,145,0.6)]"
                 : shadowColor === "red" && index === currentStep
-                ? "shadow-[0_0px_60px_-5px_rgba(252,129,129,0.6)]"
-                : ""
+                  ? "shadow-[0_0px_60px_-5px_rgba(252,129,129,0.6)]"
+                  : ""
             }`}
           >
             <p className="font-semibold mb-2">Step {index + 1}:</p>
@@ -202,56 +203,58 @@ function DeltaChem() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg ease-in duration-300">
-      <h1 className="text-3xl font-bold mb-4">Δ Chem</h1>
-      {currentQuestion >= questions.length ? (
-        <div className="flex items-center justify-center">
-          <div className="inline-block text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 w-96 my-8 text-center">
-            Done!
+    <div className="">
+      <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg ease-in duration-300">
+        <h1 className="text-3xl font-bold mb-4">Δ Chem</h1>
+        {currentQuestion >= questions.length ? (
+          <div className="flex items-center justify-center">
+            <div className="inline-block text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 w-96 my-8 text-center">
+              Done!
+            </div>
+          </div>
+        ) : (
+          <>
+            <h1 className="text-xl font-bold mb-6">
+              Question {currentQuestion + 1}
+            </h1>
+            <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 mb-6">
+              <h2 className="text-xl font-bold text-white">
+                <Latex>{questions[currentQuestion]["question"]}</Latex>
+              </h2>
+            </div>
+            <Steps
+              steps={questions[currentQuestion]["steps"]}
+              nextQuestion={nextQuestion}
+              key={currentQuestion}
+            />
+          </>
+        )}
+        <div className="flex justify-center my-4">
+          <div className="w-2/3">
+            <Progress value={(currentQuestion / questions.length) * 100} />
           </div>
         </div>
-      ) : (
-        <>
-          <h1 className="text-xl font-bold mb-6">
-            Question {currentQuestion + 1}
-          </h1>
-          <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 mb-6">
-            <h2 className="text-xl font-bold text-white">
-              <Latex>{questions[currentQuestion]["question"]}</Latex>
-            </h2>
-          </div>
-          <Steps
-            steps={questions[currentQuestion]["steps"]}
-            nextQuestion={nextQuestion}
-            key={currentQuestion}
-          />
-        </>
-      )}
-      <div className="flex justify-center my-4">
-        <div className="w-2/3">
-          <Progress value={(currentQuestion / questions.length) * 100} />
+        <div className="flex justify-center gap-4">
+          {currentQuestion > 0 ? (
+            <Button
+              onClick={() => {
+                setCurrentQuestion(currentQuestion - 1);
+              }}
+              variant={"destructive"}
+            >
+              Back
+            </Button>
+          ) : null}
+          {teacher && currentQuestion < questions.length ? (
+            <Button
+              onClick={() => {
+                setCurrentQuestion((prev) => prev + 1);
+              }}
+            >
+              Forward
+            </Button>
+          ) : null}
         </div>
-      </div>
-      <div className="flex justify-center gap-4">
-        {currentQuestion > 0 ? (
-          <Button
-            onClick={() => {
-              setCurrentQuestion(currentQuestion - 1);
-            }}
-            variant={"destructive"}
-          >
-            Back
-          </Button>
-        ) : null}
-        {teacher && currentQuestion < questions.length ? (
-          <Button
-            onClick={() => {
-              setCurrentQuestion((prev) => prev + 1);
-            }}
-          >
-            Forward
-          </Button>
-        ) : null}
       </div>
     </div>
   );

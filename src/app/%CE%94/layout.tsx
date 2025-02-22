@@ -1,3 +1,4 @@
+import { PageWrapper } from "@/components/page-wrapper";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,5 +10,9 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main>{children}</main>;
+  return (
+    <PageWrapper className="text-slate-100 bg-black flex flex-col p-14 justify-center items-center">
+      <main>{children}</main>
+    </PageWrapper>
+  );
 }

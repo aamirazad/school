@@ -1,0 +1,79 @@
+/* Default stuff */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bold;
+  margin: 0.67em 0;
+}
+
+ul,
+ol {
+  padding-left: 40px;
+  list-style-type: disc;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+p {
+  margin: 1em 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Keep your existing styles */
+body {
+  background: #141e24;
+}
+p {
+  color: #4f99aa;
+}
+h1 {
+  font-weight: bold;
+  color: #15dd76;
+  text-align: center;
+}
+h2 {
+  color: #e96c4c;
+}
+li {
+  color: #4f99aa;
+}
+h3 {
+  color: #4e9baf;
+  font-weight: bold;
+}
+#intro {
+  font-size: 20px;
+}
+#img {
+  width: 275px;
+  float: right;
+  border-color: #070a0c;
+  border-width: thick;
+  border-radius: 10px;
+  border-bottom-style: solid;
+}
+#wall {
+  width: 175px;
+  float: right;
+  border-color: #070a0c;
+  border-width: thick;
+  border-radius: 10px;
+  border-bottom-style: solid;
+}
+#cite {
+  float: right;
+  color: #4d656f;
+  font-size: 10px;
+}
+#gray {
+  color: #4d656f;
+}
