@@ -4,28 +4,28 @@ import Link from "next/link";
 export default function Home() {
   const links = [
     {
-      href: "/open-source",
-      name: "Open Source",
-    },
-    {
-      href: "/renaissance-image-collection",
-      name: "Renaissance Image Collection",
-    },
-    {
-      href: "/enlightenment-french-revolution-timeline",
-      name: "Enlightenentment/French Revolution Timeline",
-    },
-    {
-      href: "/%CE%94",
-      name: "Δ Chem",
+      href: "/chempuzzle",
+      name: "Chem Puzzle",
     },
     {
       href: "/threegurlsrunnin",
       name: "Donation Tracker",
     },
     {
-      href: "/chempuzzle",
-      name: "Chem Puzzle",
+      href: "/%CE%94",
+      name: "Δ Chem",
+    },
+    {
+      href: "/enlightenment-french-revolution-timeline",
+      name: "Enlightenentment/French Revolution Timeline",
+    },
+    {
+      href: "/renaissance-image-collection",
+      name: "Renaissance Image Collection",
+    },
+    {
+      href: "/open-source",
+      name: "Open Source",
     },
   ];
   return (

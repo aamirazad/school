@@ -11,5 +11,9 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <PageWrapper>{children}</PageWrapper>;
+  return (
+    <div className="flex flex-col items-center justify-center mt-8">
+      {children}
+    </div>
+  );
 }

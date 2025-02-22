@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { GeistSans } from "geist/font/sans";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "School projects home",
@@ -22,7 +23,9 @@ export default function RootLayout({
         <div className="absolute top-0 left-0 mt-1 ml-2">
           <Link href="/">Back</Link>
         </div>
-        <div>{children}</div>
+        <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

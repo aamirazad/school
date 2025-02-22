@@ -1,8 +1,7 @@
-// src/app/threegurlsrunnin/layout.tsx
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "YMCA Yellow Shoelace Fundraiser",
+  title: "ChemPuzzle",
 };
 
 export default function Layout({
@@ -10,5 +9,9 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return (
+    <div className="w-full h-screen justify-center bg-white">
+      <main>{children}</main>
+    </div>
+  );
 }

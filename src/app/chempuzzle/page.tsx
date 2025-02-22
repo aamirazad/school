@@ -79,7 +79,7 @@ export default function EdpuzzleClone() {
   };
 
   return (
-    <PageWrapper className="flex flex-col md:flex-row bg-gray-100 w-full">
+    <div className="flex flex-col md:flex-row bg-gray-100 w-full">
       <div className="p-4 flex-grow transition-all duration-300 ">
         <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
           <video
@@ -134,6 +134,6 @@ export default function EdpuzzleClone() {
           </div>
         ))}
       </div>
-    </PageWrapper>
+    </div>
   );
 }
