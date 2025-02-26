@@ -1,6 +1,6 @@
-import Link from "next/link";
+/* eslint-disable react/no-unescaped-entities */
+
 import "./open-source.css";
-import { PageWrapper } from "@/components/page-wrapper";
 
 export default function OpenSourcePage() {
   return (
