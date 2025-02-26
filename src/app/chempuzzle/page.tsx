@@ -2,12 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import { PlayCircle, PauseCircle, Volume2, VolumeX } from "lucide-react";
-import { PageWrapper } from "@/components/page-wrapper";
 
 const questions = [
   {
     id: 1,
-    time: 5,
+    time: 5.596061,
     type: "multiple-choice",
     text: "What is the capital of France?",
   },
@@ -29,6 +28,7 @@ export default function EdpuzzleClone() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [loaded, setLoaded] = useState(false);
   const [nextQuestion, setNextQuestion] = useState(0);
+  const [activeQuestion, setActiveQuestion] = useState<number | null>(null);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -46,12 +46,13 @@ export default function EdpuzzleClone() {
 
   useEffect(() => {
     console.log(questions[nextQuestion].time, currentTime);
-    if (questions[nextQuestion].time === Math.round(currentTime)) {
+    if (questions[nextQuestion].time <= currentTime) {
       console.log("Next question");
       if (videoRef.current) {
         videoRef.current.pause();
       }
       setIsPlaying(false);
+      setActiveQuestion(nextQuestion);
       setNextQuestion(nextQuestion + 1);
     }
   }, [currentTime]);
@@ -136,6 +137,9 @@ export default function EdpuzzleClone() {
           </div>
         </div>
       </div>
+      {activeQuestion !== null && (
+        <div className="w-12">Question {questions[activeQuestion].text}</div>
+      )}
       <div className="md:w-64 bg-white p-4 overflow-y-auto shadow-md">
         <h2 className="text-lg font-semibold mb-4">Upcoming Questions</h2>
         {questions.map((question) => (
