@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { PlayCircle, PauseCircle, Volume2, VolumeX } from "lucide-react";
+import Question from "./_components/question";
 
-const questions = [
+export const questions = [
   {
     id: 1,
-    time: 5.596061,
+    time: 2,
     type: "multiple-choice",
     text: "What is the capital of France?",
   },
@@ -45,15 +46,12 @@ export default function EdpuzzleClone() {
   }, []);
 
   useEffect(() => {
-    console.log(questions[nextQuestion].time, currentTime);
     if (questions[nextQuestion].time <= currentTime) {
-      console.log("Next question");
-      if (videoRef.current) {
-        videoRef.current.pause();
-      }
-      setIsPlaying(false);
+      togglePlay();
       setActiveQuestion(nextQuestion);
       setNextQuestion(nextQuestion + 1);
+    } else {
+      setActiveQuestion(null);
     }
   }, [currentTime]);
 
@@ -70,7 +68,7 @@ export default function EdpuzzleClone() {
   };
 
   const togglePlay = () => {
-    if (videoRef.current) {
+    if (videoRef.current && activeQuestion == null) {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
@@ -93,16 +91,40 @@ export default function EdpuzzleClone() {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.code === "KeyM") {
+        toggleMute();
+      } else if (e.code === "ArrowLeft") {
+        if (videoRef.current) {
+          videoRef.current.currentTime -= 5;
+        }
+      }
+    },
+    [togglePlay, toggleMute, videoRef],
+  );
+
   return (
-    <div className="flex flex-col md:flex-row  bg-gray-100 w-full h-fit text-slate-900">
+    <div
+      onKeyDown={handleKeyDown}
+      className="flex flex-col md:flex-row  bg-gray-100 w-full h-fit text-slate-900"
+    >
       <div className="flex-grow p-4 transition-all duration-300">
-        <div className="xl:w-11/12">
+        <div
+          className={`transition-all duration-300 ${
+            activeQuestion !== null ? "w-3/5" : "w-11/12"
+          } bg-gray-200 h-10`}
+        >
           <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
             <video
               ref={videoRef}
               className="w-full h-full"
-              src="https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_30mb.mp4"
+              src="http://debian:4013/projects/Folding@home%20stats%20website%20-%20My%20CS50%20Final%20project.mp4"
               onContextMenu={(e) => e.preventDefault()}
+              disablePictureInPicture
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-75 text-white p-2">
               <div className="flex items-center justify-between mb-2">
@@ -137,9 +159,9 @@ export default function EdpuzzleClone() {
           </div>
         </div>
       </div>
-      {activeQuestion !== null && (
-        <div className="w-12">Question {questions[activeQuestion].text}</div>
-      )}
+      {activeQuestion !== null ? (
+        <Question question={questions[activeQuestion]} />
+      ) : null}
       <div className="md:w-64 bg-white p-4 overflow-y-auto shadow-md">
         <h2 className="text-lg font-semibold mb-4">Upcoming Questions</h2>
         {questions.map((question) => (
