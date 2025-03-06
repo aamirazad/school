@@ -112,7 +112,7 @@ export default function EdpuzzleClone() {
       onKeyDown={handleKeyDown}
       className="flex flex-col md:flex-row  bg-gray-100 w-full h-fit text-slate-900"
     >
-      <div className="flex-grow p-4 transition-all duration-300">
+      <div className="grow p-4 transition-all duration-300">
         <div
           className={`transition-all duration-300 ${
             activeQuestion !== null ? "w-3/5" : "w-11/12"
@@ -128,7 +128,7 @@ export default function EdpuzzleClone() {
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-75 text-white p-2">
               <div className="flex items-center justify-between mb-2">
-                <button onClick={togglePlay} className={"focus:outline-none"}>
+                <button onClick={togglePlay} className={"focus:outline-hidden"}>
                   {isPlaying ? (
                     <PauseCircle size={24} />
                   ) : (
@@ -136,14 +136,14 @@ export default function EdpuzzleClone() {
                   )}
                 </button>
                 <div className="text-sm">{`${formatTime(currentTime)} / ${formatTime(duration)}`}</div>
-                <button onClick={toggleMute} className="focus:outline-none">
+                <button onClick={toggleMute} className="focus:outline-hidden">
                   {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
                 </button>
               </div>
               {duration !== 0 && (
-                <div className="relative h-1 bg-gray-600 rounded">
+                <div className="relative h-1 bg-gray-600 rounded-sm">
                   <div
-                    className="absolute top-0 left-0 h-full bg-blue-500 rounded transition-all duration-300"
+                    className="absolute top-0 left-0 h-full bg-blue-500 rounded-sm transition-all duration-300"
                     style={{ width: `${(currentTime / duration) * 100}%` }}
                   />
                   {questions.map((question) => (

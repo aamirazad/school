@@ -31,7 +31,7 @@ export default function Question({
               }}
               defaultValue={userAnswers[index]?.toString() || ""}
               placeholder={`Enter your answer in ${step.unit}`}
-              className="flex-grow"
+              className="grow"
               disabled={index != currentStep || shadowColor == "green"}
             />
             <span className="text-gray-500">
@@ -60,7 +60,7 @@ export default function Question({
           </Button>
 
           {showHint[index] && (
-            <p className="mt-4 text-sm text-gray-300 bg-gray-900 p-2 rounded">
+            <p className="mt-4 text-sm text-gray-300 bg-gray-900 p-2 rounded-sm">
               <Latex>Hint: {step.hint}</Latex>
             </p>
           )}

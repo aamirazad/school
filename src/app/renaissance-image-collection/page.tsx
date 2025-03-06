@@ -41,7 +41,7 @@ export default function Home() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <div className="flex flex-grow justify-center w-full animate-fadeIn">
+      <div className="flex grow justify-center w-full animate-fadeIn">
         <div className="flex flex-col items-center justify-between pb-8 w-3/4 xl:w-2/5">
           <h1 className="pt-6 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
             {imageData[currentIndex].title}
@@ -73,7 +73,7 @@ export default function Home() {
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
-          <figcaption className="leading-7 [&:not(:first-child)]:mt-6">
+          <figcaption className="leading-7 not-first:mt-6">
             <div>{imageData[currentIndex].caption}</div>
             <div>
               <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight pt-6">
