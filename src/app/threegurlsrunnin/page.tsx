@@ -22,7 +22,7 @@ export default function Component() {
           YMCA Yellow Shoelace Fundraiser
         </h1>
 
-        <div className="flex items-center justify-center flex-grow text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-yellow-500 mr-2">
+        <div className="flex items-center justify-center grow text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-yellow-500 mr-2">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

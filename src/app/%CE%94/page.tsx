@@ -10,7 +10,6 @@ import LoadingSpinner from "@/components/loading-spinner";
 import Latex from "react-latex-next";
 import "katex/dist/katex.min.css";
 import { useSearchParams } from "next/navigation";
-import { PageWrapper } from "@/components/page-wrapper";
 
 interface QuestionProps {
   steps: (typeof questions)[0]["steps"];
@@ -128,7 +127,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
                     }}
                     defaultValue={userAnswers[index]?.toString() || ""}
                     placeholder={`Enter your answer in ${step.unit}`}
-                    className="flex-grow"
+                    className="grow"
                     disabled={index != currentStep || shadowColor == "green"}
                   />
                   <span className="text-gray-500">
@@ -157,7 +156,7 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
                 </Button>
 
                 {showHint[index] && (
-                  <p className="mt-4 text-sm text-gray-300 bg-gray-900 p-2 rounded">
+                  <p className="mt-4 text-sm text-gray-300 bg-gray-900 p-2 rounded-sm">
                     <Latex>Hint: {step.hint}</Latex>
                   </p>
                 )}
@@ -208,7 +207,7 @@ function DeltaChem() {
         <h1 className="text-3xl font-bold mb-4">Δ Chem</h1>
         {currentQuestion >= questions.length ? (
           <div className="flex items-center justify-center">
-            <div className="inline-block text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 w-96 my-8 text-center">
+            <div className="inline-block text-5xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-green-400 via-blue-500 to-purple-600 w-96 my-8 text-center">
               Done!
             </div>
           </div>
