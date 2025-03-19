@@ -27,9 +27,8 @@ export default function EdpuzzleClone() {
   const [duration, setDuration] = useState(170);
   const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [loaded, setLoaded] = useState(false);
-  const [nextQuestion, setNextQuestion] = useState(0);
-  const [activeQuestion, setActiveQuestion] = useState<number | null>(null);
+  const [activeQuestion, setActiveQuestion] = useState<typeof questions[0] | null>(null);
+  const [log, setLog] = useState("")
 
   useEffect(() => {
     const video = videoRef.current;
@@ -45,14 +44,27 @@ export default function EdpuzzleClone() {
     };
   }, []);
 
+  // Watch for a question
   useEffect(() => {
-    if (questions[nextQuestion].time <= currentTime) {
+    setLog(`Question: ${questions[0].time} current: ${Math.round(currentTime)}`)
+    if (questions[0].time == Math.round(currentTime)) {
       togglePlay();
-      setActiveQuestion(nextQuestion);
-      setNextQuestion(nextQuestion + 1);
-    } else {
-      setActiveQuestion(null);
+      setActiveQuestion(questions[0]);
     }
+    // questions.forEach(question => {
+    //   setLog(`Question: ${question.time} current: ${Math.round(currentTime)}`)
+    //   if (question.time == currentTime) {
+    //     togglePlay();
+    //     setActiveQuestion(question);
+    //   }
+    // })
+    // if (questions[nextQuestion].time <= currentTime) {
+    //   togglePlay();
+    //   setActiveQuestion(nextQuestion);
+    //   setNextQuestion(nextQuestion + 1);
+    // } else {
+    //   setActiveQuestion(null);
+    // }
   }, [currentTime]);
 
   const handleTimeUpdate = () => {
@@ -107,24 +119,30 @@ export default function EdpuzzleClone() {
     [togglePlay, toggleMute, videoRef],
   );
 
+  const handleSubmit = (question: number, e: React.FormEvent<HTMLFormElement>) => {
+    console.log(question, e)
+  }
+
   return (
     <div
       onKeyDown={handleKeyDown}
       className="flex flex-col md:flex-row  bg-gray-100 w-full h-fit text-slate-900"
     >
       <div className="grow p-4 transition-all duration-300">
+        <div>{log}</div>
         <div
           className={`transition-all duration-300 ${
             activeQuestion !== null ? "w-3/5" : "w-11/12"
           } bg-gray-200 h-10`}
         >
-          <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
+          <div  className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
             <video
               ref={videoRef}
               className="w-full h-full"
-              src="http://debian:4013/projects/Folding@home%20stats%20website%20-%20My%20CS50%20Final%20project.mp4"
+              src="https://files.aamira.me/projects/Folding@home%20stats%20website%20-%20My%20CS50%20Final%20project.mp4"
               onContextMenu={(e) => e.preventDefault()}
               disablePictureInPicture
+              onClick={togglePlay}
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-75 text-white p-2">
               <div className="flex items-center justify-between mb-2">
@@ -160,7 +178,7 @@ export default function EdpuzzleClone() {
         </div>
       </div>
       {activeQuestion !== null ? (
-        <Question question={questions[activeQuestion]} />
+        <Question question={questions[activeQuestion]} handleSubmit={handleSubmit} />
       ) : null}
       <div className="md:w-64 bg-white p-4 overflow-y-auto shadow-md">
         <h2 className="text-lg font-semibold mb-4">Upcoming Questions</h2>
