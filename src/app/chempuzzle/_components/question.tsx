@@ -3,32 +3,42 @@ import type { questions } from "../page";
 import Latex from "react-latex-next";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { z } from "zod";
+import { checkAnswer } from "./actions";
+import { useFormState } from "react-dom";
+
+interface CheckAnswerResult {
+  isCorrect: boolean;
+  message?: string;
+}
 
 export default function Question({
   question,
-  handleSubmit,
 }: {
   question: (typeof questions)[0];
-  handleSubmit: (question: number, e: React.FormEvent<HTMLFormElement>) => void;
 }) {
-  const index = question.id;
-  const answerSchema = z.string()
+  const [state, formAction] = useFormState();
   return (
     <div className="bg-gray-900 p-4 rounded-md mb-4 transition-shadow duration-500">
       <p className="font-semibold mb-2">Question :</p>
       <p className="mb-4 prose">
         <Latex>Instructions</Latex>
       </p>
-      <form onSubmit={(e) => handleSubmit(index, e)} className="space-y-4">
+      <form
+        action={async () => {
+          const res = await checkAnswer();
+          setResult(res);
+        }}
+        className="space-y-4"
+      >
         <div className="space-y-2">
-          <Label htmlFor={`answer-${index}`} className="">
+          <Label htmlFor={"answer"} className="">
             Your answer:
           </Label>
           <div className="flex items-center space-x-2">
             <Input
-              id={`answer-${index}`}
+              id={"answer"}
               type="text"
+              name="answer"
               placeholder={`Enter your answer in ${question.type}`}
               className="grow"
             />
@@ -41,13 +51,9 @@ export default function Question({
         {/* {errors[index] && <p className="text-red-300">{errors[index]}</p>} */}
 
         <div className="space-x-2">
-          <Button
-            className="bg-slate-600 hover:bg-slate-700"
-            type="submit"
-          >
+          <Button className="bg-slate-600 hover:bg-slate-700" type="submit">
             Submit
           </Button>
-
         </div>
       </form>
     </div>

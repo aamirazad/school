@@ -27,8 +27,10 @@ export default function EdpuzzleClone() {
   const [duration, setDuration] = useState(170);
   const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [activeQuestion, setActiveQuestion] = useState<typeof questions[0] | null>(null);
-  const [log, setLog] = useState("")
+  const [activeQuestion, setActiveQuestion] = useState<
+    (typeof questions)[0] | null
+  >(null);
+  const [log, setLog] = useState("");
 
   useEffect(() => {
     const video = videoRef.current;
@@ -46,7 +48,9 @@ export default function EdpuzzleClone() {
 
   // Watch for a question
   useEffect(() => {
-    setLog(`Question: ${questions[0].time} current: ${Math.round(currentTime)}`)
+    setLog(
+      `Question: ${questions[0].time} current: ${Math.round(currentTime)}`,
+    );
     if (questions[0].time == Math.round(currentTime)) {
       togglePlay();
       setActiveQuestion(questions[0]);
@@ -119,10 +123,6 @@ export default function EdpuzzleClone() {
     [togglePlay, toggleMute, videoRef],
   );
 
-  const handleSubmit = (question: number, e: React.FormEvent<HTMLFormElement>) => {
-    console.log(question, e)
-  }
-
   return (
     <div
       onKeyDown={handleKeyDown}
@@ -135,7 +135,7 @@ export default function EdpuzzleClone() {
             activeQuestion !== null ? "w-3/5" : "w-11/12"
           } bg-gray-200 h-10`}
         >
-          <div  className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
+          <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
             <video
               ref={videoRef}
               className="w-full h-full"
@@ -177,9 +177,7 @@ export default function EdpuzzleClone() {
           </div>
         </div>
       </div>
-      {activeQuestion !== null ? (
-        <Question question={questions[activeQuestion]} handleSubmit={handleSubmit} />
-      ) : null}
+      {activeQuestion !== null ? <Question question={activeQuestion} /> : null}
       <div className="md:w-64 bg-white p-4 overflow-y-auto shadow-md">
         <h2 className="text-lg font-semibold mb-4">Upcoming Questions</h2>
         {questions.map((question) => (
