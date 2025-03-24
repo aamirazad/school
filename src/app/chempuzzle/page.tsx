@@ -3,103 +3,70 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { PlayCircle, PauseCircle, Volume2, VolumeX } from "lucide-react";
 import Question from "./_components/question";
+import { useTheme } from "next-themes";
+import { questions } from "./questions";
 
-export const questions = [
-  {
-    id: 1,
-    time: 2,
-    type: "multiple-choice",
-    text: "What is the capital of France?",
-  },
-  { id: 2, time: 30, type: "short-answer", text: "Explain the water cycle." },
-  {
-    id: 3,
-    time: 45,
-    type: "multiple-choice",
-    text: "Who wrote 'Romeo and Juliet'?",
-  },
-  { id: 4, time: 60, type: "short-answer", text: "What is photosynthesis?" },
-];
-
-export default function EdpuzzleClone() {
+export default function ChemQuest() {
+  const { setTheme } = useTheme();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(170);
   const [isMuted, setIsMuted] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [activeQuestion, setActiveQuestion] = useState<
     (typeof questions)[0] | null
   >(null);
-  const [log, setLog] = useState("");
+
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    setTheme("light");
     const video = videoRef.current;
-    if (video) {
-      video.addEventListener("timeupdate", handleTimeUpdate);
-      video.addEventListener("loadedmetadata", handleLoadedMetadata);
-    }
-    return () => {
-      if (video) {
-        video.removeEventListener("timeupdate", handleTimeUpdate);
-        video.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      }
-    };
-  }, []);
+    if (!video) return;
 
-  // Watch for a question
+    const handleTimeUpdate = () => {
+      setCurrentTime(video.currentTime);
+    };
+
+    const handleLoadedMetadata = () => {
+      setDuration(video.duration);
+    };
+
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("loadedMetadata", handleLoadedMetadata);
+
+    return () => {
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("loadedMetadata", handleLoadedMetadata);
+    };
+  }, [setTheme]);
+
+  // Wrap togglePlay in useCallback to prevent it from changing on every render
+  const togglePlay = useCallback(() => {
+    if (!videoRef.current || activeQuestion !== null) return;
+
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  }, [isPlaying, activeQuestion]);
+
+  // Wrap toggleMute in useCallback to prevent it from changing on every render
+  const toggleMute = useCallback(() => {
+    if (!videoRef.current) return;
+
+    videoRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  }, [isMuted]);
+
+  // Second useEffect with togglePlay in dependencies
   useEffect(() => {
-    setLog(
-      `Question: ${questions[0].time} current: ${Math.round(currentTime)}`,
-    );
-    if (questions[0].time == Math.round(currentTime)) {
+    if (questions[0].time === Math.round(currentTime)) {
       togglePlay();
       setActiveQuestion(questions[0]);
     }
-    // questions.forEach(question => {
-    //   setLog(`Question: ${question.time} current: ${Math.round(currentTime)}`)
-    //   if (question.time == currentTime) {
-    //     togglePlay();
-    //     setActiveQuestion(question);
-    //   }
-    // })
-    // if (questions[nextQuestion].time <= currentTime) {
-    //   togglePlay();
-    //   setActiveQuestion(nextQuestion);
-    //   setNextQuestion(nextQuestion + 1);
-    // } else {
-    //   setActiveQuestion(null);
-    // }
-  }, [currentTime]);
-
-  const handleTimeUpdate = () => {
-    if (videoRef.current) {
-      setCurrentTime(videoRef.current.currentTime);
-    }
-  };
-
-  const handleLoadedMetadata = () => {
-    if (videoRef.current) {
-      setDuration(videoRef.current.duration);
-    }
-  };
-
-  const togglePlay = () => {
-    if (videoRef.current && activeQuestion == null) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
+  }, [currentTime, togglePlay]);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -114,85 +81,148 @@ export default function EdpuzzleClone() {
         togglePlay();
       } else if (e.code === "KeyM") {
         toggleMute();
-      } else if (e.code === "ArrowLeft") {
-        if (videoRef.current) {
-          videoRef.current.currentTime -= 5;
-        }
+      } else if (e.code === "ArrowLeft" && videoRef.current) {
+        videoRef.current.currentTime -= 5;
       }
     },
-    [togglePlay, toggleMute, videoRef],
+    [togglePlay, toggleMute],
   );
 
   return (
     <div
       onKeyDown={handleKeyDown}
-      className="flex flex-col md:flex-row  bg-gray-100 w-full h-fit text-slate-900"
+      autoFocus
+      className="flex flex-col md:flex-row bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen text-slate-900"
     >
-      <div className="grow p-4 transition-all duration-300">
-        <div>{log}</div>
+      {/* Main content area */}
+      <div className="flex-initial w-5/6 p-6 transition-all duration-300">
+        {/* Video container */}
         <div
-          className={`transition-all duration-300 ${
-            activeQuestion !== null ? "w-3/5" : "w-11/12"
-          } bg-gray-200 h-10`}
+          className={`mx-auto transition-all duration-300 ${
+            activeQuestion !== null ? "lg:w-4/5" : "w-full"
+          }`}
         >
-          <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
+          <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl ring-1 ring-black/5">
             <video
               ref={videoRef}
-              className="w-full h-full"
+              className="w-full h-full object-cover"
               src="https://files.aamira.me/projects/Folding@home%20stats%20website%20-%20My%20CS50%20Final%20project.mp4"
               onContextMenu={(e) => e.preventDefault()}
               disablePictureInPicture
               onClick={togglePlay}
             />
-            <div className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-75 text-white p-2">
+
+            {/* Video controls overlay */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-sm text-white px-4 py-3">
               <div className="flex items-center justify-between mb-2">
-                <button onClick={togglePlay} className={"focus:outline-hidden"}>
+                {/* Play/pause button */}
+                <button
+                  onClick={togglePlay}
+                  className="hover:text-blue-400 transition-colors focus:outline-none"
+                >
                   {isPlaying ? (
-                    <PauseCircle size={24} />
+                    <PauseCircle size={28} />
                   ) : (
-                    <PlayCircle size={24} />
+                    <PlayCircle size={28} />
                   )}
                 </button>
-                <div className="text-sm">{`${formatTime(currentTime)} / ${formatTime(duration)}`}</div>
-                <button onClick={toggleMute} className="focus:outline-hidden">
-                  {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+
+                {/* Time display */}
+                <div className="text-sm font-medium">
+                  {`${formatTime(currentTime)} / ${formatTime(duration)}`}
+                </div>
+
+                {/* Mute button */}
+                <button
+                  onClick={toggleMute}
+                  className="hover:text-blue-400 transition-colors focus:outline-none"
+                >
+                  {isMuted ? <VolumeX size={28} /> : <Volume2 size={28} />}
                 </button>
               </div>
+
+              {/* Progress bar */}
               {duration !== 0 && (
-                <div className="relative h-1 bg-gray-600 rounded-sm">
+                <div className="relative h-1.5 bg-gray-600/50 rounded-full overflow-hidden">
+                  {/* Progress indicator */}
                   <div
-                    className="absolute top-0 left-0 h-full bg-blue-500 rounded-sm transition-all duration-300"
+                    className="absolute top-0 left-0 h-full bg-blue-500 rounded-full transition-all duration-300"
                     style={{ width: `${(currentTime / duration) * 100}%` }}
                   />
+
+                  {/* Question markers */}
                   {questions.map((question) => (
                     <div
                       key={question.id}
-                      className="absolute top-0 w-2 h-2 bg-red-500 rounded-full transform -translate-y-1/2"
+                      className="absolute top-0 w-2.5 h-2.5 bg-red-500 rounded-full transform -translate-x-1/2 -translate-y-1/4 shadow-sm ring-1 ring-white/30"
                       style={{ left: `${(question.time / duration) * 100}%` }}
+                      title={`Question ${question.id}: ${question.title}`}
                     />
                   ))}
                 </div>
               )}
             </div>
+
+            {/* Play overlay button (center of video) */}
+            {!isPlaying && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                <button
+                  onClick={togglePlay}
+                  className="bg-white/20 backdrop-blur-sm text-white rounded-full p-4 hover:bg-white/30 transition-all duration-200 transform hover:scale-110"
+                >
+                  <PlayCircle size={48} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
-      {activeQuestion !== null ? <Question question={activeQuestion} /> : null}
-      <div className="md:w-64 bg-white p-4 overflow-y-auto shadow-md">
-        <h2 className="text-lg font-semibold mb-4">Upcoming Questions</h2>
-        {questions.map((question) => (
-          <div key={question.id} className="mb-4 p-3 bg-gray-100 rounded-lg">
-            <div className="text-sm font-medium text-gray-600 mb-1">
-              {question.type === "multiple-choice"
-                ? "Multiple Choice"
-                : "Short Answer"}
-            </div>
-            <div className="text-sm">{question.text}</div>
-            <div className="text-xs text-gray-500 mt-1">
-              Appears at {formatTime(question.time)}
-            </div>
+
+      {/* Active question display */}
+      <div
+        className={`${activeQuestion !== null ? "block w-3/4" : "hidden w-0"} md:block transition-all duration-300 ease-in-out grow `}
+      >
+        {activeQuestion !== null && <Question question={activeQuestion} />}
+      </div>
+
+      {/* Questions sidebar */}
+      <div className="md:w-80 bg-white shadow-xl border-l border-gray-200 flex-none">
+        <div className="p-6">
+          <h2 className="text-lg font-semibold mb-4 text-indigo-900 border-b border-gray-200 pb-2">
+            Questions
+          </h2>
+          <div className="space-y-4">
+            {questions.map((question) => (
+              <div
+                key={question.id}
+                className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200"
+              >
+                {/* Question badge */}
+                <div className="flex justify-between items-center mb-2">
+                  <span
+                    className={`text-xs font-medium py-1 px-2 rounded-full ${
+                      question.type === "multiple-choice"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-purple-100 text-purple-800"
+                    }`}
+                  >
+                    {question.type === "multiple-choice"
+                      ? "Multiple Choice"
+                      : "Short Answer"}
+                  </span>
+                  <span className="text-xs text-gray-500 font-medium">
+                    {formatTime(question.time)}
+                  </span>
+                </div>
+
+                {/* Question text */}
+                <div className="text-sm font-medium text-gray-800">
+                  {question.title}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
