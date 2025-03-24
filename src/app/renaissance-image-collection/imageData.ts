@@ -84,7 +84,7 @@ export const imageData = [
     alt: "The Virgin and Child with Saint Anne",
     title: "The Virgin and Child with Saint Anne by Leonardo da Vinci",
     caption:
-      "The innovative new technique called Sfumato used in this painting is the technique of transitioning between colors by smoothly. The blur of the lines between the people make the picture more mysterious and gives it depth.",
+      "The innovative new technique called Sfumato used in this painting is the technique of transitioning between colors by smoothly. The blur-sm of the lines between the people make the picture more mysterious and gives it depth.",
     cite: [
       "https://www.thehistoryofart.org/leonardo-da-vinci/the-virgin-and-child-with-saint-anne/",
     ],

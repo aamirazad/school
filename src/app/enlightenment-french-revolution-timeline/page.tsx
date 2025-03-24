@@ -1,14 +1,14 @@
 "use client";
 
+import { PageWrapper } from "@/components/page-wrapper";
+
 export default function Timeline() {
   return (
-    <div>
-      <iframe
-        src="https://cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1b09bPX_A9uQ8iCWBh_f8tcVQ7-97XALCIPiFYYHPk_w&font=Default&lang=en&initial_zoom=2&height=650"
-        width="100%"
-        height="650"
-        allowFullScreen
-      ></iframe>
-    </div>
+    <iframe
+      src="https://cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=18d2xGot4VlGrUs8gJs2vRAwJryvw1uj7DE3qGmrnWzc&font=Default&lang=en&initial_zoom=2&height=650"
+      width="1200"
+      height="650"
+      allowFullScreen
+    ></iframe>
   );
 }
