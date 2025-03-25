@@ -13,8 +13,10 @@ const initialState = {
 
 export default function Question({
   question,
+  questionResult,
 }: {
   question: (typeof questions)[0];
+  questionResult: (result: string) => void;
 }) {
   const [state, formAction] = useActionState(checkAnswer, initialState);
 
@@ -23,20 +25,16 @@ export default function Question({
       <div className="mb-6">
         <h3 className="font-semibold text-lg text-indigo-900 mb-3 flex items-center">
           <span
-            className={`${
-              question.type === "multiple-choice"
-                ? "bg-blue-600"
-                : "bg-purple-600"
-            } text-white px-2.5 py-1.5 rounded-full mr-3 text-sm font-bold`}
+            className={`bg-blue-600 text-white px-2.5 py-1.5 rounded-full mr-3 text-sm font-bold`}
           >
             Q{question.id}
           </span>
           {question.title}
         </h3>
 
-        <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-lg mb-4 border-l-4 border-blue-500 prose max-w-none">
+        {/* <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-lg mb-4 border-l-4 border-blue-500 prose max-w-none">
           <Latex>question</Latex>
-        </div>
+        </div> */}
       </div>
 
       <form action={formAction} className="space-y-5">
@@ -57,30 +55,39 @@ export default function Question({
             </span>
           </div>
 
-          {state?.message && (
-            <div
-              className={`mt-3 text-sm p-3 rounded-lg ${
-                state.message.includes("Correct")
-                  ? "bg-green-100 text-green-800 border border-green-200"
-                  : "bg-red-100 text-red-800 border border-red-200"
-              }`}
-            >
-              {state.message}
+          {state?.message ? (
+            <>
+              <div
+                className={`mt-3 text-sm p-3 rounded-lg ${
+                  state.message.includes("Correct")
+                    ? "bg-green-100 text-green-800 border border-green-200"
+                    : "bg-red-100 text-red-800 border border-red-200"
+                }`}
+              >
+                {state.message}
+              </div>
+              <Button
+                onClick={() => {
+                  questionResult(state.message);
+                }}
+              >
+                Continue
+              </Button>
+            </>
+          ) : (
+            <div className="flex items-center justify-between pt-2">
+              <Button
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+                type="submit"
+              >
+                Submit Answer
+              </Button>
+
+              <div className="text-xs text-gray-500">
+                Question {question.id} of 4
+              </div>
             </div>
           )}
-        </div>
-
-        <div className="flex items-center justify-between pt-2">
-          <Button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
-            type="submit"
-          >
-            Submit Answer
-          </Button>
-
-          <div className="text-xs text-gray-500">
-            Question {question.id} of 4
-          </div>
         </div>
       </form>
     </div>
