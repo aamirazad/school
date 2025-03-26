@@ -6,19 +6,44 @@ import { checkAnswer } from "./actions";
 import { useActionState } from "react";
 import { questions } from "../questions";
 import "katex/dist/katex.min.css";
+import { InputQuestion } from "./Input";
+
+// Placeholder components
+const Canvas = () => <div>Canvas Component</div>;
+const InteractiveTable = () => <div>InteractiveTable Component</div>;
+const DragDrop = () => <div>DragDrop Component</div>;
+
+type QuestionType = "text" | "drawing" | "table" | "dragdrop";
+
+interface QuestionProps {
+  question: {
+    id: number;
+    title: string;
+    type: QuestionType;
+    content: any; // Type this more specifically later
+  };
+  questionResult: (result: string) => void;
+}
 
 const initialState = {
   message: "",
 };
 
-export default function Question({
-  question,
-  questionResult,
-}: {
-  question: (typeof questions)[0];
-  questionResult: (result: string) => void;
-}) {
+export default function Question({ question, questionResult }: QuestionProps) {
   const [state, formAction] = useActionState(checkAnswer, initialState);
+
+  const renderQuestionContent = () => {
+    switch (question.type) {
+      case "drawing":
+        return <Canvas />; // Pass relevant props to Canvas
+      case "table":
+        return <InteractiveTable />; // Pass relevant props to InteractiveTable
+      case "dragdrop":
+        return <DragDrop />; // Pass relevant props to DragDrop
+      default:
+        return <InputQuestion question={question.content} />;
+    }
+  };
 
   return (
     <div className="bg-white shadow-xl rounded-xl p-6 md:ml-6 md:mr-6 md:mt-6 max-w-md transition-all duration-300 hover:shadow-2xl border border-gray-200">
@@ -31,29 +56,11 @@ export default function Question({
           </span>
           {question.title}
         </h3>
-
-        {/* <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-lg mb-4 border-l-4 border-blue-500 prose max-w-none">
-          <Latex>question</Latex>
-        </div> */}
       </div>
 
       <form action={formAction} className="space-y-5">
         <div className="space-y-3">
-          <Label htmlFor="answer" className=" font-medium block">
-            Your answer:
-          </Label>
-
-          <div className="flex items-center space-x-3">
-            <Input
-              id="answer"
-              type="text"
-              name="answer"
-              className="bg-slate-300"
-            />
-            <span className="text-gray-600 bg-gray-100 px-3 py-2 rounded-md whitespace-nowrap border border-gray-200">
-              <Latex>${question.unit}$</Latex>
-            </span>
-          </div>
+          {renderQuestionContent()}
 
           {state?.message ? (
             <>
