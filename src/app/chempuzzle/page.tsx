@@ -6,19 +6,17 @@ import {
   PauseCircle,
   Volume2,
   VolumeX,
-  Loader,
   LoaderCircle,
 } from "lucide-react";
 import Question from "./_components/question";
 import { useTheme } from "next-themes";
 import { questions } from "./questions";
-import LoadingSpinner from "@/components/loading-spinner";
 
 export default function ChemQuest() {
   const { setTheme } = useTheme();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState<null | number>(null);
+  const [duration, setDuration] = useState<number | null>(null);
   const [isMuted, setIsMuted] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState<
     (typeof questions)[0] | null
@@ -26,97 +24,102 @@ export default function ChemQuest() {
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Set theme to light mode on mount
   useEffect(() => {
     setTheme("light");
   }, [setTheme]);
 
+  // Handle video events
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    if (video.duration) {
-      setDuration(video.duration);
-    }
 
-    const handleTimeUpdate = () => {
-      setCurrentTime(video.currentTime);
-    };
-
-    const handleLoadedMetadata = () => {
-      setDuration(video.duration);
-    };
+    const handleTimeUpdate = () => setCurrentTime(video.currentTime);
+    const handleLoadedMetadata = () => setDuration(video.duration);
 
     video.addEventListener("timeupdate", handleTimeUpdate);
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
 
     return () => {
       video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("loadedMetadata", handleLoadedMetadata);
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
     };
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.code === "Space") {
-          togglePlay();
-        } else if (e.code === "KeyM") {
-          toggleMute();
-        } else if (e.code === "ArrowLeft" && videoRef.current) {
-          videoRef.current.currentTime -= 5;
-        }
-      };
-
-      document.addEventListener("keydown", handleKeyDown);
-
-      // Clean up the event listener when the component unmounts
-      return () => {
-        document.removeEventListener("keydown", handleKeyDown);
-      };
-    }
-  }, []);
-
-  // Wrap togglePlay in useCallback to prevent it from changing on every render
+  // Toggle play/pause
   const togglePlay = useCallback(() => {
-    if (!videoRef.current || activeQuestion !== null || duration === null)
-      return;
+    if (!videoRef.current || activeQuestion !== null) return;
 
     if (isPlaying) {
       videoRef.current.pause();
     } else {
       videoRef.current.play();
     }
-    setIsPlaying(!isPlaying);
-  }, [isPlaying, activeQuestion, duration]);
+    setIsPlaying((prev) => !prev);
+  }, [isPlaying, activeQuestion]);
 
-  // Wrap toggleMute in useCallback to prevent it from changing on every render
+  // Toggle mute/unmute
   const toggleMute = useCallback(() => {
     if (!videoRef.current) return;
 
     videoRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
+    setIsMuted((prev) => !prev);
   }, [isMuted]);
 
-  // Second useEffect with togglePlay in dependencies
+  // Handle keyboard shortcuts
   useEffect(() => {
-    if (questions[0].time === Math.round(currentTime)) {
-      togglePlay();
-      setActiveQuestion(questions[0]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!videoRef.current) return;
+
+      switch (e.code) {
+        case "Space":
+          togglePlay();
+          break;
+        case "KeyM":
+          toggleMute();
+          break;
+        case "ArrowLeft":
+          videoRef.current.currentTime = Math.max(
+            videoRef.current.currentTime - 5,
+            0
+          );
+          break;
+        default:
+          break;
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [togglePlay, toggleMute]);
+
+  // Pause video and show question when time matches
+  useEffect(() => {
+    const question = questions.find((q) => q.time === Math.round(currentTime));
+    if (question) {
+      setActiveQuestion(question);
+      togglePlay(); // Pause video
     }
   }, [currentTime, togglePlay]);
 
+  // Format time for display
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
+  // Handle question result
   const questionResult = (result: string) => {
     setActiveQuestion(null);
-    if (result == "Correct") {
-      togglePlay();
+    if (result === "Correct") {
+      togglePlay(); // Resume video
     }
     if (videoRef.current) {
-      videoRef.current.currentTime -= 10;
+      videoRef.current.currentTime = Math.max(
+        videoRef.current.currentTime - 10,
+        0
+      );
     }
   };
 
@@ -124,10 +127,9 @@ export default function ChemQuest() {
     <div className="flex flex-col md:flex-row bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen text-slate-900">
       {/* Main content area */}
       <div className="flex-initial w-5/6 p-6 transition-all duration-300">
-        {/* Video container */}
         <div
           className={`mx-auto transition-all duration-300 ${
-            activeQuestion !== null ? "lg:w-4/5" : "w-full"
+            activeQuestion ? "lg:w-4/5" : "w-full"
           }`}
         >
           <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl ring-1 ring-black/5">
@@ -140,13 +142,14 @@ export default function ChemQuest() {
               onClick={togglePlay}
             />
 
-            {/* Video controls overlay */}
+            {/* Video controls */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-sm text-white px-4 py-3">
               <div className="flex items-center justify-between mb-2">
-                {/* Play/pause button */}
                 <button
                   onClick={togglePlay}
-                  className={`hover:text-blue-400 transition-colors focus:outline-none ${currentTime !== 0 ? "" : "hidden"}`}
+                  className={`hover:text-blue-400 transition-colors focus:outline-none ${
+                    currentTime !== 0 ? "" : "hidden"
+                  }`}
                 >
                   {isPlaying ? (
                     <PauseCircle size={28} />
@@ -155,14 +158,12 @@ export default function ChemQuest() {
                   )}
                 </button>
 
-                {/* Time display */}
                 {duration && (
                   <div className="text-sm font-medium">
                     {`${formatTime(currentTime)} / ${formatTime(duration)}`}
                   </div>
                 )}
 
-                {/* Mute button */}
                 <button
                   onClick={toggleMute}
                   className="hover:text-blue-400 transition-colors focus:outline-none"
@@ -171,16 +172,12 @@ export default function ChemQuest() {
                 </button>
               </div>
 
-              {/* Progress bar */}
               {duration && (
                 <div className="relative h-1.5 bg-gray-600/50 rounded-full overflow-hidden">
-                  {/* Progress indicator */}
                   <div
                     className="absolute top-0 left-0 h-full bg-blue-500 rounded-full transition-all duration-300"
                     style={{ width: `${(currentTime / duration) * 100}%` }}
                   />
-
-                  {/* Question markers */}
                   {questions.map((question) => (
                     <div
                       key={question.id}
@@ -195,7 +192,6 @@ export default function ChemQuest() {
               )}
             </div>
 
-            {/* Play overlay button (center of video) */}
             <CenterPlayButton
               togglePlay={togglePlay}
               currentTime={currentTime}
@@ -207,9 +203,11 @@ export default function ChemQuest() {
 
       {/* Active question display */}
       <div
-        className={`${activeQuestion !== null ? "block w-3/4" : "hidden w-0"} md:block transition-all duration-300 ease-in-out grow `}
+        className={`${
+          activeQuestion ? "block w-3/4" : "hidden w-0"
+        } md:block transition-all duration-300 ease-in-out grow`}
       >
-        {activeQuestion !== null && (
+        {activeQuestion && (
           <Question question={activeQuestion} questionResult={questionResult} />
         )}
       </div>
@@ -226,7 +224,6 @@ export default function ChemQuest() {
                 key={question.id}
                 className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200"
               >
-                {/* Question badge */}
                 <div className="flex justify-between items-center mb-2">
                   <span
                     className={`text-xs font-medium py-1 px-2 rounded-full ${
@@ -243,8 +240,6 @@ export default function ChemQuest() {
                     {formatTime(question.time)}
                   </span>
                 </div>
-
-                {/* Question text */}
                 <div className="text-sm font-medium text-gray-800">
                   {question.title}
                 </div>
@@ -266,7 +261,8 @@ function CenterPlayButton({
   currentTime: number;
   duration: number | null;
 }) {
-  if (!duration)
+  if (duration === null) {
+    // Show loading spinner only if duration is null
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-black/20">
         <button
@@ -279,8 +275,10 @@ function CenterPlayButton({
         </button>
       </div>
     );
+  }
 
-  if (currentTime === 0)
+  if (currentTime === 0) {
+    // Show play button if video is at the beginning
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-black/20">
         <button
@@ -291,5 +289,7 @@ function CenterPlayButton({
         </button>
       </div>
     );
-  return null;
+  }
+
+  return null; // No button if video is playing or paused mid-way
 }
