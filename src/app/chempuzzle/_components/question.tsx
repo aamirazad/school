@@ -8,13 +8,6 @@ import { questions } from "../questions";
 import "katex/dist/katex.min.css";
 import { InputQuestion } from "./Input";
 
-// Placeholder components
-const Canvas = () => <div>Canvas Component</div>;
-const InteractiveTable = () => <div>InteractiveTable Component</div>;
-const DragDrop = () => <div>DragDrop Component</div>;
-
-type QuestionType = "text" | "drawing" | "table" | "dragdrop";
-
 interface QuestionProps {
   question: {
     id: number;
