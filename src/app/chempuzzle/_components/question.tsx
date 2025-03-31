@@ -16,22 +16,15 @@ const DragDrop = () => <div>DragDrop Component</div>;
 type QuestionType = "text" | "drawing" | "table" | "dragdrop";
 
 interface QuestionProps {
-  question: {
-    id: number;
-    title: string;
-    type: QuestionType;
-    content: any; // Type this more specifically later
-  };
-  questionResult: (result: string) => void;
+  question: (typeof questions)[0];
+  response: (formData: FormData) => void;
 }
 
 const initialState = {
   message: "",
 };
 
-export default function Question({ question, questionResult }: QuestionProps) {
-  const [state, formAction] = useActionState(checkAnswer, initialState);
-
+export default function Question({ question, response }: QuestionProps) {
   const renderQuestionContent = () => {
     switch (question.type) {
       case "drawing":
@@ -40,8 +33,8 @@ export default function Question({ question, questionResult }: QuestionProps) {
         return <InteractiveTable />; // Pass relevant props to InteractiveTable
       case "dragdrop":
         return <DragDrop />; // Pass relevant props to DragDrop
-      default:
-        return <InputQuestion question={question.content} />;
+      case "multiple-choice":
+        return <InputQuestion question={question.title} />;
     }
   };
 
@@ -54,47 +47,26 @@ export default function Question({ question, questionResult }: QuestionProps) {
           >
             Q{question.id}
           </span>
-          {question.title}
+          <Latex>{question.title}</Latex>
         </h3>
       </div>
 
-      <form action={formAction} className="space-y-5">
+      <form action={response} className="space-y-5">
         <div className="space-y-3">
           {renderQuestionContent()}
 
-          {state?.message ? (
-            <>
-              <div
-                className={`mt-3 text-sm p-3 rounded-lg ${
-                  state.message.includes("Correct")
-                    ? "bg-green-100 text-green-800 border border-green-200"
-                    : "bg-red-100 text-red-800 border border-red-200"
-                }`}
-              >
-                {state.message}
-              </div>
-              <Button
-                onClick={() => {
-                  questionResult(state.message);
-                }}
-              >
-                Continue
-              </Button>
-            </>
-          ) : (
-            <div className="flex items-center justify-between pt-2">
-              <Button
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
-                type="submit"
-              >
-                Submit Answer
-              </Button>
+          <div className="flex items-center justify-between pt-2">
+            <Button
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+              type="submit"
+            >
+              Submit Answer
+            </Button>
 
-              <div className="text-xs text-gray-500">
-                Question {question.id} of 4
-              </div>
+            <div className="text-xs text-gray-500">
+              Question {question.id} of 4
             </div>
-          )}
+          </div>
         </div>
       </form>
     </div>
