@@ -1,16 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import {
-  PlayCircle,
-  PauseCircle,
-  Volume2,
-  VolumeX,
-  LoaderCircle,
-} from "lucide-react";
+import { PlayCircle, PauseCircle, Volume2, VolumeX } from "lucide-react";
 import Question from "./_components/question";
 import { useTheme } from "next-themes";
 import { questions } from "./questions";
+import { capitalizeFirstLetter } from "@/lib/utils";
+import { CenterPlayButton } from "./_components/center-play-button";
+import { z } from "zod";
 
 export default function ChemQuest() {
   const { setTheme } = useTheme();
@@ -21,6 +18,7 @@ export default function ChemQuest() {
   const [activeQuestion, setActiveQuestion] = useState<
     (typeof questions)[0] | null
   >(null);
+  const [answers, setAnswers] = useState<string[]>([]);
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -29,7 +27,6 @@ export default function ChemQuest() {
     setTheme("light");
   }, [setTheme]);
 
-  // Handle video events
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -38,7 +35,13 @@ export default function ChemQuest() {
     const handleLoadedMetadata = () => setDuration(video.duration);
 
     video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("loadedmetadata", handleLoadedMetadata);
+
+    // Check if duration is already available
+    if (video.duration) {
+      setDuration(video.duration);
+    } else {
+      video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    }
 
     return () => {
       video.removeEventListener("timeupdate", handleTimeUpdate);
@@ -47,16 +50,39 @@ export default function ChemQuest() {
   }, []);
 
   // Toggle play/pause
-  const togglePlay = useCallback(() => {
-    if (!videoRef.current || activeQuestion !== null) return;
+  const togglePlay = useCallback(
+    (param?: boolean | { force?: boolean }) => {
+      // Extract force value, handling both call styles
+      let force: boolean | undefined;
 
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play();
-    }
-    setIsPlaying((prev) => !prev);
-  }, [isPlaying, activeQuestion]);
+      if (typeof param === "boolean") {
+        force = param;
+      } else if (
+        param &&
+        typeof param === "object" &&
+        !("nativeEvent" in param)
+      ) {
+        force = param.force;
+      }
+
+      if (!videoRef.current) return;
+
+      if (activeQuestion !== null && force !== true) {
+        return;
+      }
+
+      const shouldPlay = force !== undefined ? force : !isPlaying;
+
+      if (shouldPlay) {
+        videoRef.current.play();
+        setIsPlaying(true);
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    },
+    [isPlaying, activeQuestion],
+  );
 
   // Toggle mute/unmute
   const toggleMute = useCallback(() => {
@@ -69,7 +95,7 @@ export default function ChemQuest() {
   // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!videoRef.current) return;
+      if (!videoRef.current || activeQuestion) return;
 
       switch (e.code) {
         case "Space":
@@ -81,7 +107,7 @@ export default function ChemQuest() {
         case "ArrowLeft":
           videoRef.current.currentTime = Math.max(
             videoRef.current.currentTime - 5,
-            0
+            0,
           );
           break;
         default:
@@ -95,8 +121,8 @@ export default function ChemQuest() {
 
   // Pause video and show question when time matches
   useEffect(() => {
-    const question = questions.find((q) => q.time === Math.round(currentTime));
-    if (question) {
+    const question = questions.find((q) => q.time === Math.ceil(currentTime));
+    if (question && !answers[question.id - 1] && !activeQuestion) {
       setActiveQuestion(question);
       togglePlay(); // Pause video
     }
@@ -110,17 +136,10 @@ export default function ChemQuest() {
   };
 
   // Handle question result
-  const questionResult = (result: string) => {
-    setActiveQuestion(null);
-    if (result === "Correct") {
-      togglePlay(); // Resume video
-    }
-    if (videoRef.current) {
-      videoRef.current.currentTime = Math.max(
-        videoRef.current.currentTime - 10,
-        0
-      );
-    }
+  const saveAnswer = (formData: FormData) => {
+    answers[0] = z.string().min(1).max(100).parse(formData.get("answer"));
+    setActiveQuestion(null); // Schedule the update
+    togglePlay(true); // Force video to pause, bypassing activeQuestion check
   };
 
   return (
@@ -185,7 +204,7 @@ export default function ChemQuest() {
                       style={{
                         left: `${(question.time / duration) * 100}%`,
                       }}
-                      title={`Question ${question.id}: ${question.title}`}
+                      // title={`Question ${question.id}: ${question.title}`}
                     />
                   ))}
                 </div>
@@ -208,7 +227,7 @@ export default function ChemQuest() {
         } md:block transition-all duration-300 ease-in-out grow`}
       >
         {activeQuestion && (
-          <Question question={activeQuestion}  />
+          <Question question={activeQuestion} response={saveAnswer} />
         )}
       </div>
 
@@ -225,23 +244,15 @@ export default function ChemQuest() {
                 className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200"
               >
                 <div className="flex justify-between items-center mb-2">
-                  <span
-                    className={`text-xs font-medium py-1 px-2 rounded-full ${
-                      question.type === "multiple-choice"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-purple-100 text-purple-800"
-                    }`}
-                  >
-                    {question.type === "multiple-choice"
-                      ? "Multiple Choice"
-                      : "Short Answer"}
+                  <span className="text-xs font-medium py-1 px-2 rounded-full bg-blue-100 text-blue-800">
+                    {capitalizeFirstLetter(question.type)}
                   </span>
                   <span className="text-xs text-gray-500 font-medium">
                     {formatTime(question.time)}
                   </span>
                 </div>
-                <div className="text-sm font-medium text-gray-800">
-                  {question.title}
+                <div className="text-sm font-medium text-gray-800 truncate">
+                  {question.prompt}
                 </div>
               </div>
             ))}
@@ -250,46 +261,4 @@ export default function ChemQuest() {
       </div>
     </div>
   );
-}
-
-function CenterPlayButton({
-  togglePlay,
-  currentTime,
-  duration,
-}: {
-  togglePlay: () => void;
-  currentTime: number;
-  duration: number | null;
-}) {
-  if (duration === null) {
-    // Show loading spinner only if duration is null
-    return (
-      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-        <button
-          onClick={togglePlay}
-          className="bg-white/20 backdrop-blur-sm text-white rounded-full p-4 hover:bg-white/30 transition-all duration-200 transform hover:scale-110"
-        >
-          <div className="animate-spin">
-            <LoaderCircle size={48} />
-          </div>
-        </button>
-      </div>
-    );
-  }
-
-  if (currentTime === 0) {
-    // Show play button if video is at the beginning
-    return (
-      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-        <button
-          onClick={togglePlay}
-          className="bg-white/20 backdrop-blur-sm text-white rounded-full p-4 hover:bg-white/30 transition-all duration-200 transform hover:scale-110"
-        >
-          <PlayCircle size={48} />
-        </button>
-      </div>
-    );
-  }
-
-  return null; // No button if video is playing or paused mid-way
 }

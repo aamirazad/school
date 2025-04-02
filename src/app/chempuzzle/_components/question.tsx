@@ -20,6 +20,8 @@ const initialState = {
 export default function Question({ question, response }: QuestionProps) {
   const renderQuestionContent = () => {
     switch (question.type) {
+      case "short answer":
+        return <InputQuestion question={question.prompt} />;
       case "drawing":
         return <Canvas />; // Pass relevant props to Canvas
       case "table":
@@ -27,7 +29,7 @@ export default function Question({ question, response }: QuestionProps) {
       case "dragdrop":
         return <DragDrop />; // Pass relevant props to DragDrop
       case "multiple-choice":
-        return <InputQuestion question={question.title} />;
+        return <MultipleChoice />;
     }
   };
 
@@ -40,7 +42,7 @@ export default function Question({ question, response }: QuestionProps) {
           >
             Q{question.id}
           </span>
-          <Latex>{question.title}</Latex>
+          <Latex>{question.prompt}</Latex>
         </h3>
       </div>
 

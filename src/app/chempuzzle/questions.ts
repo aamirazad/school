@@ -1,10 +1,10 @@
-type QuestionFormat = "text" | "drawing" | "table" | "dragdrop";
+type QuestionType = "short answer" | "drawing" | "table" | "dragdrop";
 
 interface Question {
   id: number;
   time: number;
   prompt: string;
-  format: QuestionFormat;
+  type: QuestionType;
   answer: string;
   unit: string;
 }
@@ -12,9 +12,9 @@ interface Question {
 export const questions: Question[] = [
   {
     id: 1,
-    time: 2,
+    time: 3,
     prompt: "What is the capital of France?",
-    format: "text",
+    type: "short answer",
     answer: "Paris",
     unit: "cm^{3}",
   },
