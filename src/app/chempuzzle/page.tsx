@@ -136,7 +136,7 @@ export default function ChemQuest() {
             <video
               ref={videoRef}
               className="w-full h-full object-cover"
-              src="https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_5mb.mp4"
+              src="https://files.aamira.me/projects/Folding@home%20stats%20website%20-%20My%20CS50%20Final%20project.mp4"
               onContextMenu={(e) => e.preventDefault()}
               disablePictureInPicture
               onClick={togglePlay}
@@ -208,7 +208,7 @@ export default function ChemQuest() {
         } md:block transition-all duration-300 ease-in-out grow`}
       >
         {activeQuestion && (
-          <Question question={activeQuestion} questionResult={questionResult} />
+          <Question question={activeQuestion}  />
         )}
       </div>
 
