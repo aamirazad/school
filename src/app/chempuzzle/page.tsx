@@ -11,6 +11,7 @@ import { EquationBalancer } from "@/components/equation-balancer";
 import { DipoleArrows } from "@/components/dipole-arrows";
 import Latex from "react-latex-next";
 import "katex/dist/katex.min.css";
+
 import { KaExpression } from "@/components/ka-expression";
 import { LewisDot } from "@/components/lewis-dot";
 
@@ -58,8 +59,14 @@ const questions: Question[] = [
     type: "multiple-choice",
     time: 3,
     reviewTime: 4,
-    prompt: "Which of the following is a noble gas?",
-    options: ["Oxygen", "Nitrogen", "Helium", "Chlorine"],
+    prompt:
+      "Which of the following correctly represents the equilibrium reaction for the dissociation of hypochlorous acid in water? Choose the correct answer.",
+    options: [
+      "\\text{HClO}(aq) + \\text{H}_2(l) \\rightleftharpoons \\text{H}_3\\text{O}^+(aq) + \\text{ClO}^-(aq)",
+      "$\\text{HClO}(aq) + \\text{H}_2\\text{O}(l) \\rightleftharpoons \\text{H}_3\\text{O}^+(aq) + \\text{ClO}^-(aq)$",
+      "$\\text{HClO}(aq) \\rightleftharpoons \\text{H}^+(aq) + \\text{ClO}^-(aq)$",
+      "$\\text{HClO}(aq) + \\text{OH}^-(aq) \\rightleftharpoons \\text{H}_2\\text{O}(l) + \\text{ClO}^-(aq)$",
+    ],
   },
   {
     id: 3,
@@ -213,6 +220,7 @@ export default function ChemQuest() {
       !activeQuestion
     ) {
       setActiveQuestion(question);
+      setReviewQuestion(null);
       togglePlay(false); // Pause video
     }
   }, [currentTime, togglePlay, answeredQuestions]);
@@ -302,7 +310,7 @@ export default function ChemQuest() {
             <video
               ref={videoRef}
               className="w-full h-full object-cover"
-              src="https://files.aamira.me/projects/Folding@home%20stats%20website%20-%20My%20CS50%20Final%20project.mp4"
+              src="https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_5mb.mp4"
               onContextMenu={(e) => e.preventDefault()}
               disablePictureInPicture
               onClick={() => togglePlay()}
@@ -391,12 +399,15 @@ export default function ChemQuest() {
                   />
                 ) : (
                   <div className="text-blue-700 font-medium">
-                    Your answer:{" "}
-                    {userAnswers[reviewQuestion.id] || "Not answered"}
+                    <Latex>
+                      Your answer:{" "}
+                      {userAnswers[reviewQuestion.id] || "Not answered"}
+                    </Latex>
                   </div>
                 )}
               </div>
             )}
+            bun{" "}
           </div>
         </div>
       </div>
