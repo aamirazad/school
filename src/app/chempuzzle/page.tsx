@@ -9,6 +9,9 @@ import { TextInput } from "@/components/text-input";
 import { MultipleChoice } from "@/components/multiple-choice";
 import { EquationBalancer } from "@/components/equation-balancer";
 import { DipoleArrows } from "@/components/dipole-arrows";
+import Latex from "react-latex-next";
+import "katex/dist/katex.min.css";
+import { KaExpression } from "@/components/ka-expression";
 
 // Add CSS for animations
 const fadeInAnimation = `
@@ -27,7 +30,8 @@ type QuestionType =
   | "text"
   | "multiple-choice"
   | "equation-balance"
-  | "dipole-arrow";
+  | "dipole-arrow"
+  | "ka-expression";
 
 interface Question {
   id: number;
@@ -36,8 +40,6 @@ interface Question {
   reviewTime: number; // in seconds
   prompt: string;
   options?: string[];
-  answer: string;
-  explanation?: string;
 }
 
 // Sample questions
@@ -48,9 +50,6 @@ const questions: Question[] = [
     time: 5, // Show after 5 seconds
     reviewTime: 40, // Review after 40 seconds
     prompt: "What is the chemical formula for water?",
-    answer: "H2O",
-    explanation:
-      "Water consists of two hydrogen atoms bonded to one oxygen atom.",
   },
   {
     id: 2,
@@ -59,9 +58,6 @@ const questions: Question[] = [
     reviewTime: 50, // Review after 50 seconds
     prompt: "Which of the following is a noble gas?",
     options: ["Oxygen", "Nitrogen", "Helium", "Chlorine"],
-    answer: "Helium",
-    explanation:
-      "Helium (He) is a noble gas in Group 18 of the periodic table.",
   },
   {
     id: 3,
@@ -69,8 +65,6 @@ const questions: Question[] = [
     time: 25, // Show after 25 seconds
     reviewTime: 60, // Review after 60 seconds
     prompt: "Balance the following chemical equation: H₂ + O₂ → H₂O",
-    answer: "2H₂ + O₂ → 2H₂O",
-    explanation: "We need 4 hydrogen atoms and 2 oxygen atoms on each side.",
   },
   {
     id: 4,
@@ -78,9 +72,14 @@ const questions: Question[] = [
     time: 35, // Show after 35 seconds
     reviewTime: 70, // Review after 70 seconds
     prompt: "Draw the dipole arrow for the H-Cl bond.",
-    answer: "H→Cl",
-    explanation:
-      "Chlorine is more electronegative than hydrogen, so the dipole arrow points from H to Cl.",
+  },
+  {
+    id: 5,
+    type: "ka-expression",
+    time: 1, // Show after 45 seconds
+    reviewTime: 80, // Review after 80 seconds
+    prompt:
+      "Find the acid dissociation constant ($K_a$) for the following reaction:",
   },
 ];
 
@@ -397,7 +396,7 @@ export default function ChemQuest() {
         {activeQuestion && (
           <div className="p-6 bg-white rounded-lg shadow-xl m-4">
             <h3 className="text-xl font-semibold mb-4">
-              {activeQuestion.prompt}
+              <Latex>{activeQuestion.prompt}</Latex>
             </h3>
 
             {activeQuestion.type === "text" && (
@@ -424,6 +423,10 @@ export default function ChemQuest() {
 
             {activeQuestion.type === "dipole-arrow" && (
               <DipoleArrows onSubmit={handleAnswerSubmit} />
+            )}
+
+            {activeQuestion.type === "ka-expression" && (
+              <KaExpression onSubmit={handleAnswerSubmit} />
             )}
           </div>
         )}

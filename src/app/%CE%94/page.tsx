@@ -19,11 +19,11 @@ interface QuestionProps {
 function Steps({ steps, nextQuestion }: QuestionProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>(
-    Array(steps.length).fill(null),
+    Array(steps.length).fill(null)
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [showHint, setShowHint] = useState<boolean[]>(
-    Array(steps.length).fill(false),
+    Array(steps.length).fill(false)
   );
   const [errors, setErrors] = useState<string[]>(Array(steps.length).fill(""));
   const [shadowColor, setShadowColor] = useState<string>("");
@@ -102,8 +102,8 @@ function Steps({ steps, nextQuestion }: QuestionProps) {
               shadowColor === "green" && index === currentStep
                 ? "shadow-[0_0px_60px_-5px_rgba(104,211,145,0.6)]"
                 : shadowColor === "red" && index === currentStep
-                  ? "shadow-[0_0px_60px_-5px_rgba(252,129,129,0.6)]"
-                  : ""
+                ? "shadow-[0_0px_60px_-5px_rgba(252,129,129,0.6)]"
+                : ""
             }`}
           >
             <p className="font-semibold mb-2">Step {index + 1}:</p>
