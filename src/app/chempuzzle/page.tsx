@@ -12,6 +12,7 @@ import { DipoleArrows } from "@/components/dipole-arrows";
 import Latex from "react-latex-next";
 import "katex/dist/katex.min.css";
 import { KaExpression } from "@/components/ka-expression";
+import { LewisDot } from "@/components/lewis-dot";
 
 // Add CSS for animations
 const fadeInAnimation = `
@@ -31,7 +32,8 @@ type QuestionType =
   | "multiple-choice"
   | "equation-balance"
   | "dipole-arrow"
-  | "ka-expression";
+  | "ka-expression"
+  | "lewis-dot";
 
 interface Question {
   id: number;
@@ -47,39 +49,46 @@ const questions: Question[] = [
   {
     id: 1,
     type: "text",
-    time: 5, // Show after 5 seconds
-    reviewTime: 40, // Review after 40 seconds
+    time: 10,
+    reviewTime: 11,
     prompt: "What is the chemical formula for water?",
   },
   {
     id: 2,
     type: "multiple-choice",
-    time: 15, // Show after 15 seconds
-    reviewTime: 50, // Review after 50 seconds
+    time: 3,
+    reviewTime: 4,
     prompt: "Which of the following is a noble gas?",
     options: ["Oxygen", "Nitrogen", "Helium", "Chlorine"],
   },
   {
     id: 3,
     type: "equation-balance",
-    time: 25, // Show after 25 seconds
-    reviewTime: 60, // Review after 60 seconds
+    time: 5,
+    reviewTime: 6,
     prompt: "Balance the following chemical equation: H₂ + O₂ → H₂O",
   },
   {
     id: 4,
     type: "dipole-arrow",
-    time: 35, // Show after 35 seconds
-    reviewTime: 70, // Review after 70 seconds
+    time: 6,
+    reviewTime: 7,
     prompt: "Draw the dipole arrow for the H-Cl bond.",
   },
   {
     id: 5,
     type: "ka-expression",
-    time: 1, // Show after 45 seconds
-    reviewTime: 80, // Review after 80 seconds
+    time: 8,
+    reviewTime: 9,
     prompt:
       "Find the acid dissociation constant ($K_a$) for the following reaction:",
+  },
+  {
+    id: 6,
+    type: "lewis-dot",
+    time: 1,
+    reviewTime: 2,
+    prompt: "Draw the Lewis dot structure for water (H2O)",
   },
 ];
 
@@ -298,7 +307,6 @@ export default function ChemQuest() {
               disablePictureInPicture
               onClick={() => togglePlay()}
             />
-
             {/* Video controls */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-sm text-white px-4 py-3">
               <div className="flex items-center justify-between mb-2">
@@ -364,23 +372,29 @@ export default function ChemQuest() {
                 </div>
               )}
             </div>
-
             <CenterPlayButton
               togglePlay={togglePlay}
               currentTime={currentTime}
               duration={duration}
             />
-
             {/* Answer review floating box */}
             {showingReview && reviewQuestion && (
               <div className="absolute bottom-20 right-4 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-xl max-w-xs border border-gray-200 animate-fade-in">
                 <h4 className="font-medium text-sm mb-2">
                   {reviewQuestion.prompt}
                 </h4>
-                <div className="text-blue-700 font-medium">
-                  Your answer:{" "}
-                  {userAnswers[reviewQuestion.id] || "Not answered"}
-                </div>
+                {reviewQuestion.type === "lewis-dot" ? (
+                  <LewisDot
+                    review={true}
+                    structure={userAnswers[reviewQuestion.id]}
+                    onSubmit={() => {}}
+                  />
+                ) : (
+                  <div className="text-blue-700 font-medium">
+                    Your answer:{" "}
+                    {userAnswers[reviewQuestion.id] || "Not answered"}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -427,6 +441,10 @@ export default function ChemQuest() {
 
             {activeQuestion.type === "ka-expression" && (
               <KaExpression onSubmit={handleAnswerSubmit} />
+            )}
+
+            {activeQuestion.type === "lewis-dot" && (
+              <LewisDot onSubmit={handleAnswerSubmit} />
             )}
           </div>
         )}

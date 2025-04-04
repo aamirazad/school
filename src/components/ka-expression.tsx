@@ -55,7 +55,7 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
   const base = `$\\text{H}_2\\text{O}_{(l)}$`;
   const conjAcid = `$\\text{H}_3\\text{O}^+_{(aq)}$`;
   const conjBase = `$\\text{HCOO}^-_{(aq)}$`;
-  
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-gray-50 p-4 rounded-lg text-center">
@@ -68,7 +68,7 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
           </div>
         </div>
       </div>
-  
+
       <div className="grid gap-4">
         <div>
           <Label htmlFor="h-plus">
@@ -85,7 +85,7 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
             className="w-full mt-1"
           />
         </div>
-  
+
         <div>
           <Label htmlFor="conjugate-base">
             Concentration of <Latex>{conjBase}</Latex> (mol/L)
@@ -101,7 +101,7 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
             className="w-full mt-1"
           />
         </div>
-  
+
         <div>
           <Label htmlFor="acid">
             Concentration of <Latex>{acid}</Latex> (mol/L)
@@ -118,7 +118,7 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
           />
         </div>
       </div>
-  
+
       {calculateKa() !== null && (
         <div className="bg-blue-50 p-3 rounded-lg text-center">
           <p className="font-medium">
@@ -126,7 +126,7 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
           </p>
         </div>
       )}
-  
+
       <Button
         type="submit"
         className="w-full"
@@ -136,4 +136,4 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
       </Button>
     </form>
   );
-  
+}
