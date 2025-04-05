@@ -9,6 +9,7 @@
         "@radix-ui/react-progress": "^1.1.2",
         "@radix-ui/react-radio-group": "^1.2.3",
         "@radix-ui/react-slot": "^1.1.2",
+        "@types/react-katex": "^3.0.4",
         "better-react-mathjax": "^2.1.0",
         "caniuse-lite": "^1.0.30001701",
         "class-variance-authority": "^0.7.1",
@@ -24,6 +25,7 @@
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-hook-form": "^7.54.2",
+        "react-katex": "^3.0.1",
         "react-latex-next": "^3.0.0",
         "sharp": "^0.33.2",
         "tailwind-merge": "^3.0.2",
@@ -240,6 +242,8 @@
     "@types/react": ["types-react@19.0.0-rc.1", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-RshndUfqTW6K3STLPis8BtAYCGOkMbtvYsi90gmVNDZBXUyUc5juf2PE9LfS/JmOlUIRO8cWTS/1MTnmhjDqyQ=="],
 
     "@types/react-dom": ["types-react-dom@19.0.0", "", { "dependencies": { "@types/react": "*" } }, "sha512-qtWBYduBCmrgf4wqnTrGttEJJSZ6cTGmzuvmWd/34TJNKz/Pp69Islc1+txHF3nRxSuRvmhxztFXvLyxhp8G2w=="],
+
+    "@types/react-katex": ["@types/react-katex@3.0.4", "", { "dependencies": { "@types/react": "*" } }, "sha512-aLkykKzSKLpXI6REJ3uClao6P47HAFfR1gcHOZwDeTuALsyjgMhz+oynLV4gX0kiJVnvHrBKF/TLXqyNTpHDUg=="],
 
     "@typescript-eslint/eslint-plugin": ["@typescript-eslint/eslint-plugin@8.27.0", "", { "dependencies": { "@eslint-community/regexpp": "^4.10.0", "@typescript-eslint/scope-manager": "8.27.0", "@typescript-eslint/type-utils": "8.27.0", "@typescript-eslint/utils": "8.27.0", "@typescript-eslint/visitor-keys": "8.27.0", "graphemer": "^1.4.0", "ignore": "^5.3.1", "natural-compare": "^1.4.0", "ts-api-utils": "^2.0.1" }, "peerDependencies": { "@typescript-eslint/parser": "^8.0.0 || ^8.0.0-alpha.0", "eslint": "^8.57.0 || ^9.0.0", "typescript": ">=4.8.4 <5.9.0" } }, "sha512-4henw4zkePi5p252c8ncBLzLce52SEUz2Ebj8faDnuUXz2UuHEONYcJ+G0oaCF+bYCWVZtrGzq3FD7YXetmnSA=="],
 
@@ -754,6 +758,8 @@
     "react-hook-form": ["react-hook-form@7.54.2", "", { "peerDependencies": { "react": "^16.8.0 || ^17 || ^18 || ^19" } }, "sha512-eHpAUgUjWbZocoQYUHposymRb4ZP6d0uwUnooL2uOybA9/3tPUvoAKqEWK1WaSiTxxOfTpffNZP7QwlnM3/gEg=="],
 
     "react-is": ["react-is@16.13.1", "", {}, "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="],
+
+    "react-katex": ["react-katex@3.0.1", "", { "dependencies": { "katex": "^0.16.0" }, "peerDependencies": { "prop-types": "^15.8.1", "react": ">=15.3.2 <=18" } }, "sha512-wIUW1fU5dHlkKvq4POfDkHruQsYp3fM8xNb/jnc8dnQ+nNCnaj0sx5pw7E6UyuEdLRyFKK0HZjmXBo+AtXXy0A=="],
 
     "react-latex-next": ["react-latex-next@3.0.0", "", { "dependencies": { "katex": "^0.16.0" }, "peerDependencies": { "react": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0", "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0" } }, "sha512-x70f1b1G7TronVigsRgKHKYYVUNfZk/3bciFyYX1lYLQH2y3/TXku3+5Vap8MDbJhtopePSYBsYWS6jhzIdz+g=="],
 

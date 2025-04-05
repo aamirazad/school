@@ -9,11 +9,10 @@ import { TextInput } from "@/components/text-input";
 import { MultipleChoice } from "@/components/multiple-choice";
 import { EquationBalancer } from "@/components/equation-balancer";
 import { DipoleArrows } from "@/components/dipole-arrows";
-import Latex from "react-latex-next";
-import "katex/dist/katex.min.css";
 
 import { KaExpression } from "@/components/ka-expression";
 import { LewisDot } from "@/components/lewis-dot";
+import MathJaxProvider from "@/components/MathJaxProvider";
 
 // Add CSS for animations
 const fadeInAnimation = `
@@ -62,10 +61,10 @@ const questions: Question[] = [
     prompt:
       "Which of the following correctly represents the equilibrium reaction for the dissociation of hypochlorous acid in water? Choose the correct answer.",
     options: [
-      "\\text{HClO}(aq) + \\text{H}_2(l) \\rightleftharpoons \\text{H}_3\\text{O}^+(aq) + \\text{ClO}^-(aq)",
-      "$\\text{HClO}(aq) + \\text{H}_2\\text{O}(l) \\rightleftharpoons \\text{H}_3\\text{O}^+(aq) + \\text{ClO}^-(aq)$",
-      "$\\text{HClO}(aq) \\rightleftharpoons \\text{H}^+(aq) + \\text{ClO}^-(aq)$",
-      "$\\text{HClO}(aq) + \\text{OH}^-(aq) \\rightleftharpoons \\text{H}_2\\text{O}(l) + \\text{ClO}^-(aq)$",
+      "\\(\\ce{2H + O -> H2O}\\)",
+      "\\(\\ce{HClO(aq) + H2O(l) <=> H3O+(aq) + ClO-(aq)}\\)",
+      "\\(\\ce{HClO(aq) <=> H+(aq) + ClO-(aq)}\\)",
+      `\\(\\ce{N2O5(g) -> 2NO2(g) + 1/2O2(g)}\\)`,
     ],
   },
   {
@@ -73,7 +72,7 @@ const questions: Question[] = [
     type: "equation-balance",
     time: 5,
     reviewTime: 6,
-    prompt: "Balance the following chemical equation: H₂ + O₂ → H₂O",
+    prompt: "Balance the following chemical equation: $\\ce{H2 + O2 -> H2O}$",
   },
   {
     id: 4,
@@ -88,14 +87,14 @@ const questions: Question[] = [
     time: 8,
     reviewTime: 9,
     prompt:
-      "Find the acid dissociation constant ($K_a$) for the following reaction:",
+      "Find the acid dissociation constant (\\(K_a\\)) for the following reaction:",
   },
   {
     id: 6,
     type: "lewis-dot",
     time: 1,
     reviewTime: 2,
-    prompt: "Draw the Lewis dot structure for water (H2O)",
+    prompt: "Draw the Lewis dot structure for water (\\(\\ce{H2O}\\))",
   },
 ];
 
@@ -389,7 +388,7 @@ export default function ChemQuest() {
             {showingReview && reviewQuestion && (
               <div className="absolute bottom-20 right-4 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-xl max-w-xs border border-gray-200 animate-fade-in">
                 <h4 className="font-medium text-sm mb-2">
-                  {reviewQuestion.prompt}
+                  <MathJaxProvider>{reviewQuestion.prompt}</MathJaxProvider>
                 </h4>
                 {reviewQuestion.type === "lewis-dot" ? (
                   <LewisDot
@@ -399,10 +398,10 @@ export default function ChemQuest() {
                   />
                 ) : (
                   <div className="text-blue-700 font-medium">
-                    <Latex>
-                      Your answer:{" "}
+                    Your answer:{" "}
+                    <MathJaxProvider>
                       {userAnswers[reviewQuestion.id] || "Not answered"}
-                    </Latex>
+                    </MathJaxProvider>
                   </div>
                 )}
               </div>
@@ -421,7 +420,7 @@ export default function ChemQuest() {
         {activeQuestion && (
           <div className="p-6 bg-white rounded-lg shadow-xl m-4">
             <h3 className="text-xl font-semibold mb-4">
-              <Latex>{activeQuestion.prompt}</Latex>
+              <MathJaxProvider>{activeQuestion.prompt} </MathJaxProvider>
             </h3>
 
             {activeQuestion.type === "text" && (

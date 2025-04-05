@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { ChemJax } from "./latex-wrapper";
+import MathJaxProvider from "./MathJaxProvider";
 
 interface MultipleChoiceProps {
   options: string[];
@@ -36,7 +36,7 @@ export function MultipleChoice({ options, onSelect }: MultipleChoiceProps) {
               htmlFor={`option-${index}`}
               className="cursor-pointer flex-grow"
             >
-              <ChemJax>{option}</ChemJax>
+              <MathJaxProvider>{option}</MathJaxProvider>
             </Label>
           </div>
         ))}

@@ -59,21 +59,17 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-gray-50 p-4 rounded-lg text-center">
-        <p className="text-lg font-medium mb-2">
-          <Latex>{equation}</Latex>
-        </p>
+        <p className="text-lg font-medium mb-2">{equation}</p>
         <div className="flex items-center justify-center">
           <div className="text-2xl">
-            <Latex>{`$K_a = \\frac{[\\text{H}_3\\text{O}^+] [\\text{HCOO}^-]}{[\\text{HCOOH}]}$`}</Latex>
+            {`$K_a = \\frac{[\\text{H}_3\\text{O}^+] [\\text{HCOO}^-]}{[\\text{HCOOH}]}$`}
           </div>
         </div>
       </div>
 
       <div className="grid gap-4">
         <div>
-          <Label htmlFor="h-plus">
-            Concentration of <Latex>{conjAcid}</Latex> (mol/L)
-          </Label>
+          <Label htmlFor="h-plus">Concentration of {conjAcid} (mol/L)</Label>
           <Input
             id="h-plus"
             type="number"
@@ -88,7 +84,7 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
 
         <div>
           <Label htmlFor="conjugate-base">
-            Concentration of <Latex>{conjBase}</Latex> (mol/L)
+            Concentration of {conjBase} (mol/L)
           </Label>
           <Input
             id="conjugate-base"
@@ -103,9 +99,7 @@ export function KaExpression({ onSubmit }: KaExpressionProps) {
         </div>
 
         <div>
-          <Label htmlFor="acid">
-            Concentration of <Latex>{acid}</Latex> (mol/L)
-          </Label>
+          <Label htmlFor="acid">Concentration of {acid} (mol/L)</Label>
           <Input
             id="acid"
             type="number"
