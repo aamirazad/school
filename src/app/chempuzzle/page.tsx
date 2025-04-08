@@ -48,53 +48,74 @@ interface Question {
 const questions: Question[] = [
   {
     id: 1,
-    type: "text",
+    type: "multiple-choice",
     time: 10,
-    reviewTime: 11,
-    prompt: "What is the chemical formula for water?",
+    reviewTime: 1010,
+    prompt:
+      "Write the equilibrium reaction for the dissociation of hypochlorous acid in water",
   },
   {
     id: 2,
-    type: "multiple-choice",
-    time: 3,
-    reviewTime: 4,
+    type: "ka-expression",
+    time: 20,
+    reviewTime: 1020,
     prompt:
-      "Which of the following correctly represents the equilibrium reaction for the dissociation of hypochlorous acid in water? Choose the correct answer.",
-    options: [
-      "\\(\\ce{2H + O -> H2O}\\)",
-      "\\(\\ce{HClO(aq) + H2O(l) <=> H3O+(aq) + ClO-(aq)}\\)",
-      "\\(\\ce{HClO(aq) <=> H+(aq) + ClO-(aq)}\\)",
-      `\\(\\ce{N2O5(g) -> 2NO2(g) + 1/2O2(g)}\\)`,
-    ],
+      "Write the expression for the acid dissociation constant (Ka) for hypochlorous acid",
   },
   {
     id: 3,
-    type: "equation-balance",
-    time: 5,
-    reviewTime: 6,
-    prompt: "Balance the following chemical equation: $\\ce{H2 + O2 -> H2O}$",
+    type: "text",
+    time: 30,
+    reviewTime: 1030,
+    prompt:
+      "If the Ka of HClO is 3.010-8, calculate the pH of a 0.10 M solution of hypochlorous acid.",
   },
   {
     id: 4,
-    type: "dipole-arrow",
-    time: 6,
-    reviewTime: 7,
-    prompt: "Draw the dipole arrow for the H-Cl bond.",
+    type: "lewis-dot",
+    time: 40,
+    reviewTime: 1040,
+    prompt:
+      "Complete the Lewis electron-dot diagram for the hypochlorite ion (ClO-) by drawing in all of the electron pairs",
   },
   {
     id: 5,
-    type: "ka-expression",
-    time: 8,
-    reviewTime: 9,
+    type: "dipole-arrow",
+    time: 50,
+    reviewTime: 1050,
     prompt:
-      "Find the acid dissociation constant (\\(K_a\\)) for the following reaction:",
+      " Using the Lewis structure from part (d) indicate any bond dipoles with arrows.",
   },
   {
     id: 6,
-    type: "lewis-dot",
-    time: 1,
-    reviewTime: 2,
-    prompt: "Draw the Lewis dot structure for water (\\(\\ce{H2O}\\))",
+    type: "text",
+    time: 60,
+    reviewTime: 1060,
+    prompt:
+      "Describe the intermolecular forces present in a sample of pure hypochlorous acid.",
+  },
+  {
+    id: 7,
+    type: "text",
+    time: 70,
+    reviewTime: 1070,
+    prompt:
+      "Identify the hybridization of the valence orbitals of the central atom",
+  },
+  {
+    id: 8,
+    type: "text",
+    time: 80,
+    reviewTime: 1080,
+    prompt:
+      "Using the equilibrium reaction from part (a), predict the effect on the equilibrium (shift left, shift right, or no change) of adding HCl to the solution. Explain your reasoning in terms of Le Chateliers Principle",
+  },
+  {
+    id: 9,
+    type: "text",
+    time: 90,
+    reviewTime: 1090,
+    prompt: "Write the rate law for the decomposition of N2O5",
   },
 ];
 
@@ -282,7 +303,7 @@ export default function ChemQuest() {
         .filter((q) => q.reviewTime > currentTime)
         .sort((a, b) => a.reviewTime - b.reviewTime)[0]?.reviewTime;
 
-      // If there's no next review within the next 10 seconds, hide the review
+      // If theres no next review within the next 10 seconds, hide the review
       if (!nextReviewTime || nextReviewTime - currentTime > 10) {
         setShowingReview(false);
         setReviewQuestion(null);
@@ -309,7 +330,7 @@ export default function ChemQuest() {
             <video
               ref={videoRef}
               className="w-full h-full object-cover"
-              src="https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_5mb.mp4"
+              src="https://files.aamira.me/inbox/semester.mp4"
               onContextMenu={(e) => e.preventDefault()}
               disablePictureInPicture
               onClick={() => togglePlay()}
