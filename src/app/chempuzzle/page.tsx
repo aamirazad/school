@@ -2,123 +2,347 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { PlayCircle, PauseCircle, Volume2, VolumeX } from "lucide-react";
-import Question from "./_components/question";
 import { useTheme } from "next-themes";
-import { questions } from "./questions";
+import { separateName } from "@/lib/utils";
+import { CenterPlayButton } from "./_components/center-play-button";
+import { TextInput } from "@/components/text-input";
+import { MultipleChoice } from "@/components/multiple-choice";
+import { EquationBalancer } from "@/components/equation-balancer";
+import { DipoleArrows } from "@/components/dipole-arrows";
+
+import { KaExpression } from "@/components/ka-expression";
+import { LewisDot } from "@/components/lewis-dot";
+import MathJaxProvider from "@/components/MathJaxProvider";
+
+// Add CSS for animations
+const fadeInAnimation = `
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+`;
+
+// Define the question types and structure
+type QuestionType =
+  | "text"
+  | "multiple-choice"
+  | "equation-balance"
+  | "dipole-arrow"
+  | "ka-expression"
+  | "lewis-dot";
+
+interface Question {
+  id: number;
+  type: QuestionType;
+  time: number; // in seconds
+  reviewTime: number; // in seconds
+  prompt: string;
+  options?: string[];
+}
+
+// Sample questions
+const questions: Question[] = [
+  {
+    id: 1,
+    type: "multiple-choice",
+    time: 10,
+    reviewTime: 1010,
+    prompt:
+      "Write the equilibrium reaction for the dissociation of hypochlorous acid in water",
+  },
+  {
+    id: 2,
+    type: "ka-expression",
+    time: 20,
+    reviewTime: 1020,
+    prompt:
+      "Write the expression for the acid dissociation constant (Ka) for hypochlorous acid",
+  },
+  {
+    id: 3,
+    type: "text",
+    time: 30,
+    reviewTime: 1030,
+    prompt:
+      "If the Ka of HClO is 3.010-8, calculate the pH of a 0.10 M solution of hypochlorous acid.",
+  },
+  {
+    id: 4,
+    type: "lewis-dot",
+    time: 40,
+    reviewTime: 1040,
+    prompt:
+      "Complete the Lewis electron-dot diagram for the hypochlorite ion (ClO-) by drawing in all of the electron pairs",
+  },
+  {
+    id: 5,
+    type: "dipole-arrow",
+    time: 50,
+    reviewTime: 1050,
+    prompt:
+      " Using the Lewis structure from part (d) indicate any bond dipoles with arrows.",
+  },
+  {
+    id: 6,
+    type: "text",
+    time: 60,
+    reviewTime: 1060,
+    prompt:
+      "Describe the intermolecular forces present in a sample of pure hypochlorous acid.",
+  },
+  {
+    id: 7,
+    type: "text",
+    time: 70,
+    reviewTime: 1070,
+    prompt:
+      "Identify the hybridization of the valence orbitals of the central atom",
+  },
+  {
+    id: 8,
+    type: "text",
+    time: 80,
+    reviewTime: 1080,
+    prompt:
+      "Using the equilibrium reaction from part (a), predict the effect on the equilibrium (shift left, shift right, or no change) of adding HCl to the solution. Explain your reasoning in terms of Le Chateliers Principle",
+  },
+  {
+    id: 9,
+    type: "text",
+    time: 90,
+    reviewTime: 1090,
+    prompt: "Write the rate law for the decomposition of N2O5",
+  },
+];
 
 export default function ChemQuest() {
   const { setTheme } = useTheme();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(170);
+  const [duration, setDuration] = useState<number | null>(null);
   const [isMuted, setIsMuted] = useState(false);
-  const [activeQuestion, setActiveQuestion] = useState<
-    (typeof questions)[0] | null
-  >(null);
+  const [activeQuestion, setActiveQuestion] = useState<Question | null>(null);
+  const [showingReview, setShowingReview] = useState(false);
+  const [reviewQuestion, setReviewQuestion] = useState<Question | null>(null);
+  const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
+  const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
+  const [reviewStartTime, setReviewStartTime] = useState<number | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Set theme to light mode on mount
   useEffect(() => {
     setTheme("light");
+  }, [setTheme]);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const handleTimeUpdate = () => {
-      setCurrentTime(video.currentTime);
-    };
-
-    const handleLoadedMetadata = () => {
-      setDuration(video.duration);
-    };
+    const handleTimeUpdate = () => setCurrentTime(video.currentTime);
+    const handleLoadedMetadata = () => setDuration(video.duration);
 
     video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("loadedMetadata", handleLoadedMetadata);
+
+    // Check if duration is already available
+    if (video.duration) {
+      setDuration(video.duration);
+    } else {
+      video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    }
 
     return () => {
       video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("loadedMetadata", handleLoadedMetadata);
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
     };
-  }, [setTheme]);
+  }, []);
 
-  // Wrap togglePlay in useCallback to prevent it from changing on every render
-  const togglePlay = useCallback(() => {
-    if (!videoRef.current || activeQuestion !== null) return;
+  // Toggle play/pause
+  const togglePlay = useCallback(
+    (param?: boolean | { force?: boolean }) => {
+      // Extract force value, handling both call styles
+      let force: boolean | undefined;
 
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
-  }, [isPlaying, activeQuestion]);
+      if (typeof param === "boolean") {
+        force = param;
+      } else if (
+        param &&
+        typeof param === "object" &&
+        !("nativeEvent" in param)
+      ) {
+        force = param.force;
+      }
 
-  // Wrap toggleMute in useCallback to prevent it from changing on every render
+      if (!videoRef.current) return;
+
+      if (activeQuestion !== null && force !== true) {
+        return;
+      }
+
+      const shouldPlay = force !== undefined ? force : !isPlaying;
+
+      if (shouldPlay) {
+        videoRef.current.play();
+        setIsPlaying(true);
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    },
+    [isPlaying, activeQuestion]
+  );
+
+  // Toggle mute/unmute
   const toggleMute = useCallback(() => {
     if (!videoRef.current) return;
 
     videoRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
+    setIsMuted((prev) => !prev);
   }, [isMuted]);
 
-  // Second useEffect with togglePlay in dependencies
+  // Handle keyboard shortcuts
   useEffect(() => {
-    if (questions[0].time === Math.round(currentTime)) {
-      togglePlay();
-      setActiveQuestion(questions[0]);
-    }
-  }, [currentTime, togglePlay]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!videoRef.current || activeQuestion) return;
 
+      switch (e.code) {
+        case "Space":
+          togglePlay();
+          break;
+        case "KeyM":
+          toggleMute();
+          break;
+        case "ArrowLeft":
+          videoRef.current.currentTime = Math.max(
+            videoRef.current.currentTime - 5,
+            0
+          );
+          break;
+        default:
+          break;
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [togglePlay, toggleMute]);
+
+  // Pause video and show question when time matches
+  useEffect(() => {
+    const question = questions.find((q) => q.time === Math.ceil(currentTime));
+    if (
+      question &&
+      !answeredQuestions.includes(question.id) &&
+      !activeQuestion
+    ) {
+      setActiveQuestion(question);
+      setReviewQuestion(null);
+      togglePlay(false); // Pause video
+    }
+  }, [currentTime, togglePlay, answeredQuestions]);
+
+  // Format time for display
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.code === "Space") {
-        e.preventDefault();
-        togglePlay();
-      } else if (e.code === "KeyM") {
-        toggleMute();
-      } else if (e.code === "ArrowLeft" && videoRef.current) {
-        videoRef.current.currentTime -= 5;
+  // Handle answer submission
+  const handleAnswerSubmit = (answer: string) => {
+    if (activeQuestion) {
+      // Save the answer
+      setUserAnswers((prev) => ({
+        ...prev,
+        [activeQuestion.id]: answer,
+      }));
+
+      // Mark question as answered
+      setAnsweredQuestions((prev) => [...prev, activeQuestion.id]);
+
+      // Close the question and resume
+      setActiveQuestion(null);
+      togglePlay(true);
+    }
+  };
+
+  // Add effect to show answer review
+  useEffect(() => {
+    if (!duration) return;
+
+    const reviewToShow = questions.find(
+      (q) => q.reviewTime === Math.ceil(currentTime)
+    );
+
+    if (
+      reviewToShow &&
+      !activeQuestion &&
+      answeredQuestions.includes(reviewToShow.id)
+    ) {
+      setReviewQuestion(reviewToShow);
+      setShowingReview(true);
+      setReviewStartTime(currentTime);
+    }
+  }, [currentTime, duration, answeredQuestions, activeQuestion]);
+
+  // Add effect to hide review after 10 seconds of playback
+  useEffect(() => {
+    if (!showingReview || !reviewStartTime) return;
+
+    // Calculate how much video time has passed since review started
+    const elapsedVideoTime = currentTime - reviewStartTime;
+
+    // Check if 10 seconds of video playback have passed
+    if (elapsedVideoTime >= 10) {
+      // Find the next review time
+      const nextReviewTime = questions
+        .filter((q) => q.reviewTime > currentTime)
+        .sort((a, b) => a.reviewTime - b.reviewTime)[0]?.reviewTime;
+
+      // If theres no next review within the next 10 seconds, hide the review
+      if (!nextReviewTime || nextReviewTime - currentTime > 10) {
+        setShowingReview(false);
+        setReviewQuestion(null);
+        setReviewStartTime(null);
       }
-    },
-    [togglePlay, toggleMute],
-  );
+    }
+  }, [currentTime, showingReview, reviewStartTime]);
 
   return (
-    <div
-      onKeyDown={handleKeyDown}
-      autoFocus
-      className="flex flex-col md:flex-row bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen text-slate-900"
-    >
+    <div className="flex flex-col md:flex-row bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen text-slate-900">
+      {/* Add style tag for animations */}
+      <style jsx global>
+        {fadeInAnimation}
+      </style>
+
       {/* Main content area */}
       <div className="flex-initial w-5/6 p-6 transition-all duration-300">
-        {/* Video container */}
         <div
           className={`mx-auto transition-all duration-300 ${
-            activeQuestion !== null ? "lg:w-4/5" : "w-full"
+            activeQuestion ? "lg:w-4/5" : "w-full"
           }`}
         >
           <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl ring-1 ring-black/5">
             <video
               ref={videoRef}
               className="w-full h-full object-cover"
-              src="https://files.aamira.me/projects/Folding@home%20stats%20website%20-%20My%20CS50%20Final%20project.mp4"
+              src="https://files.aamira.me/inbox/semester.mp4"
               onContextMenu={(e) => e.preventDefault()}
               disablePictureInPicture
-              onClick={togglePlay}
+              onClick={() => togglePlay()}
             />
-
-            {/* Video controls overlay */}
+            {/* Video controls */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-sm text-white px-4 py-3">
               <div className="flex items-center justify-between mb-2">
-                {/* Play/pause button */}
                 <button
-                  onClick={togglePlay}
-                  className="hover:text-blue-400 transition-colors focus:outline-none"
+                  onClick={() => togglePlay()}
+                  className={`hover:text-blue-400 transition-colors focus:outline-none ${
+                    currentTime !== 0 ? "" : "hidden"
+                  }`}
                 >
                   {isPlaying ? (
                     <PauseCircle size={28} />
@@ -127,12 +351,12 @@ export default function ChemQuest() {
                   )}
                 </button>
 
-                {/* Time display */}
-                <div className="text-sm font-medium">
-                  {`${formatTime(currentTime)} / ${formatTime(duration)}`}
-                </div>
+                {duration && (
+                  <div className="text-sm font-medium">
+                    {`${formatTime(currentTime)} / ${formatTime(duration)}`}
+                  </div>
+                )}
 
-                {/* Mute button */}
                 <button
                   onClick={toggleMute}
                   className="hover:text-blue-400 transition-colors focus:outline-none"
@@ -141,48 +365,120 @@ export default function ChemQuest() {
                 </button>
               </div>
 
-              {/* Progress bar */}
-              {duration !== 0 && (
+              {duration && (
                 <div className="relative h-1.5 bg-gray-600/50 rounded-full overflow-hidden">
-                  {/* Progress indicator */}
                   <div
                     className="absolute top-0 left-0 h-full bg-blue-500 rounded-full transition-all duration-300"
                     style={{ width: `${(currentTime / duration) * 100}%` }}
                   />
-
-                  {/* Question markers */}
                   {questions.map((question) => (
                     <div
                       key={question.id}
-                      className="absolute top-0 w-2.5 h-2.5 bg-red-500 rounded-full transform -translate-x-1/2 -translate-y-1/4 shadow-sm ring-1 ring-white/30"
-                      style={{ left: `${(question.time / duration) * 100}%` }}
-                      title={`Question ${question.id}: ${question.title}`}
+                      className={`absolute top-0 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/4 shadow-sm ring-1 ring-white/30 ${
+                        answeredQuestions.includes(question.id)
+                          ? "bg-green-500"
+                          : "bg-red-500"
+                      }`}
+                      style={{
+                        left: `${(question.time / duration) * 100}%`,
+                      }}
+                      title={`Question ${question.id}: ${question.prompt}`}
+                    />
+                  ))}
+                  {questions.map((question) => (
+                    <div
+                      key={`review-${question.id}`}
+                      className="absolute top-0 w-2.5 h-2.5 bg-yellow-500 rounded-full transform -translate-x-1/2 translate-y-1/4 shadow-sm ring-1 ring-white/30"
+                      style={{
+                        left: `${(question.reviewTime / duration) * 100}%`,
+                      }}
+                      title={`Review Question ${question.id} at ${formatTime(
+                        question.reviewTime
+                      )}`}
                     />
                   ))}
                 </div>
               )}
             </div>
-
-            {/* Play overlay button (center of video) */}
-            {!isPlaying && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                <button
-                  onClick={togglePlay}
-                  className="bg-white/20 backdrop-blur-sm text-white rounded-full p-4 hover:bg-white/30 transition-all duration-200 transform hover:scale-110"
-                >
-                  <PlayCircle size={48} />
-                </button>
+            <CenterPlayButton
+              togglePlay={togglePlay}
+              currentTime={currentTime}
+              duration={duration}
+            />
+            {/* Answer review floating box */}
+            {showingReview && reviewQuestion && (
+              <div className="absolute bottom-20 right-4 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-xl max-w-xs border border-gray-200 animate-fade-in">
+                <h4 className="font-medium text-sm mb-2">
+                  <MathJaxProvider>{reviewQuestion.prompt}</MathJaxProvider>
+                </h4>
+                {reviewQuestion.type === "lewis-dot" ? (
+                  <LewisDot
+                    review={true}
+                    structure={userAnswers[reviewQuestion.id]}
+                    onSubmit={() => {}}
+                  />
+                ) : (
+                  <div className="text-blue-700 font-medium">
+                    Your answer:{" "}
+                    <MathJaxProvider>
+                      {userAnswers[reviewQuestion.id] || "Not answered"}
+                    </MathJaxProvider>
+                  </div>
+                )}
               </div>
             )}
+            bun{" "}
           </div>
         </div>
       </div>
 
       {/* Active question display */}
       <div
-        className={`${activeQuestion !== null ? "block w-3/4" : "hidden w-0"} md:block transition-all duration-300 ease-in-out grow `}
+        className={`${
+          activeQuestion ? "block w-3/4" : "hidden w-0"
+        } md:block transition-all duration-300 ease-in-out grow`}
       >
-        {activeQuestion !== null && <Question question={activeQuestion} />}
+        {activeQuestion && (
+          <div className="p-6 bg-white rounded-lg shadow-xl m-4">
+            <h3 className="text-xl font-semibold mb-4">
+              <MathJaxProvider>{activeQuestion.prompt} </MathJaxProvider>
+            </h3>
+
+            {activeQuestion.type === "text" && (
+              <TextInput onSubmit={handleAnswerSubmit} />
+            )}
+
+            {activeQuestion.type === "multiple-choice" &&
+              activeQuestion.options && (
+                <MultipleChoice
+                  options={activeQuestion.options}
+                  onSelect={handleAnswerSubmit}
+                />
+              )}
+
+            {activeQuestion.type === "equation-balance" && (
+              <EquationBalancer
+                equation={activeQuestion.prompt.replace(
+                  "Balance the following chemical equation: ",
+                  ""
+                )}
+                onSubmit={handleAnswerSubmit}
+              />
+            )}
+
+            {activeQuestion.type === "dipole-arrow" && (
+              <DipoleArrows onSubmit={handleAnswerSubmit} />
+            )}
+
+            {activeQuestion.type === "ka-expression" && (
+              <KaExpression onSubmit={handleAnswerSubmit} />
+            )}
+
+            {activeQuestion.type === "lewis-dot" && (
+              <LewisDot onSubmit={handleAnswerSubmit} />
+            )}
+          </div>
+        )}
       </div>
 
       {/* Questions sidebar */}
@@ -195,30 +491,28 @@ export default function ChemQuest() {
             {questions.map((question) => (
               <div
                 key={question.id}
-                className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200"
+                className={`p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 ${
+                  answeredQuestions.includes(question.id)
+                    ? "border-green-300"
+                    : ""
+                }`}
               >
-                {/* Question badge */}
                 <div className="flex justify-between items-center mb-2">
-                  <span
-                    className={`text-xs font-medium py-1 px-2 rounded-full ${
-                      question.type === "multiple-choice"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-purple-100 text-purple-800"
-                    }`}
-                  >
-                    {question.type === "multiple-choice"
-                      ? "Multiple Choice"
-                      : "Short Answer"}
+                  <span className="text-xs font-medium py-1 px-2 rounded-full bg-blue-100 text-blue-800">
+                    {separateName(question.type)}
                   </span>
                   <span className="text-xs text-gray-500 font-medium">
                     {formatTime(question.time)}
                   </span>
                 </div>
-
-                {/* Question text */}
-                <div className="text-sm font-medium text-gray-800">
-                  {question.title}
+                <div className="text-sm font-medium text-gray-800 truncate">
+                  {question.prompt}
                 </div>
+                {answeredQuestions.includes(question.id) && (
+                  <div className="mt-2 text-xs text-green-600 font-medium">
+                    ✓ Answered
+                  </div>
+                )}
               </div>
             ))}
           </div>
