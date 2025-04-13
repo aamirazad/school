@@ -1,28 +1,29 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "./ui/textarea";
 
 interface TextInputProps {
-  onSubmit: (answer: string) => void
+  onSubmit: (answer: string) => void;
 }
 
 export function TextInput({ onSubmit }: TextInputProps) {
-  const [answer, setAnswer] = useState("")
+  const [answer, setAnswer] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (answer.trim()) {
-      onSubmit(answer)
+      onSubmit(`\\text{${answer}}`);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <Input
+      <Textarea
         value={answer}
         onChange={(e) => setAnswer(e.target.value)}
         placeholder="Type your answer here..."
@@ -33,6 +34,5 @@ export function TextInput({ onSubmit }: TextInputProps) {
         Submit Answer
       </Button>
     </form>
-  )
+  );
 }
-

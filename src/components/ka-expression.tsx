@@ -1,133 +1,106 @@
 "use client";
 
-import type React from "react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Latex from "react-latex-next";
+import { Button } from "@/components/ui/button";
 
 interface KaExpressionProps {
   onSubmit: (answer: string) => void;
 }
 
 export function KaExpression({ onSubmit }: KaExpressionProps) {
-  // Extract the conjugate base from the acid formula (e.g., "HA" -> "A-")
+  const [numerator1, setNumerator1] = useState("");
+  const [numerator2, setNumerator2] = useState("");
+  const [denominator1, setDenominator1] = useState("");
+  const [denominator2, setDenominator2] = useState("");
 
-  // State for each concentration value
-  const [hPlus, setHPlus] = useState("");
-  const [conjugateBase, setConjugateBase] = useState("");
-  const [acidConc, setAcidConc] = useState("");
-
-  // Calculate the Ka value when all inputs are filled
-  const calculateKa = (): number | null => {
-    if (!hPlus || !conjugateBase || !acidConc) return null;
-
-    const hPlusVal = parseFloat(hPlus);
-    const baseVal = parseFloat(conjugateBase);
-    const acidVal = parseFloat(acidConc);
-
-    if (isNaN(hPlusVal) || isNaN(baseVal) || isNaN(acidVal) || acidVal === 0)
-      return null;
-
-    return (hPlusVal * baseVal) / acidVal;
+  const handleSubmit = () => {
+    const expression = `K_a = \\frac{[${numerator1}][${numerator2}]}{[${denominator1}][${denominator2}]}`;
+    onSubmit(expression);
   };
-
-  // Format the Ka expression as a string
-  const formatKaExpression = (): string => {
-    const ka = calculateKa();
-    if (ka === null) return "";
-
-    // Format to scientific notation if very small
-    return ka < 0.001 ? ka.toExponential(4) : ka.toFixed(2);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const kaValue = formatKaExpression();
-    if (kaValue) {
-      onSubmit(kaValue);
-    }
-  };
-
-  const equation = `$\\text{HCOOH}_{(aq)} + \\text{H}_2O_{(l)} \\rightleftharpoons \\text{H}_3O^+_{(aq)} + \\text{HCOO}^-_{(aq)}$`;
-  const acid = `$\\text{HCOOH}_{(aq)}$`;
-  const base = `$\\text{H}_2\\text{O}_{(l)}$`;
-  const conjAcid = `$\\text{H}_3\\text{O}^+_{(aq)}$`;
-  const conjBase = `$\\text{HCOO}^-_{(aq)}$`;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-gray-50 p-4 rounded-lg text-center">
-        <p className="text-lg font-medium mb-2">{equation}</p>
-        <div className="flex items-center justify-center">
-          <div className="text-2xl">
-            {`$K_a = \\frac{[\\text{H}_3\\text{O}^+] [\\text{HCOO}^-]}{[\\text{HCOOH}]}$`}
+    <div className="space-y-6">
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          {/* Ka Expression Preview */}
+          <div className="text-2xl flex flex-col items-center">
+            <div className="flex items-center space-x-2">
+              <div className="border border-gray-300 rounded px-2 py-1 min-w-[100px] text-center">
+                {numerator1 ? `[${numerator1}]` : "[ ]"}
+              </div>
+              <div className="border border-gray-300 rounded px-2 py-1 min-w-[100px] text-center">
+                {numerator2 ? `[${numerator2}]` : "[ ]"}
+              </div>
+            </div>
+            <div className="w-full border-t border-gray-300 my-2"></div>
+            <div className="flex items-center space-x-2">
+              <div className="border border-gray-300 rounded px-2 py-1 min-w-[100px] text-center">
+                {denominator1 ? `[${denominator1}]` : "[ ]"}
+              </div>
+              <div className="border border-gray-300 rounded px-2 py-1 min-w-[100px] text-center">
+                {denominator2 ? `[${denominator2}]` : "[ ]"}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Input Fields */}
       <div className="grid gap-4">
         <div>
-          <Label htmlFor="h-plus">Concentration of {conjAcid} (mol/L)</Label>
+          <Label htmlFor="numerator1">First Numerator Molecule</Label>
           <Input
-            id="h-plus"
-            type="number"
-            step="0.0001"
-            min="0"
-            value={hPlus}
-            onChange={(e) => setHPlus(e.target.value)}
-            placeholder={`Enter value`}
+            id="numerator1"
+            value={numerator1}
+            onChange={(e) => setNumerator1(e.target.value)}
+            placeholder="Enter molecule"
             className="w-full mt-1"
           />
         </div>
 
         <div>
-          <Label htmlFor="conjugate-base">
-            Concentration of {conjBase} (mol/L)
-          </Label>
+          <Label htmlFor="numerator2">Second Numerator Molecule</Label>
           <Input
-            id="conjugate-base"
-            type="number"
-            step="0.0001"
-            min="0"
-            value={conjugateBase}
-            onChange={(e) => setConjugateBase(e.target.value)}
-            placeholder={`Enter value`}
+            id="numerator2"
+            value={numerator2}
+            onChange={(e) => setNumerator2(e.target.value)}
+            placeholder="Enter molecule"
             className="w-full mt-1"
           />
         </div>
 
         <div>
-          <Label htmlFor="acid">Concentration of {acid} (mol/L)</Label>
+          <Label htmlFor="denominator1">First Denominator Molecule</Label>
           <Input
-            id="acid"
-            type="number"
-            step="0.0001"
-            min="0.0001"
-            value={acidConc}
-            onChange={(e) => setAcidConc(e.target.value)}
-            placeholder={`Enter value`}
+            id="denominator1"
+            value={denominator1}
+            onChange={(e) => setDenominator1(e.target.value)}
+            placeholder="Enter molecule"
+            className="w-full mt-1"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="denominator2">Second Denominator Molecule</Label>
+          <Input
+            id="denominator2"
+            value={denominator2}
+            onChange={(e) => setDenominator2(e.target.value)}
+            placeholder="Enter molecule"
             className="w-full mt-1"
           />
         </div>
       </div>
 
-      {calculateKa() !== null && (
-        <div className="bg-blue-50 p-3 rounded-lg text-center">
-          <p className="font-medium">
-            K<sub>a</sub> = {formatKaExpression()}
-          </p>
-        </div>
-      )}
-
       <Button
-        type="submit"
+        onClick={handleSubmit}
         className="w-full"
-        disabled={calculateKa() === null}
+        disabled={!numerator1 || !numerator2 || !denominator1 || !denominator2}
       >
         Submit Answer
       </Button>
-    </form>
+    </div>
   );
 }

@@ -18,9 +18,8 @@ export function LewisDot({
 
   const initialStructure = {
     atoms: [
-      { id: "O", x: 150, y: 100, element: "O" },
-      { id: "H1", x: 70, y: 100, element: "H" },
-      { id: "H2", x: 230, y: 100, element: "H" },
+      { id: "Cl", x: 190, y: 100, element: "Cl" },
+      { id: "O", x: 100, y: 100, element: "O" },
     ],
     electrons: [] as { x: number; y: number }[],
     bonds: [] as { from: string; to: string }[],
@@ -88,6 +87,41 @@ export function LewisDot({
         ctx.stroke();
       }
     }
+
+    // Draw brackets around the molecule
+    const padding = 40;
+    const left =
+      Math.min(...currentStructure.atoms.map((atom) => atom.x)) - padding;
+    const right =
+      Math.max(...currentStructure.atoms.map((atom) => atom.x)) + padding;
+    const top =
+      Math.min(...currentStructure.atoms.map((atom) => atom.y)) - padding;
+    const bottom =
+      Math.max(...currentStructure.atoms.map((atom) => atom.y)) + padding;
+
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "black";
+
+    // Left bracket
+    ctx.moveTo(left, top);
+    ctx.lineTo(left - 10, top);
+    ctx.lineTo(left - 10, bottom);
+    ctx.lineTo(left, bottom);
+
+    // Right bracket
+    ctx.moveTo(right, top);
+    ctx.lineTo(right + 10, top);
+    ctx.lineTo(right + 10, bottom);
+    ctx.lineTo(right, bottom);
+
+    ctx.stroke();
+
+    // Add -1 charge on the top-right
+    ctx.fillStyle = "black";
+    ctx.font = "20px Arial";
+    ctx.textAlign = "left";
+    ctx.fillText("-1", right + 15, top - 10);
   }, [currentStructure, selectedAtom]);
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {

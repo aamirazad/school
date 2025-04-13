@@ -13,6 +13,8 @@ import { DipoleArrows } from "@/components/dipole-arrows";
 import { KaExpression } from "@/components/ka-expression";
 import { LewisDot } from "@/components/lewis-dot";
 import MathJaxProvider from "@/components/MathJaxProvider";
+import Latex from "react-latex-next";
+import "katex/dist/katex.min.css";
 
 // Add CSS for animations
 const fadeInAnimation = `
@@ -49,73 +51,72 @@ const questions: Question[] = [
   {
     id: 1,
     type: "multiple-choice",
-    time: 10,
-    reviewTime: 1010,
+    time: 47,
+    reviewTime: 50,
     prompt:
       "Write the equilibrium reaction for the dissociation of hypochlorous acid in water",
+    options: [
+      "HClO(aq) + H₂O(l) ⇌ H₃O⁺(aq) + ClO⁻(aq)",
+      "HClO(aq) + H⁺(aq) ⇌ ClO⁻(aq) + OH⁻",
+      "HClO(aq) + OH⁻(aq) ⇌ ClO⁻(aq) + H₂O(l)",
+      "HClO(aq) + H₂O(l) → HCl(aq) + H₂O₂(aq)",
+    ],
   },
   {
     id: 2,
     type: "ka-expression",
-    time: 20,
-    reviewTime: 1020,
+    time: 56,
+    reviewTime: 60,
     prompt:
-      "Write the expression for the acid dissociation constant (Ka) for hypochlorous acid",
+      "Write the expression for the acid dissociation constant ($K_a$) for hypochlorous acid",
   },
   {
     id: 3,
     type: "text",
-    time: 30,
-    reviewTime: 1030,
+    time: 70,
+    reviewTime: 75,
     prompt:
-      "If the Ka of HClO is 3.010-8, calculate the pH of a 0.10 M solution of hypochlorous acid.",
+      "If the Ka of HClO is $3.0\\times10^{-8}$, calculate the pH of a 0.10 M solution of hypochlorous acid.",
   },
   {
     id: 4,
     type: "lewis-dot",
-    time: 40,
-    reviewTime: 1040,
+    time: 84,
+    reviewTime: 86,
     prompt:
-      "Complete the Lewis electron-dot diagram for the hypochlorite ion (ClO-) by drawing in all of the electron pairs",
+      "Complete the Lewis electron-dot diagram for the hypochlorite ion ($ClO^-$) by drawing in all of the electron pairs",
   },
   {
     id: 5,
     type: "dipole-arrow",
-    time: 50,
-    reviewTime: 1050,
+    time: 91,
+    reviewTime: 95,
     prompt:
       " Using the Lewis structure from part (d) indicate any bond dipoles with arrows.",
   },
   {
     id: 6,
     type: "text",
-    time: 60,
-    reviewTime: 1060,
+    time: 101,
+    reviewTime: 105,
     prompt:
       "Describe the intermolecular forces present in a sample of pure hypochlorous acid.",
   },
   {
     id: 7,
     type: "text",
-    time: 70,
-    reviewTime: 1070,
+    time: 109,
+    reviewTime: 110,
     prompt:
       "Identify the hybridization of the valence orbitals of the central atom",
   },
   {
     id: 8,
     type: "text",
-    time: 80,
-    reviewTime: 1080,
+    time: 133,
+    reviewTime: 135,
     prompt:
       "Using the equilibrium reaction from part (a), predict the effect on the equilibrium (shift left, shift right, or no change) of adding HCl to the solution. Explain your reasoning in terms of Le Chateliers Principle",
-  },
-  {
-    id: 9,
-    type: "text",
-    time: 90,
-    reviewTime: 1090,
-    prompt: "Write the rate law for the decomposition of N2O5",
   },
 ];
 
@@ -193,7 +194,7 @@ export default function ChemQuest() {
         setIsPlaying(false);
       }
     },
-    [isPlaying, activeQuestion]
+    [isPlaying, activeQuestion],
   );
 
   // Toggle mute/unmute
@@ -219,7 +220,14 @@ export default function ChemQuest() {
         case "ArrowLeft":
           videoRef.current.currentTime = Math.max(
             videoRef.current.currentTime - 5,
-            0
+            0,
+          );
+          break;
+        // remove
+        case "ArrowRight":
+          videoRef.current.currentTime = Math.max(
+            videoRef.current.currentTime + 5,
+            0,
           );
           break;
         default:
@@ -275,7 +283,7 @@ export default function ChemQuest() {
     if (!duration) return;
 
     const reviewToShow = questions.find(
-      (q) => q.reviewTime === Math.ceil(currentTime)
+      (q) => q.reviewTime === Math.ceil(currentTime),
     );
 
     if (
@@ -330,7 +338,7 @@ export default function ChemQuest() {
             <video
               ref={videoRef}
               className="w-full h-full object-cover"
-              src="https://files.aamira.me/inbox/semester.mp4"
+              src="https://files.aamira.me/inbox/semester-final.mp4"
               onContextMenu={(e) => e.preventDefault()}
               disablePictureInPicture
               onClick={() => togglePlay()}
@@ -393,7 +401,7 @@ export default function ChemQuest() {
                         left: `${(question.reviewTime / duration) * 100}%`,
                       }}
                       title={`Review Question ${question.id} at ${formatTime(
-                        question.reviewTime
+                        question.reviewTime,
                       )}`}
                     />
                   ))}
@@ -409,7 +417,7 @@ export default function ChemQuest() {
             {showingReview && reviewQuestion && (
               <div className="absolute bottom-20 right-4 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-xl max-w-xs border border-gray-200 animate-fade-in">
                 <h4 className="font-medium text-sm mb-2">
-                  <MathJaxProvider>{reviewQuestion.prompt}</MathJaxProvider>
+                  <Latex>{reviewQuestion.prompt}</Latex>
                 </h4>
                 {reviewQuestion.type === "lewis-dot" ? (
                   <LewisDot
@@ -420,9 +428,9 @@ export default function ChemQuest() {
                 ) : (
                   <div className="text-blue-700 font-medium">
                     Your answer:{" "}
-                    <MathJaxProvider>
-                      {userAnswers[reviewQuestion.id] || "Not answered"}
-                    </MathJaxProvider>
+                    <Latex>
+                      ${userAnswers[reviewQuestion.id] ?? "Not answered"}$
+                    </Latex>
                   </div>
                 )}
               </div>
@@ -441,7 +449,7 @@ export default function ChemQuest() {
         {activeQuestion && (
           <div className="p-6 bg-white rounded-lg shadow-xl m-4">
             <h3 className="text-xl font-semibold mb-4">
-              <MathJaxProvider>{activeQuestion.prompt} </MathJaxProvider>
+              <Latex>{activeQuestion.prompt} </Latex>
             </h3>
 
             {activeQuestion.type === "text" && (
@@ -460,7 +468,7 @@ export default function ChemQuest() {
               <EquationBalancer
                 equation={activeQuestion.prompt.replace(
                   "Balance the following chemical equation: ",
-                  ""
+                  "",
                 )}
                 onSubmit={handleAnswerSubmit}
               />
