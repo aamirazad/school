@@ -65,7 +65,7 @@ const questions: Question[] = [
   {
     id: 2,
     type: "ka-expression",
-    time: 55,
+    time: 56,
     reviewTime: 60,
     prompt:
       "Write the expression for the acid dissociation constant ($K_a$) for hypochlorous acid",
@@ -73,7 +73,7 @@ const questions: Question[] = [
   {
     id: 3,
     type: "text",
-    time: 69,
+    time: 70,
     reviewTime: 75,
     prompt:
       "If the Ka of HClO is $3.0\\times10^{-8}$, calculate the pH of a 0.10 M solution of hypochlorous acid.",
@@ -81,7 +81,7 @@ const questions: Question[] = [
   {
     id: 4,
     type: "lewis-dot",
-    time: 83,
+    time: 84,
     reviewTime: 86,
     prompt:
       "Complete the Lewis electron-dot diagram for the hypochlorite ion ($ClO^-$) by drawing in all of the electron pairs",
@@ -89,7 +89,7 @@ const questions: Question[] = [
   {
     id: 5,
     type: "dipole-arrow",
-    time: 90,
+    time: 91,
     reviewTime: 95,
     prompt:
       " Using the Lewis structure from part (d) indicate any bond dipoles with arrows.",
@@ -97,7 +97,7 @@ const questions: Question[] = [
   {
     id: 6,
     type: "text",
-    time: 100,
+    time: 101,
     reviewTime: 105,
     prompt:
       "Describe the intermolecular forces present in a sample of pure hypochlorous acid.",
@@ -105,7 +105,7 @@ const questions: Question[] = [
   {
     id: 7,
     type: "text",
-    time: 108,
+    time: 109,
     reviewTime: 110,
     prompt:
       "Identify the hybridization of the valence orbitals of the central atom",
@@ -113,17 +113,10 @@ const questions: Question[] = [
   {
     id: 8,
     type: "text",
-    time: 132,
+    time: 133,
     reviewTime: 135,
     prompt:
       "Using the equilibrium reaction from part (a), predict the effect on the equilibrium (shift left, shift right, or no change) of adding HCl to the solution. Explain your reasoning in terms of Le Chateliers Principle",
-  },
-  {
-    id: 9,
-    type: "text",
-    time: 149,
-    reviewTime: 150,
-    prompt: "Write the rate law for the decomposition of N2O5",
   },
 ];
 
@@ -201,7 +194,7 @@ export default function ChemQuest() {
         setIsPlaying(false);
       }
     },
-    [isPlaying, activeQuestion]
+    [isPlaying, activeQuestion],
   );
 
   // Toggle mute/unmute
@@ -227,14 +220,14 @@ export default function ChemQuest() {
         case "ArrowLeft":
           videoRef.current.currentTime = Math.max(
             videoRef.current.currentTime - 5,
-            0
+            0,
           );
           break;
         // remove
         case "ArrowRight":
           videoRef.current.currentTime = Math.max(
             videoRef.current.currentTime + 5,
-            0
+            0,
           );
           break;
         default:
@@ -290,7 +283,7 @@ export default function ChemQuest() {
     if (!duration) return;
 
     const reviewToShow = questions.find(
-      (q) => q.reviewTime === Math.ceil(currentTime)
+      (q) => q.reviewTime === Math.ceil(currentTime),
     );
 
     if (
@@ -345,7 +338,7 @@ export default function ChemQuest() {
             <video
               ref={videoRef}
               className="w-full h-full object-cover"
-              src="https://files.aamira.me/inbox/semester-tbd.mp4"
+              src="https://files.aamira.me/inbox/semester-final.mp4"
               onContextMenu={(e) => e.preventDefault()}
               disablePictureInPicture
               onClick={() => togglePlay()}
@@ -408,7 +401,7 @@ export default function ChemQuest() {
                         left: `${(question.reviewTime / duration) * 100}%`,
                       }}
                       title={`Review Question ${question.id} at ${formatTime(
-                        question.reviewTime
+                        question.reviewTime,
                       )}`}
                     />
                   ))}
@@ -475,7 +468,7 @@ export default function ChemQuest() {
               <EquationBalancer
                 equation={activeQuestion.prompt.replace(
                   "Balance the following chemical equation: ",
-                  ""
+                  "",
                 )}
                 onSubmit={handleAnswerSubmit}
               />
