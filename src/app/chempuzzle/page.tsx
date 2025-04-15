@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { PlayCircle, PauseCircle, Volume2, VolumeX } from "lucide-react";
+import { PlayCircle, PauseCircle, Volume2, VolumeX, Cone } from "lucide-react";
 import { useTheme } from "next-themes";
 import { separateName } from "@/lib/utils";
 import { CenterPlayButton } from "./_components/center-play-button";
@@ -52,7 +52,7 @@ const questions: Question[] = [
     id: 1,
     type: "multiple-choice",
     time: 47,
-    reviewTime: 50,
+    reviewTime: 137,
     prompt:
       "Write the equilibrium reaction for the dissociation of hypochlorous acid in water",
     options: [
@@ -66,7 +66,7 @@ const questions: Question[] = [
     id: 2,
     type: "ka-expression",
     time: 56,
-    reviewTime: 60,
+    reviewTime: 185,
     prompt:
       "Write the expression for the acid dissociation constant ($K_a$) for hypochlorous acid",
   },
@@ -74,7 +74,7 @@ const questions: Question[] = [
     id: 3,
     type: "text",
     time: 70,
-    reviewTime: 75,
+    reviewTime: 211,
     prompt:
       "If the Ka of HClO is $3.0\\times10^{-8}$, calculate the pH of a 0.10 M solution of hypochlorous acid.",
   },
@@ -82,7 +82,7 @@ const questions: Question[] = [
     id: 4,
     type: "lewis-dot",
     time: 84,
-    reviewTime: 86,
+    reviewTime: 340,
     prompt:
       "Complete the Lewis electron-dot diagram for the hypochlorite ion ($ClO^-$) by drawing in all of the electron pairs",
   },
@@ -90,7 +90,7 @@ const questions: Question[] = [
     id: 5,
     type: "dipole-arrow",
     time: 91,
-    reviewTime: 95,
+    reviewTime: 370,
     prompt:
       " Using the Lewis structure from part (d) indicate any bond dipoles with arrows.",
   },
@@ -98,7 +98,7 @@ const questions: Question[] = [
     id: 6,
     type: "text",
     time: 101,
-    reviewTime: 105,
+    reviewTime: 402,
     prompt:
       "Describe the intermolecular forces present in a sample of pure hypochlorous acid.",
   },
@@ -106,7 +106,7 @@ const questions: Question[] = [
     id: 7,
     type: "text",
     time: 109,
-    reviewTime: 110,
+    reviewTime: 458,
     prompt:
       "Identify the hybridization of the valence orbitals of the central atom",
   },
@@ -114,7 +114,7 @@ const questions: Question[] = [
     id: 8,
     type: "text",
     time: 133,
-    reviewTime: 135,
+    reviewTime: 504,
     prompt:
       "Using the equilibrium reaction from part (a), predict the effect on the equilibrium (shift left, shift right, or no change) of adding HCl to the solution. Explain your reasoning in terms of Le Chateliers Principle",
   },
@@ -223,12 +223,13 @@ export default function ChemQuest() {
             0,
           );
           break;
-        // remove
         case "ArrowRight":
-          videoRef.current.currentTime = Math.max(
-            videoRef.current.currentTime + 5,
-            0,
-          );
+          if (currentTime > 132) {
+            videoRef.current.currentTime = Math.max(
+              videoRef.current.currentTime + 5,
+              0,
+            );
+          }
           break;
         default:
           break;
@@ -237,7 +238,7 @@ export default function ChemQuest() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [togglePlay, toggleMute]);
+  }, [togglePlay, toggleMute, currentTime]);
 
   // Pause video and show question when time matches
   useEffect(() => {
@@ -282,6 +283,11 @@ export default function ChemQuest() {
   useEffect(() => {
     if (!duration) return;
 
+    if (currentTime > 598) {
+      setReviewQuestion(null);
+      setShowingReview(false);
+    }
+
     const reviewToShow = questions.find(
       (q) => q.reviewTime === Math.ceil(currentTime),
     );
@@ -297,28 +303,28 @@ export default function ChemQuest() {
     }
   }, [currentTime, duration, answeredQuestions, activeQuestion]);
 
-  // Add effect to hide review after 10 seconds of playback
-  useEffect(() => {
-    if (!showingReview || !reviewStartTime) return;
+  // // Add effect to hide review after 10 seconds of playback
+  // useEffect(() => {
+  //   if (!showingReview || !reviewStartTime) return;
 
-    // Calculate how much video time has passed since review started
-    const elapsedVideoTime = currentTime - reviewStartTime;
+  //   // Calculate how much video time has passed since review started
+  //   const elapsedVideoTime = currentTime - reviewStartTime;
 
-    // Check if 10 seconds of video playback have passed
-    if (elapsedVideoTime >= 10) {
-      // Find the next review time
-      const nextReviewTime = questions
-        .filter((q) => q.reviewTime > currentTime)
-        .sort((a, b) => a.reviewTime - b.reviewTime)[0]?.reviewTime;
+  //   // Check if 10 seconds of video playback have passed
+  //   if (elapsedVideoTime >= 10) {
+  //     // Find the next review time
+  //     const nextReviewTime = questions
+  //       .filter((q) => q.reviewTime > currentTime)
+  //       .sort((a, b) => a.reviewTime - b.reviewTime)[0]?.reviewTime;
 
-      // If theres no next review within the next 10 seconds, hide the review
-      if (!nextReviewTime || nextReviewTime - currentTime > 10) {
-        setShowingReview(false);
-        setReviewQuestion(null);
-        setReviewStartTime(null);
-      }
-    }
-  }, [currentTime, showingReview, reviewStartTime]);
+  //     // If theres no next review within the next 10 seconds, hide the review
+  //     if (!nextReviewTime || nextReviewTime - currentTime > 10) {
+  //       setShowingReview(false);
+  //       setReviewQuestion(null);
+  //       setReviewStartTime(null);
+  //     }
+  //   }
+  // }, [currentTime, showingReview, reviewStartTime]);
 
   return (
     <div className="flex flex-col md:flex-row bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen text-slate-900">
