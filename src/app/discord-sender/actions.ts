@@ -1,14 +1,11 @@
 "use server";
 
-const WEBHOOK_URL = `https://discord.com/api/webhooks/1376669459108069397/${process.env.DISCORD_WEBHOOK_TOKEN}`;
 const VALID_PASSWORD = process.env.DISCORD_VALID_PASSWORD;
-
-// Extract webhook ID and token from the URL
-const WEBHOOK_ID = "1376669459108069397";
-const WEBHOOK_TOKEN = process.env.DISCORD_WEBHOOK_TOKEN;
 
 export async function validatePassword(prevState: any, formData: FormData) {
   const password = formData.get("password") as string;
+  const webhookId = formData.get("webhook-id") as string;
+  const webhookToken = formData.get("webhook-token") as string;
 
   if (!password) {
     return {
@@ -24,13 +21,40 @@ export async function validatePassword(prevState: any, formData: FormData) {
     };
   }
 
+  // Use environment variables as defaults if webhook fields are empty
+  const finalWebhookId = webhookId || process.env.DISCORD_WEBHOOK_ID || "";
+  const finalWebhookToken =
+    webhookToken || process.env.DISCORD_WEBHOOK_TOKEN || "";
+
+  if (!finalWebhookId || !finalWebhookToken) {
+    return {
+      error:
+        "Webhook configuration is missing. Please provide webhook details or set environment variables.",
+      success: false,
+    };
+  }
+
+  // Basic validation for webhook ID (should be numeric)
+  if (!/^\d+$/.test(finalWebhookId)) {
+    return {
+      error: "Webhook ID should be numeric",
+      success: false,
+    };
+  }
+
   return {
     success: true,
+    webhookConfig: {
+      id: finalWebhookId,
+      token: finalWebhookToken,
+    },
   };
 }
 
 export async function fetchDiscordMessage(prevState: any, formData: FormData) {
   const messageId = formData.get("messageId") as string;
+  const webhookId = formData.get("webhookId") as string;
+  const webhookToken = formData.get("webhookToken") as string;
 
   if (!messageId) {
     return {
@@ -39,9 +63,16 @@ export async function fetchDiscordMessage(prevState: any, formData: FormData) {
     };
   }
 
+  if (!webhookId || !webhookToken) {
+    return {
+      error: "Webhook configuration is missing",
+      success: false,
+    };
+  }
+
   try {
     const response = await fetch(
-      `https://discord.com/api/webhooks/${WEBHOOK_ID}/${WEBHOOK_TOKEN}/messages/${messageId}`,
+      `https://discord.com/api/webhooks/${webhookId}/${webhookToken}/messages/${messageId}`,
       {
         method: "GET",
         headers: {
@@ -81,9 +112,10 @@ export async function fetchDiscordMessage(prevState: any, formData: FormData) {
 
 export async function sendDiscordMessage(prevState: any, formData: FormData) {
   const username = formData.get("username") as string;
-  const content = formData.get("content") as string;
-  const useEmbed = formData.get("use-embed") === "true";
+  const useJsonMode = formData.get("use-json-mode") === "true";
   const editingMessageId = formData.get("editing-message-id") as string;
+  const webhookId = formData.get("webhook-id") as string;
+  const webhookToken = formData.get("webhook-token") as string;
 
   // Validate basic inputs
   if (!username) {
@@ -93,23 +125,15 @@ export async function sendDiscordMessage(prevState: any, formData: FormData) {
     };
   }
 
-  if (!content && !useEmbed) {
+  if (!webhookId || !webhookToken) {
     return {
-      error: "Either message content or embed is required",
-      success: false,
-    };
-  }
-
-  if (content && content.length > 2000) {
-    return {
-      error: "Message content cannot exceed 2000 characters",
+      error: "Webhook configuration is missing",
       success: false,
     };
   }
 
   try {
-    // Prepare the Discord webhook payload
-    const payload: any = {
+    let payload: any = {
       username: username.trim(),
       avatar_url:
         "https://files.aamira.me/inbox/7846690e25ca5ecdb6bd3d1ca9b7c800.webp",
@@ -118,166 +142,68 @@ export async function sendDiscordMessage(prevState: any, formData: FormData) {
       },
     };
 
-    // Add content if provided
-    if (content) {
+    if (useJsonMode) {
+      // JSON Mode - parse the JSON content
+      const jsonContent = formData.get("json-content") as string;
+
+      if (!jsonContent) {
+        return {
+          error: "JSON content is required in JSON mode",
+          success: false,
+        };
+      }
+
+      try {
+        const parsedJson = JSON.parse(jsonContent);
+
+        // Merge the parsed JSON with the base payload
+        // The JSON can override content, embeds, etc. but we keep username and avatar
+        payload = {
+          ...payload,
+          ...parsedJson,
+          // Preserve username and avatar from form
+          username: username.trim(),
+          avatar_url:
+            "https://files.aamira.me/inbox/7846690e25ca5ecdb6bd3d1ca9b7c800.webp",
+        };
+      } catch (jsonError) {
+        return {
+          error: "Invalid JSON format. Please check your JSON syntax.",
+          success: false,
+        };
+      }
+    } else {
+      // Simple Mode - just content
+      const content = formData.get("content") as string;
+
+      if (!content) {
+        return {
+          error: "Message content is required",
+          success: false,
+        };
+      }
+
+      if (content.length > 2000) {
+        return {
+          error: "Message content cannot exceed 2000 characters",
+          success: false,
+        };
+      }
+
       payload.content = content.trim();
-    }
 
-    // Build embed if requested
-    if (useEmbed) {
-      const embed: any = {
-        type: "rich",
-      };
-
-      // Basic embed fields
-      const embedTitle = formData.get("embed-title") as string;
-      const embedDescription = formData.get("embed-description") as string;
-      const embedUrl = formData.get("embed-url") as string;
-      const embedColor = formData.get("embed-color") as string;
-      const embedTimestamp = formData.get("embed-timestamp") as string;
-
-      if (embedTitle) {
-        if (embedTitle.length > 256) {
-          return {
-            error: "Embed title cannot exceed 256 characters",
-            success: false,
-          };
-        }
-        embed.title = embedTitle.trim();
+      // When editing in simple mode, explicitly clear embeds to remove any existing ones
+      if (editingMessageId) {
+        payload.embeds = [];
       }
-
-      if (embedDescription) {
-        if (embedDescription.length > 4096) {
-          return {
-            error: "Embed description cannot exceed 4096 characters",
-            success: false,
-          };
-        }
-        embed.description = embedDescription.trim();
-      }
-
-      if (embedUrl) {
-        embed.url = embedUrl.trim();
-      }
-
-      if (embedColor) {
-        // Convert hex color to integer
-        const colorHex = embedColor.replace("#", "");
-        if (/^[0-9A-F]{6}$/i.test(colorHex)) {
-          embed.color = Number.parseInt(colorHex, 16);
-        }
-      }
-
-      if (embedTimestamp) {
-        embed.timestamp = new Date(embedTimestamp).toISOString();
-      }
-
-      // Author
-      const authorName = formData.get("embed-author-name") as string;
-      const authorUrl = formData.get("embed-author-url") as string;
-      const authorIcon = formData.get("embed-author-icon") as string;
-
-      if (authorName) {
-        if (authorName.length > 256) {
-          return {
-            error: "Author name cannot exceed 256 characters",
-            success: false,
-          };
-        }
-        embed.author = { name: authorName.trim() };
-        if (authorUrl) embed.author.url = authorUrl.trim();
-        if (authorIcon) embed.author.icon_url = authorIcon.trim();
-      }
-
-      // Footer
-      const footerText = formData.get("embed-footer-text") as string;
-      const footerIcon = formData.get("embed-footer-icon") as string;
-
-      if (footerText) {
-        if (footerText.length > 2048) {
-          return {
-            error: "Footer text cannot exceed 2048 characters",
-            success: false,
-          };
-        }
-        embed.footer = { text: footerText.trim() };
-        if (footerIcon) embed.footer.icon_url = footerIcon.trim();
-      }
-
-      // Media
-      const imageUrl = formData.get("embed-image") as string;
-      const thumbnailUrl = formData.get("embed-thumbnail") as string;
-
-      if (imageUrl) {
-        embed.image = { url: imageUrl.trim() };
-      }
-
-      if (thumbnailUrl) {
-        embed.thumbnail = { url: thumbnailUrl.trim() };
-      }
-
-      // Fields
-      const fieldsCount =
-        Number.parseInt(formData.get("embed-fields-count") as string) || 0;
-      if (fieldsCount > 0) {
-        embed.fields = [];
-        let totalCharacters = 0;
-
-        for (let i = 0; i < fieldsCount; i++) {
-          const fieldName = formData.get(`embed-field-name-${i}`) as string;
-          const fieldValue = formData.get(`embed-field-value-${i}`) as string;
-          const fieldInline =
-            formData.get(`embed-field-inline-${i}`) === "true";
-
-          if (fieldName && fieldValue) {
-            if (fieldName.length > 256) {
-              return {
-                error: `Field ${i + 1} name cannot exceed 256 characters`,
-                success: false,
-              };
-            }
-            if (fieldValue.length > 1024) {
-              return {
-                error: `Field ${i + 1} value cannot exceed 1024 characters`,
-                success: false,
-              };
-            }
-
-            totalCharacters += fieldName.length + fieldValue.length;
-            embed.fields.push({
-              name: fieldName.trim(),
-              value: fieldValue.trim(),
-              inline: fieldInline,
-            });
-          }
-        }
-
-        // Check total character limit across all embed fields
-        const titleChars = embed.title?.length || 0;
-        const descChars = embed.description?.length || 0;
-        const authorChars = embed.author?.name?.length || 0;
-        const footerChars = embed.footer?.text?.length || 0;
-
-        if (
-          titleChars + descChars + authorChars + footerChars + totalCharacters >
-          6000
-        ) {
-          return {
-            error: "Total embed characters cannot exceed 6000 characters",
-            success: false,
-          };
-        }
-      }
-
-      payload.embeds = [embed];
     }
 
     // Determine if we're editing or creating a new message
     const isEditing = !!editingMessageId;
     const method = isEditing ? "PATCH" : "POST";
     const url = isEditing
-      ? `https://discord.com/api/webhooks/${WEBHOOK_ID}/${WEBHOOK_TOKEN}/messages/${editingMessageId}?wait=true`
-      : `${WEBHOOK_URL}?wait=true`;
+      ? `https://discord.com/api/webhooks/${webhookId}/${webhookToken}/messages/${editingMessageId}?wait=true`
+      : `https://discord.com/api/webhooks/${webhookId}/${webhookToken}?wait=true`;
 
     // For editing, we don't send username and avatar_url
     if (isEditing) {
@@ -308,6 +234,13 @@ export async function sendDiscordMessage(prevState: any, formData: FormData) {
       if (response.status === 404 && isEditing) {
         return {
           error: "Message not found. It may have been deleted.",
+          success: false,
+        };
+      }
+
+      if (response.status === 400) {
+        return {
+          error: "Invalid message format. Please check your JSON structure.",
           success: false,
         };
       }
