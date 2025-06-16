@@ -32,7 +32,7 @@ export default function IdPage() {
       }
       return result;
     },
-    { error: "", success: false },
+    { error: "", success: false }
   );
 
   // Set up global Turnstile callbacks
