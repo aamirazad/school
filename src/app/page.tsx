@@ -4,6 +4,10 @@ import Link from "next/link";
 export default function Home() {
   const links = [
     {
+      href: "/id",
+      name: "ID",
+    },
+    {
       href: "/chempuzzle",
       name: "Chem Puzzle",
     },
