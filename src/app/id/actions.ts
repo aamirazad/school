@@ -19,7 +19,7 @@ async function verifyTurnstile(token: string): Promise<boolean> {
           secret: process.env.TURNSTILE_SECRET_KEY,
           response: token,
         }),
-      }
+      },
     );
 
     const data = await response.json();
@@ -61,7 +61,7 @@ export async function createAccount(name: string, email: string) {
   try {
     const response = await fetch(
       "https://id.aamira.me/api/users",
-      requestOptions
+      requestOptions,
     );
 
     if (!response.ok) {
@@ -101,7 +101,7 @@ export async function sendEmailCode(email: string) {
   try {
     const response = await fetch(
       "https://id.aamira.me/api/one-time-access-email",
-      requestOptions
+      requestOptions,
     );
 
     if (!response.ok) {
@@ -118,7 +118,7 @@ export async function sendEmailCode(email: string) {
 // New combined server action that handles both account creation and email sending with Turnstile verification
 export async function createAccountWithTurnstile(
   prevState: any,
-  formData: FormData
+  formData: FormData,
 ) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
@@ -148,7 +148,7 @@ export async function createAccountWithTurnstile(
   const isTurnstileValid = await verifyTurnstile(turnstileToken);
   if (!isTurnstileValid) {
     return {
-      error: "Security verification failed. Please try again.",
+      error: "Security verification failed. Please reload your page.",
       success: false,
     };
   }
