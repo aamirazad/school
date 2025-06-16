@@ -30,8 +30,6 @@ export async function createAccount(name: string, email: string) {
     body: raw,
   };
 
-  console.log(requestOptions);
-
   try {
     const response = await fetch(
       "https://id.aamira.me/api/users",
@@ -42,11 +40,12 @@ export async function createAccount(name: string, email: string) {
       console.error("API Error:", response.status, response);
       return `API Error: ${response.status} ${response.statusText}`;
     }
+
+    // Only redirect if the response was OK (i.e., no API errors)
+    redirect("https://hasd.zulipchat.com/register/");
   } catch (error) {
     console.error("Network Error:", error);
     return "Network error occurred";
-  } finally {
-    redirect("https://hasd.zulipchat.com/register/");
   }
 }
 

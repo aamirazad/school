@@ -83,12 +83,11 @@ export default function IdPage() {
                   />
                 </div>
               </div>
-              {error ?? (
+              {error ? (
                 <Alert variant="destructive">
                   <AlertTitle>{error}</AlertTitle>
                 </Alert>
-              )}
-
+              ) : null}
               <Button
                 type="submit"
                 disabled={
