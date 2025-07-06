@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { Geist } from "next/font/google";
+import Script from "next/script";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
@@ -23,6 +24,11 @@ export default function RootLayout({
       <body
         className={` antialiased text-slate-100 bg-black ${geist.className}`}
       >
+        <Script
+          src="https://www.aamira.me/api/script.js"
+          data-site-id="4"
+          strategy="afterInteractive"
+        />
         <div className="absolute top-0 left-0 mt-1 ml-2">
           <Link href="/">Back</Link>
         </div>
