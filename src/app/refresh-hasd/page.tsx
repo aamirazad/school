@@ -17,25 +17,15 @@ import { validatePassword, refreshContent } from "./actions";
 import { useActionState } from "react";
 
 export default function RefreshHASD() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshComplete, setRefreshComplete] = useState(false);
   const [progress, setProgress] = useState(0);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [passwordState, passwordAction, passwordPending] = useActionState(
-    validatePassword,
-    undefined
-  );
   const [refreshState, refreshAction, refreshPending] = useActionState(
     refreshContent,
     undefined
   );
-
-  // Handle successful password validation
-  if (passwordState?.success && !isAuthenticated) {
-    setIsAuthenticated(true);
-  }
 
   // Check for ongoing refresh on mount
   useEffect(() => {
@@ -180,68 +170,6 @@ export default function RefreshHASD() {
     };
   }, []);
 
-  const logout = () => {
-    window.location.reload();
-  };
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 p-4">
-        <Card className="w-full max-w-md bg-gray-800 border-gray-700">
-          <CardHeader className="text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-900/20">
-              <Lock className="h-6 w-6 text-blue-400" />
-            </div>
-            <CardTitle className="text-white">Access Required</CardTitle>
-            <CardDescription className="text-gray-400">
-              Enter the password to refresh
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form action={passwordAction} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-200">
-                  Password
-                </Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="Enter password"
-                  required
-                  className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400"
-                />
-              </div>
-
-              {passwordState?.error && (
-                <Alert
-                  variant="destructive"
-                  className="bg-gray-800 border-red-700"
-                >
-                  <AlertDescription>{passwordState.error}</AlertDescription>
-                </Alert>
-              )}
-              <Button
-                type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700"
-                disabled={passwordPending}
-              >
-                {passwordPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Verifying...
-                  </>
-                ) : (
-                  "Submit"
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-900 p-4">
       <div className="mx-auto max-w-2xl space-y-6">
@@ -262,13 +190,6 @@ export default function RefreshHASD() {
                   </p>
                 </div>
               </div>
-              <Button
-                variant="outline"
-                onClick={logout}
-                className="border-gray-600 text-gray-300 hover:bg-gray-700"
-              >
-                Logout
-              </Button>
             </div>
           </CardContent>
         </Card>
