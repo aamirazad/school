@@ -26,7 +26,7 @@ export default function RootLayout({
       >
         <Script
           src="https://www.aamira.me/api/script.js"
-          data-site-id="4"
+          data-site-id="2"
           strategy="afterInteractive"
         />
         <div className="absolute top-0 left-0 mt-1 ml-2">
