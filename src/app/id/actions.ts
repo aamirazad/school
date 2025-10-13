@@ -60,7 +60,7 @@ export async function createAccount(name: string, email: string) {
 
   try {
     const response = await fetch(
-      "https://id.aamira.me/api/users",
+      "https://id.aamirazad.com/api/users",
       requestOptions,
     );
 
@@ -100,7 +100,7 @@ export async function sendEmailCode(email: string) {
 
   try {
     const response = await fetch(
-      "https://id.aamira.me/api/one-time-access-email",
+      "https://id.aamirazad.com/api/one-time-access-email",
       requestOptions,
     );
 

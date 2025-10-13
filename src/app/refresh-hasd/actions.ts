@@ -34,7 +34,7 @@ export async function refreshContent(prevState: any, formData: FormData) {
   }
 
   try {
-    const response = await fetch("https://db.aamira.me/");
+    const response = await fetch("https://db.aamirazad.com/");
 
     if (response.status !== 404) {
       return {

@@ -206,7 +206,7 @@ export default function RefreshHASD() {
               content on the{" "}
               <a
                 className="underline"
-                href="https://historyclub.aamira.me/"
+                href="https://historyclub.aamirazad.com/"
                 target="_blank"
               >
                 History Club site.
@@ -230,7 +230,7 @@ export default function RefreshHASD() {
                   Deployment complete! Please refresh the{" "}
                   <a
                     className="underline"
-                    href="https://historyclub.aamira.me/"
+                    href="https://historyclub.aamirazad.com/"
                     target="_blank"
                   >
                     History Club site

@@ -136,7 +136,7 @@ export async function sendDiscordMessage(prevState: any, formData: FormData) {
     let payload: any = {
       username: username.trim(),
       avatar_url:
-        "https://files.aamira.me/inbox/7846690e25ca5ecdb6bd3d1ca9b7c800.webp",
+        "https://files.aamirazad.com/inbox/7846690e25ca5ecdb6bd3d1ca9b7c800.webp",
       allowed_mentions: {
         parse: ["users", "roles", "everyone"],
       },
@@ -164,7 +164,7 @@ export async function sendDiscordMessage(prevState: any, formData: FormData) {
           // Preserve username and avatar from form
           username: username.trim(),
           avatar_url:
-            "https://files.aamira.me/inbox/7846690e25ca5ecdb6bd3d1ca9b7c800.webp",
+            "https://files.aamirazad.com/inbox/7846690e25ca5ecdb6bd3d1ca9b7c800.webp",
         };
       } catch (jsonError) {
         return {
