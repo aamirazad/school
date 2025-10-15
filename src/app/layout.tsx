@@ -25,7 +25,7 @@ export default function RootLayout({
         className={` antialiased text-slate-100 bg-black ${geist.className}`}
       >
         <Script
-          src="https://www.aamira.me/api/script.js"
+          src="https://www.aamirazad.com/api/script.js"
           data-site-id="2"
           strategy="afterInteractive"
         />

@@ -344,7 +344,7 @@ export default function ChemQuest() {
             <video
               ref={videoRef}
               className="w-full h-full object-cover"
-              src="https://files.aamira.me/inbox/semester-final.mp4"
+              src="https://files.aamirazad.com/inbox/semester-final.mp4"
               onContextMenu={(e) => e.preventDefault()}
               disablePictureInPicture
               onClick={() => togglePlay()}
