@@ -21,16 +21,27 @@ function CommunityLoginContent() {
 			// Construct the final redirect URL
 			const redirectUrl = `https://auth.aamirazad.com/login/alternative/email?redirect=${encodeURIComponent(authorizeUrl)}`;
 
-			// Perform the redirect
-			window.location.href = redirectUrl;
+			// Perform the redirect after 2 seconds
+			setTimeout(() => {
+				window.location.href = redirectUrl;
+			}, 2000);
 		}
 	}, [searchParams]);
 
 	return (
-		<div className="min-h-screen flex items-center justify-center">
-			<div className="text-center">
+		<div className="min-h-screen flex items-center justify-center p-4">
+			<div className="text-center max-w-md">
 				<LoadingSpinner className="w-8 h-8 mx-auto mb-4" />
-				<p className="text-slate-600 dark:text-slate-400">Redirecting...</p>
+				<p className="text-slate-600 dark:text-slate-400 mb-6">
+					Redirecting...
+				</p>
+				<div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+					<p className="text-yellow-800 dark:text-yellow-200 font-semibold text-sm">
+						If the next screen says something about "Account Details" please
+						click the reload button on your browser to complete the sign in
+						process, sorry for the inconvenience.
+					</p>
+				</div>
 			</div>
 		</div>
 	);
