@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import LoadingSpinner from "@/components/loading-spinner";
 
-export default function CommunityLogin() {
+function CommunityLoginContent() {
 	const searchParams = useSearchParams();
 
 	useEffect(() => {
@@ -30,5 +30,19 @@ export default function CommunityLogin() {
 				<p className="text-slate-600 dark:text-slate-400">Redirecting...</p>
 			</div>
 		</div>
+	);
+}
+
+export default function CommunityLogin() {
+	return (
+		<Suspense
+			fallback={
+				<div className="min-h-screen flex items-center justify-center">
+					<LoadingSpinner className="w-8 h-8" />
+				</div>
+			}
+		>
+			<CommunityLoginContent />
+		</Suspense>
 	);
 }
