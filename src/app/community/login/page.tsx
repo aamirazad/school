@@ -12,6 +12,14 @@ function CommunityLoginContent() {
 		null,
 	);
 
+	// Save query params to cookie immediately on mount
+	useEffect(() => {
+		const queryString = searchParams.toString();
+		if (queryString) {
+			document.cookie = `community_auth_params=${encodeURIComponent(queryString)}; path=/; max-age=600; SameSite=Lax`;
+		}
+	}, [searchParams]);
+
 	const handleLogin = () => {
 		setIsRedirecting(true);
 		setRedirectType("login");
@@ -19,9 +27,6 @@ function CommunityLoginContent() {
 		const queryString = searchParams.toString();
 
 		if (queryString) {
-			// Save query params to cookie for later use
-			document.cookie = `community_auth_params=${encodeURIComponent(queryString)}; path=/; max-age=600; SameSite=Lax`;
-
 			// Construct the /authorize URL with all the original parameters
 			const authorizeUrl = `/authorize?${queryString}`;
 
