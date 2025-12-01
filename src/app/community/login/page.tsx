@@ -12,6 +12,9 @@ function CommunityLoginContent() {
 		const queryString = searchParams.toString();
 
 		if (queryString) {
+			// Save query params to cookie for later use
+			document.cookie = `community_auth_params=${encodeURIComponent(queryString)}; path=/; max-age=600; SameSite=Lax`;
+
 			// Construct the /authorize URL with all the original parameters
 			const authorizeUrl = `/authorize?${queryString}`;
 
