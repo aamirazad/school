@@ -32,15 +32,7 @@ function CommunityLoginContent() {
 	};
 
 	const handleSignup = () => {
-		const queryString = searchParams.toString();
-
-		// construct the same authorizeUrl used for login
-		const authorizeUrl = queryString
-			? `/authorize?${queryString}`
-			: `/authorize`;
-
-		// redirect to re-sign in (confirm email) and then authorize
-		const signupUrl = `https://auth.aamirazad.com/signup?redirect=/login/alternative/email?redirect=${encodeURIComponent(authorizeUrl)}`;
+		const signupUrl = `https://auth.aamirazad.com/signup?redirect=/community-sign-up-confirmed`;
 
 		window.location.href = signupUrl;
 	};
