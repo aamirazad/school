@@ -1,40 +1,35 @@
 "use client";
 
 import { LockIcon } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import LoadingSpinner from "@/components/loading-spinner";
+import { saveAuthParams } from "../actions";
 
 function CommunityLoginContent() {
 	const searchParams = useSearchParams();
+	const router = useRouter();
+	const queryString = searchParams.toString();
 
-	// Save query params to cookie immediately on mount
+	// Save query params to cookie on mount
 	useEffect(() => {
-		const queryString = searchParams.toString();
 		if (queryString) {
-			document.cookie = `community_auth_params=${encodeURIComponent(queryString)}; path=/; max-age=600; SameSite=Lax`;
+			saveAuthParams(queryString);
 		}
-	}, [searchParams]);
+	}, [queryString]);
+
+	const buildAuthorizeUrl = () => `/authorize?${queryString}`;
 
 	const handleLogin = () => {
-		const queryString = searchParams.toString();
-
-		if (queryString) {
-			// Construct the /authorize URL with all the original parameters
-			const authorizeUrl = `/authorize?${queryString}`;
-
-			// Construct the final redirect URL
-			const redirectUrl = `https://auth.aamirazad.com/login/alternative/email?redirect=${encodeURIComponent(authorizeUrl)}`;
-
-			// Perform the redirect immediately
-			window.location.href = redirectUrl;
-		}
+		if (!queryString) return;
+		const redirectUrl = `https://auth.aamirazad.com/login/alternative/email?redirect=${encodeURIComponent(buildAuthorizeUrl())}`;
+		router.push(redirectUrl);
 	};
 
 	const handleSignup = () => {
-		const signupUrl = `https://auth.aamirazad.com/signup?redirect=/community-sign-up-confirmed`;
-
-		window.location.href = signupUrl;
+		router.push(
+			"https://auth.aamirazad.com/signup?redirect=/community-sign-up-confirmed",
+		);
 	};
 
 	return (
@@ -81,7 +76,7 @@ export default function CommunityLogin() {
 	return (
 		<Suspense
 			fallback={
-				<div className="min-h-screen flex items-center justify-center">
+				<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
 					<LoadingSpinner className="w-8 h-8" />
 				</div>
 			}

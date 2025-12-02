@@ -1,38 +1,13 @@
-"use client";
+import { redirect } from "next/navigation";
+import { clearAuthParams, getAuthParams } from "../actions";
 
-import { useEffect } from "react";
-import LoadingSpinner from "@/components/loading-spinner";
+export default async function CommunityLoggedIn() {
+	const queryString = await getAuthParams();
 
-export default function CommunityLoggedIn() {
-	useEffect(() => {
-		// Read the cookie
-		const cookies = document.cookie.split("; ");
-		const authParamsCookie = cookies.find((row) =>
-			row.startsWith("community_auth_params="),
-		);
+	if (!queryString) {
+		redirect("https://community.aamirazad.com/login");
+	}
 
-		if (!authParamsCookie) {
-			// No cookie found, redirect to login
-			window.location.href = "https://community.aamirazad.com/login";
-			return;
-		}
-
-		// Extract and decode the query params
-		const queryString = decodeURIComponent(authParamsCookie.split("=")[1]);
-
-		// Clear the cookie
-		document.cookie = "community_auth_params=; path=/; max-age=0; SameSite=Lax";
-
-		// Redirect to authorize with the saved params
-		window.location.href = `https://auth.aamirazad.com/authorize?${queryString}`;
-	}, []);
-
-	return (
-		<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-			<div className="text-center">
-				<LoadingSpinner className="w-8 h-8 mx-auto mb-4" />
-				<p className="text-slate-600 dark:text-slate-400">Redirecting...</p>
-			</div>
-		</div>
-	);
+	await clearAuthParams();
+	redirect(`https://auth.aamirazad.com/authorize?${queryString}`);
 }
