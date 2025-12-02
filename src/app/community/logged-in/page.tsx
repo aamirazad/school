@@ -13,7 +13,7 @@ export default function CommunityLoggedIn() {
 
 		if (!authParamsCookie) {
 			// No cookie found, redirect to login
-			window.location.href = "/community/login";
+			window.location.href = "https://community.aamirazad.com/login";
 			return;
 		}
 
