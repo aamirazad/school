@@ -32,7 +32,19 @@ function CommunityLoginContent() {
 	};
 
 	const handleSignup = () => {
-		window.location.href = "https://auth.aamirazad.com/signup";
+		const queryString = searchParams.toString();
+
+		// construct the same authorizeUrl used for login
+		const authorizeUrl = queryString
+			? `/authorize?${queryString}`
+			: `/authorize`;
+
+		// redirect to signup including authorizeUrl as the redirect param
+		const signupUrl = `https://auth.aamirazad.com/signup?redirect=${encodeURIComponent(
+			authorizeUrl,
+		)}`;
+
+		window.location.href = signupUrl;
 	};
 
 	return (
