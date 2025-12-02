@@ -7,26 +7,27 @@ import LoadingSpinner from "@/components/loading-spinner";
 function CommunityLoginContent() {
 	const searchParams = useSearchParams();
 
-	// Save query params to cookie immediately on mount
+	// Save query params to cookie and redirect immediately on mount
 	useEffect(() => {
 		const queryString = searchParams.toString();
-		if (queryString) {
-			document.cookie = `community_auth_params=${encodeURIComponent(queryString)}; path=/; max-age=600; SameSite=Lax`;
-		}
-	}, [searchParams]);
+		if (!queryString) return;
 
-	const queryString = searchParams.toString();
+		// save cookie for later use by /community/logged-in
+		document.cookie = `community_auth_params=${encodeURIComponent(
+			queryString,
+		)}; path=/; max-age=600; SameSite=Lax`;
 
-	if (queryString) {
 		// Construct the /authorize URL with all the original parameters
 		const authorizeUrl = `/authorize?${queryString}`;
 
 		// Construct the final redirect URL
-		const redirectUrl = `https://auth.aamirazad.com/login/alternative/email?redirect=${encodeURIComponent(authorizeUrl)}`;
+		const redirectUrl = `https://auth.aamirazad.com/login/alternative/email?redirect=${encodeURIComponent(
+			authorizeUrl,
+		)}`;
 
-		// Perform the redirect immediately
-		window.location.href = redirectUrl;
-	}
+		// Perform the redirect immediately (use replace to avoid back-history entry)
+		window.location.replace(redirectUrl);
+	}, [searchParams]);
 
 	return (
 		<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4"></div>
