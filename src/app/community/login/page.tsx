@@ -38,7 +38,7 @@ function CommunityLoginContent() {
 	};
 
 	return (
-		<div className="min-h-screen bg-[#02030a] flex items-center justify-center px-4">
+		<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
 			<div className="w-full max-w-sm rounded-2xl bg-[#111111] px-6 py-8 shadow-[0_18px_45px_rgba(0,0,0,0.7)]">
 				<div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#222222]">
 					<span className="text-xl font-semibold text-white">

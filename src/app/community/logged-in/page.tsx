@@ -28,7 +28,7 @@ export default function CommunityLoggedIn() {
 	}, []);
 
 	return (
-		<div className="min-h-screen flex items-center justify-center">
+		<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
 			<div className="text-center">
 				<LoadingSpinner className="w-8 h-8 mx-auto mb-4" />
 				<p className="text-slate-600 dark:text-slate-400">Redirecting...</p>
