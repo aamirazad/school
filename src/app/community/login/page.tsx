@@ -2,15 +2,11 @@
 
 import { LockIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import LoadingSpinner from "@/components/loading-spinner";
 
 function CommunityLoginContent() {
 	const searchParams = useSearchParams();
-	const [isRedirecting, setIsRedirecting] = useState(false);
-	const [redirectType, setRedirectType] = useState<"login" | "signup" | null>(
-		null,
-	);
 
 	// Save query params to cookie immediately on mount
 	useEffect(() => {
@@ -21,9 +17,6 @@ function CommunityLoginContent() {
 	}, [searchParams]);
 
 	const handleLogin = () => {
-		setIsRedirecting(true);
-		setRedirectType("login");
-
 		const queryString = searchParams.toString();
 
 		if (queryString) {
@@ -33,45 +26,14 @@ function CommunityLoginContent() {
 			// Construct the final redirect URL
 			const redirectUrl = `https://auth.aamirazad.com/login/alternative/email?redirect=${encodeURIComponent(authorizeUrl)}`;
 
-			// Perform the redirect after 2 seconds
-			setTimeout(() => {
-				window.location.href = redirectUrl;
-			}, 2000);
+			// Perform the redirect immediately
+			window.location.href = redirectUrl;
 		}
 	};
 
 	const handleSignup = () => {
 		window.location.href = "https://auth.aamirazad.com/signup";
 	};
-
-	useEffect(() => {
-		if (redirectType === "login") {
-			const timer = setTimeout(() => {
-				setIsRedirecting(false);
-				setRedirectType(null);
-			}, 2000);
-
-			return () => clearTimeout(timer);
-		}
-	}, [redirectType]);
-
-	if (isRedirecting && redirectType === "login") {
-		return (
-			<div className="min-h-screen flex items-center justify-center p-4 bg-[#02030a]">
-				<div className="text-center max-w-md">
-					<LoadingSpinner className="w-8 h-8 mx-auto mb-4 text-[#6568e6]" />
-					<p className="text-slate-400 mb-6">Redirecting...</p>
-					<div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
-						<p className="text-yellow-200 font-semibold text-sm">
-							If the next screen says something about "Account Details" please
-							click the reload button on your browser to complete the sign in
-							process, sorry for the inconvenience.
-						</p>
-					</div>
-				</div>
-			</div>
-		);
-	}
 
 	return (
 		<div className="min-h-screen bg-[#02030a] flex items-center justify-center px-4">
