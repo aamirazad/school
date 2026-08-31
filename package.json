@@ -27,7 +27,7 @@
 		"eslint-config-next": "^16.0.6",
 		"framer-motion": "^12.23.24",
 		"geist": "^1.5.1",
-		"katex": "^0.16.25",
+		"katex": "^0.18.0",
 		"latex": "^0.0.1",
 		"lucide-react": "^0.555.0",
 		"next": "16.3.3",
