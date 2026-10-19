@@ -135,7 +135,7 @@ export default function DiscordWebhookForm() {
         }
       }
 
-      setEditingMessageId(fetchState.messageId);
+      setEditingMessageId(fetchState.messageId ?? "");
       setFetchMessageId("");
     }
   }, [fetchState]);
