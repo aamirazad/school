@@ -1,7 +1,5 @@
 "use client";
 
-import { PageWrapper } from "@/components/page-wrapper";
-
 export default function Timeline() {
   return (
     <iframe
