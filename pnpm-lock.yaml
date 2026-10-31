@@ -223,7 +223,7 @@ importers:
         version: 1.8.1(next@16.4.2(@babel/core@7.29.7(supports-color@10.2.2))(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))
       katex:
         specifier: ^0.19.0
-        version: 0.19.0
+        version: 0.19.1
       lucide-react:
         specifier: ^0.555.0
         version: 0.555.0(react@19.3.1)
@@ -3133,8 +3133,8 @@ packages:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
 
-  katex@0.19.0:
-    resolution: {integrity: sha512-v6Tznz3zJ7u3niRCoDTsumM2+HA2XXcCu+WAacCeHD2z3p9A9Ks987o5FzfTGBN0e8A0vjEgIDvLbICrXpdw/Q==}
+  katex@0.19.1:
+    resolution: {integrity: sha512-jG8uKntjSEcm2EpQOh0XturpPuuC9r3Sq5HLHdsFdWZT27E672SF19QEi+of0/YeOy15lDgRhKvr5614uRrEfA==}
     hasBin: true
 
   keyv@5.6.0:
@@ -7210,7 +7210,7 @@ snapshots:
       object.assign: 4.1.7
       object.values: 1.2.1
 
-  katex@0.19.0:
+  katex@0.19.1:
     dependencies:
       commander: 15.0.0
 
@@ -7621,7 +7621,7 @@ snapshots:
 
   react-latex-next@3.0.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
-      katex: 0.19.0
+      katex: 0.19.1
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
